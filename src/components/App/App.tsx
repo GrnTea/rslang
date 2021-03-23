@@ -6,8 +6,9 @@ import Header from "../Header";
 const App = () => (
   <React.Fragment>
     <Header />
+
+    <div>Hello World!</div>
     <Footer />
-    <div>Hello W</div>
   </React.Fragment>
 
 );
