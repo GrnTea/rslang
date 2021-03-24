@@ -1,0 +1,18 @@
+{ 
+    "team": [
+        {
+            "id": 0,
+            "userName": "Julia1 Gvozdeva1",
+            "userImg": "./assets/images/team/julia.jpg",
+            "userDescription": "Lorem ispum",
+            "userGitHub": "https://github.com/JuliaGvozdeva"
+        },
+        {
+            "id": 1,
+            "userName": "Julia2 Gvozdeva2",
+            "userImg": "./assets/images/team/julia.jpg",
+            "userDescription": "Lorem ispum",
+            "userGitHub": "https://github.com/JuliaGvozdeva"
+        }
+    ]
+}
