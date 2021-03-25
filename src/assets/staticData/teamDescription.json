@@ -3,15 +3,29 @@
         {
             "id": 0,
             "userName": "Julia1 Gvozdeva1",
-            "userImg": "./assets/images/team/julia.jpg",
-            "userDescription": "Lorem ispum",
+            "userImg": "https://picsum.photos/200/300",
+            "userDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
             "userGitHub": "https://github.com/JuliaGvozdeva"
         },
         {
             "id": 1,
             "userName": "Julia2 Gvozdeva2",
-            "userImg": "./assets/images/team/julia.jpg",
-            "userDescription": "Lorem ispum",
+            "userImg": "https://picsum.photos/200/300",
+            "userDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+            "userGitHub": "https://github.com/JuliaGvozdeva"
+        },
+        {
+            "id": 2,
+            "userName": "Julia1 Gvozdeva1",
+            "userImg": "https://picsum.photos/200/300",
+            "userDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+            "userGitHub": "https://github.com/JuliaGvozdeva"
+        },
+        {
+            "id": 3,
+            "userName": "Julia2 Gvozdeva2",
+            "userImg": "https://picsum.photos/200/300",
+            "userDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
             "userGitHub": "https://github.com/JuliaGvozdeva"
         }
     ]
