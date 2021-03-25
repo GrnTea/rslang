@@ -7,6 +7,9 @@ import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import { FormControlLabel } from '@material-ui/core';
+import { connect } from "react-redux";
+import { toggleLang, toggleIsAutoVoice, incrementCountNewWords,  decrimentCountNewWords, decrimentCountMaxDailyCards, incrementCountMaxDailyCards} from "../../../../../redux/settings-reducer";
+import  { RootState }  from "../../../../../redux/reducer";
 
 const LANGUAGES = {
     en: {
@@ -42,35 +45,42 @@ const TEXTS = {
     }
 }
 
-const MainSettings: React.FC = () => {
+type Props = {
+    lang: string,
+    toggleLang: (value: React.ChangeEvent<HTMLInputElement>) => void,
+    isAutoVoice: boolean,
+    toggleIsAutoVoice: (value: React.ChangeEvent<HTMLInputElement>) => void,
+    countNewWords: number,
+    incrementCountNewWords: (value: number) => void,
+    decrimentCountNewWords: (value: number) => void,
+    countMaxDayCards: number,
+    incrementCountMaxDailyCards: (value: number) => void,
+    decrimentCountMaxDailyCards: (value: number) => void,
+}
+
+const MainSettings: React.FC<Props> = ({lang, toggleLang, isAutoVoice, toggleIsAutoVoice, countNewWords, incrementCountNewWords, decrimentCountNewWords, countMaxDayCards, incrementCountMaxDailyCards, decrimentCountMaxDailyCards }) => {
   const useStyles = MainSettingsStyles();
-  const [lang, setLang] = useState("ru");
-  const [autoVoice, setAutoVoice] = useState(true);
-  const [countNewWords, setCountNewWords] = useState(10);
-  const [countMaxDayCards, setCountMaxDayCards] = useState(10);
+  const [countNewdaylyWords, setCountNewdaylyWords] = useState<number>(countNewWords);
+  const [countMaxCards, setCountMaxCards] = useState<number>(countMaxDayCards);
 
-  const handleChangeLanguage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLang(event.target.value);
+  const handleChangeSubstractCount = () => {
+    setCountNewdaylyWords(countNewdaylyWords-1);
+    decrimentCountNewWords(countNewdaylyWords);
   }
 
-  const handleChangeAutomaticVoiceActing = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAutoVoice(event.target.checked);
-  }
-
-  const handleChangeSubstractCountNewWorlds = () => {
-    setCountNewWords(countNewWords - 1);
-  }
-
-  const handleChangeAddCountNewWorlds = () => {
-    setCountNewWords(countNewWords + 1);
+  const handleChangeAddCount = () => {
+    setCountNewdaylyWords(countNewdaylyWords+1);
+    incrementCountNewWords(countNewdaylyWords);
   }
 
   const handleChangeSubstractCountMaxDayCards = () => {
-    setCountMaxDayCards(countMaxDayCards - 1);
+    setCountMaxCards(countMaxCards - 1);
+    decrimentCountMaxDailyCards(countMaxCards);
   }
 
   const handleChangeAddCountMaxDayCards = () => {
-    setCountMaxDayCards(countMaxDayCards + 1);
+    setCountMaxCards(countMaxCards + 1);
+    incrementCountMaxDailyCards(countMaxCards);
   }
 
   return (
@@ -84,7 +94,7 @@ const MainSettings: React.FC = () => {
                 labelId="demo-simple-select-outlined-label"
                 id="demo-simple-select-outlined"
                 value={lang}
-                onChange={handleChangeLanguage}
+                onChange={toggleLang}
                 label="Language"
                 >
                     {
@@ -100,8 +110,8 @@ const MainSettings: React.FC = () => {
             <FormControlLabel
                 control={
                     <Switch
-                        checked={autoVoice}
-                        onChange={handleChangeAutomaticVoiceActing}
+                        checked={isAutoVoice}
+                        onChange={toggleIsAutoVoice}
                         color="primary"
                         classes={{switchBase: useStyles.switchBase}}
                     />
@@ -114,9 +124,9 @@ const MainSettings: React.FC = () => {
             <div className={useStyles.dailySettings}>
                 <span>{TEXTS[lang].numbersNewWords}</span>
                 <div className={useStyles.dailySettingsBtnGroup}>
-                    <Button className={useStyles.daylySettingsBtn} onClick={handleChangeAddCountNewWorlds}>+</Button>
+                    <Button className={useStyles.daylySettingsBtn} onClick={handleChangeAddCount}>+</Button>
                     <div>{countNewWords}</div>
-                    <Button className={useStyles.daylySettingsBtn} onClick={handleChangeSubstractCountNewWorlds}>-</Button>
+                    <Button className={useStyles.daylySettingsBtn} onClick={handleChangeSubstractCount}>-</Button>
                 </div>
             </div>
             <div className={useStyles.dailySettings}>
@@ -132,4 +142,20 @@ const MainSettings: React.FC = () => {
    );
 };
 
-export default MainSettings;
+const mapStateToProps = (state:RootState) => ({
+    lang: state.lang.lang,
+    isAutoVoice: state.isAutoVoice.isAutoVoice,
+    countNewWords: state.countNewWords.countNewWords,
+    countMaxDayCards: state.countMaxDayCards.countMaxDayCards
+  });
+  
+const mapDispatchToProps = {
+    toggleLang,
+    toggleIsAutoVoice,
+    decrimentCountNewWords,
+    incrementCountNewWords,
+    incrementCountMaxDailyCards,
+    decrimentCountMaxDailyCards
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainSettings);
