@@ -2,12 +2,12 @@ import React from "react";
 
 import Footer from "../Footer";
 import Header from "../Header";
+import TeamPage from "../Pages/TeamPage/TeamPage"
 
 const App = () => (
   <React.Fragment>
     <Header />
-
-    <div>Hello World!</div>
+    <TeamPage />
     <Footer />
   </React.Fragment>
 

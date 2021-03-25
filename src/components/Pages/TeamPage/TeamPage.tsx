@@ -16,7 +16,7 @@ function getUserData(url:string) {
 const TeamPage: React.FC = () => {
   const useStyles = TeamStyles();
   const [usersData, setUserData ] = useState([]);
-  const url = "../../../assets/staticData/teamDescription.json";
+  const url = "./assets/staticData/teamDescription.json";
 
   useEffect(() => {
     async function fetchData() {
