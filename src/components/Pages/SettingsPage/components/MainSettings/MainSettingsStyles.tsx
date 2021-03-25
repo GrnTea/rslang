@@ -16,7 +16,8 @@ const mainSettingsStyles = makeStyles({
     },
 
     "daylySettingsBtn": {
-        backgroundColor: "#1665B4!important",
+        backgroundColor: "#1665B4!important",        
+        fontWeight: "bold",
 
         "&:hover": {
             backgroundColor: "#2687e7!important",
@@ -27,15 +28,20 @@ const mainSettingsStyles = makeStyles({
         display: "flex",
         flexDirection: "column",
         rowGap: "1em",
-        marginTop: "1em"
+        marginTop: "1em",
     },
 
     "dailySettingsBtnGroup": {
         display: "flex",
         flexDirection: "row",
         columnGap: "1em",
-        alignItems: "center"
-    }
+        alignItems: "center",
+        fontWeight: "bold"
+    },
+
+    "switchBase": {
+        color: "#1665B4!important",
+    },
 });
 
 export default mainSettingsStyles;

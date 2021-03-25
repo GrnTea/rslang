@@ -19,6 +19,29 @@ const LANGUAGES = {
     }
 }
 
+const TEXTS = {
+    en: {
+        mainTitle: "MAIN SETTINGS",
+        appSettings: "APP SETTINGS",
+        lang: "Language",
+        voiceSettings: "VOICE SETTINGS",
+        autoVoicePrewiew: "Automatic voice preview",
+        dayLearningSettings: "DAY LEARNING SETTINGS",
+        numbersNewWords: "Number of new words to learn per day",
+        maxNumberOfCards: "Maximum number of cards to learn per day"
+    },
+    ru: {
+        mainTitle: "ОСНОВНЫЕ ПАРАМЕТРЫ",
+        appSettings: "НАСТРОЙКИ ПРИЛОЖЕНИЯ",
+        lang: "Язык",
+        voiceSettings: "НАСТРОЙКИ ЗВУКА",
+        autoVoicePrewiew: "Автоматическая озвучка",
+        dayLearningSettings: "НАСТРОЙКИ ЕЖЕДНЕВНОГО ОБУЧЕНИЯ",
+        numbersNewWords: "Количество новых слов в день для изучения",
+        maxNumberOfCards: "Максимальное количество карточек для изучения в день"
+    }
+}
+
 const MainSettings: React.FC = () => {
   const useStyles = MainSettingsStyles();
   const [lang, setLang] = useState("ru");
@@ -34,29 +57,29 @@ const MainSettings: React.FC = () => {
     setAutoVoice(event.target.checked);
   }
 
-  const handleChangeSubstractCountNewWorlds = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeSubstractCountNewWorlds = () => {
     setCountNewWords(countNewWords - 1);
   }
 
-  const handleChangeAddCountNewWorlds = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeAddCountNewWorlds = () => {
     setCountNewWords(countNewWords + 1);
   }
 
-  const handleChangeSubstractCountMaxDayCards = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeSubstractCountMaxDayCards = () => {
     setCountMaxDayCards(countMaxDayCards - 1);
   }
 
-  const handleChangeAddCountMaxDayCards = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeAddCountMaxDayCards = () => {
     setCountMaxDayCards(countMaxDayCards + 1);
   }
 
   return (
     <div className={useStyles.mainSettingsContainer}>
-        <h1>ОСНОВНЫЕ ПАРАМЕТРЫ</h1>
+        <h1>{TEXTS[lang].mainTitle}</h1>
         <div>
-            <h2>НАСТРОЙКИ ПРИЛОЖЕНИЯ</h2>
+            <h2>{TEXTS[lang].appSettings}</h2>
             <FormControl variant="outlined" className={useStyles.formControl}>
-                <InputLabel id="demo-simple-select-outlined-label">Язык</InputLabel>
+                <InputLabel id="demo-simple-select-outlined-label">{TEXTS[lang].lang}</InputLabel>
                 <Select
                 labelId="demo-simple-select-outlined-label"
                 id="demo-simple-select-outlined"
@@ -73,22 +96,23 @@ const MainSettings: React.FC = () => {
             </FormControl>
         </div>
         <div>
-            <h2>НАСТРОЙКИ ЗВУКА</h2>
+            <h2>{TEXTS[lang].voiceSettings}</h2>
             <FormControlLabel
                 control={
                     <Switch
                         checked={autoVoice}
                         onChange={handleChangeAutomaticVoiceActing}
                         color="primary"
+                        classes={{switchBase: useStyles.switchBase}}
                     />
                 }
-                label="Автоматическая озвучка"
+                label={TEXTS[lang].autoVoicePrewiew}
             />            
         </div>
         <div>
-            <h2>НАСТРОЙКИ ЕЖЕДНЕВНОГО ОБУЧЕНИЯ</h2>
+            <h2>{TEXTS[lang].dayLearningSettings}</h2>
             <div className={useStyles.dailySettings}>
-                <span>Количество новых слов в день для изучения</span>
+                <span>{TEXTS[lang].numbersNewWords}</span>
                 <div className={useStyles.dailySettingsBtnGroup}>
                     <Button className={useStyles.daylySettingsBtn} onClick={handleChangeAddCountNewWorlds}>+</Button>
                     <div>{countNewWords}</div>
@@ -96,7 +120,7 @@ const MainSettings: React.FC = () => {
                 </div>
             </div>
             <div className={useStyles.dailySettings}>
-                <span>Максимальное количество карточек для изучения в день</span>
+                <span>{TEXTS[lang].maxNumberOfCards}</span>
                 <div className={useStyles.dailySettingsBtnGroup}>
                     <Button className={useStyles.daylySettingsBtn} onClick={handleChangeAddCountMaxDayCards}>+</Button>
                     <div>{countMaxDayCards}</div>
