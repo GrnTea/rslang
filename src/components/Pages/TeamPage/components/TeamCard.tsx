@@ -1,5 +1,6 @@
 import React from "react";
 import TeamStyles from "../TeamCardStyles";
+import github from "../../../../assets/images/github.svg";
 
 interface UserInfo {
     userInfo: any
@@ -15,7 +16,7 @@ const TeamCard = ({ userInfo }:UserInfo) => {
             <h2 className={useStyles.userName}>{userInfo.userName}</h2>
             <p className={useStyles.userDescription}>{userInfo.userDescription}</p>
             <div className={useStyles.userLink}>
-                <a href={userInfo.userGitHub}><img className={useStyles.githubImg} src="./assets/images/github.svg"/></a>
+                <a href={userInfo.userGitHub}><img className={useStyles.githubImg} src={github}/></a>
             </div>
         </div>
     </div>
