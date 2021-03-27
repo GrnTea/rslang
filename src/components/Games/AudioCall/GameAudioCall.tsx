@@ -64,17 +64,11 @@ export default function GameAudioCall(){
   useEffect(() => {
     console.log(counter)
     if(counter === 10){
-      let result = 
-      <div className="end-game">
-        <div>правильных ответов: {trueAnswer}</div>  
-        <div>не правильных ответов: {falseAnswer}</div>  
-      </div>
-      setEndGame(result);
+      setEndGame(true);
       setStartGame(false);
       setRebootButton(true);
 
       document.querySelector('.content-conteiner').classList.add('hide');
-
     }
   }, [counter])
 
@@ -205,7 +199,12 @@ export default function GameAudioCall(){
 
       </div>    
       
-      {endGame ? endGame : ''}
+      {endGame ? 
+        <div className="end-game">
+          <div>правильных ответов: {trueAnswer}</div>  
+          <div>не правильных ответов: {falseAnswer}</div>  
+        </div> : ''
+      }
       {rebootButton ? 
         <div className="button-reboot-game">
           <Button 
@@ -218,7 +217,5 @@ export default function GameAudioCall(){
         : ''
       }
     </div> 
-
-
   )
 }
