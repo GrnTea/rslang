@@ -22,11 +22,10 @@ module.exports = {
     '@typescript-eslint'
   ],
   "rules": {
-    "linebreak-style": ["error", "windows"],
+    "linebreak-style": ["error", (process.platform === "win32" ? "windows" : "unix")],
     "quotes": ["error", "double"],
     "max-len": ["error", { "code": 120 }],
     "no-loop-func": 1,
-    "linebreak-style": ["error", "unix"],
     "import/extensions": [
       "error",
       "ignorePackages",
