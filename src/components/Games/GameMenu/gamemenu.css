@@ -32,7 +32,7 @@
   padding: 5px 20px;
 }
 
-.link-navigation:nth-child(1n+1){
+.link-navigation{
   border-left: none;
 }
 

@@ -62,7 +62,7 @@ export default function GameAudioCall(){
   }, [word]);
 
   useEffect(() => {
-    console.log(counter)
+    // console.log(counter)
     if(counter === 10){
       setEndGame(true);
       setStartGame(false);
@@ -211,7 +211,7 @@ export default function GameAudioCall(){
             onClick={rebootGame} 
             variant="contained" 
             color="primary">
-              ебануть ещё разик
+              сыграть ещё раз
           </Button> 
         </div>
         : ''
