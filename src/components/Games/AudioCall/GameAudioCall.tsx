@@ -109,8 +109,8 @@ export default function GameAudioCall(){
 
   function checkWord(e) {
     let targetElem = e.target;
-    let currentElem;
-    if(e.target.innerHTML === word.word){
+    let currentElem: any;
+    if(e.target.dataset.value === word.word){
       setShowImage(true)
       setTrueanswer(prev => prev + 1);
 
@@ -177,12 +177,13 @@ export default function GameAudioCall(){
         <div className="random-words">
           {
           displayWords.map((e, i) => {
+            
             return (
               <div key={i} 
                 data-value={e.word}
                 className="random-word"
                 onClick={e => checkWord(e)} >
-                  {e.word}
+                  {e.wordTranslate}
               </div>
             )
           } )
