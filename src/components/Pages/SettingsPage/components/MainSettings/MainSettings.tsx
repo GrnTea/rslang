@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import MainSettingsStyles from "./MainSettingsStyles";
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -6,10 +6,16 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
-import { FormControlLabel } from '@material-ui/core';
 import { connect } from "react-redux";
 import { toggleLang, toggleIsAutoVoice, incrementCountNewWords,  decrimentCountNewWords, decrimentCountMaxDailyCards, incrementCountMaxDailyCards} from "../../../../../redux/main-settings_reducer";
 import  { RootState }  from "../../../../../redux/reducer";
+import { FormControlLabel, FormGroup, FormLabel, withStyles } from '@material-ui/core';
+
+const StyledLabel = withStyles({
+    root: {
+      marginBottom: "1em",
+    }
+  })(FormLabel);
 
 const LANGUAGES = {
     en: {
@@ -84,59 +90,69 @@ const MainSettings: React.FC<Props> = ({lang, toggleLang, isAutoVoice, toggleIsA
   }
 
   return (
-    <div className={useStyles.mainSettingsContainer}>
-        <h1>{TEXTS[lang].mainTitle}</h1>
-        <div>
-            <h2>{TEXTS[lang].appSettings}</h2>
-            <FormControl variant="outlined" className={useStyles.formControl}>
-                <InputLabel id="demo-simple-select-outlined-label">{TEXTS[lang].lang}</InputLabel>
-                <Select
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
-                value={lang}
-                onChange={toggleLang}
-                label="Language"
-                >
-                    {
-                        Object.keys(LANGUAGES[lang]).map((item)=> {
-                            return <MenuItem key={item} value={item}>{LANGUAGES[lang][item]}</MenuItem>
-                        })
-                    }
-                </Select>
+    <div>
+        <h2>{TEXTS[lang].mainTitle}</h2>
+        <div className={useStyles.mainSettingsContainer}>
+            <FormControl component="fieldset">
+                <StyledLabel component="legend" classes={useStyles.formLabel}>{TEXTS[lang].appSettings}</StyledLabel>
+                <FormGroup>
+                    <FormControl variant="outlined" className={useStyles.formControlLang}>
+                        <InputLabel id="demo-simple-select-outlined-label">{TEXTS[lang].lang}</InputLabel>
+                        <Select
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        value={lang}
+                        onChange={toggleLang}
+                        label="Language"
+                        >
+                            {
+                                Object.keys(LANGUAGES[lang]).map((item)=> {
+                                    return <MenuItem key={item} value={item}>{LANGUAGES[lang][item]}</MenuItem>
+                                })
+                            }
+                        </Select>
+                    </FormControl>
+                </FormGroup>
             </FormControl>
+            <FormControl component="fieldset">
+                <StyledLabel component="legend">{TEXTS[lang].voiceSettings}</StyledLabel>
+                    <FormGroup>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={isAutoVoice}
+                                    onChange={toggleIsAutoVoice}
+                                    color="primary"
+                                    classes={{switchBase: useStyles.switchBase}}
+                                />
+                            }
+                            label={TEXTS[lang].autoVoicePrewiew}
+                        />  
+                    </FormGroup>
+                </FormControl>
+            <div>
+                <FormControl component="fieldset">
+                    <FormLabel component="legend">{TEXTS[lang].dayLearningSettings}</FormLabel>
+                    <FormGroup>
+                        <div className={useStyles.dailySettings}>
+                            <span>{TEXTS[lang].numbersNewWords}</span>
+                            <div className={useStyles.dailySettingsBtnGroup}>
+                                <Button className={useStyles.daylySettingsBtn} onClick={handleChangeAddCount}>+</Button>
+                                <div>{countNewWords}</div>
+                                <Button className={useStyles.daylySettingsBtn} onClick={handleChangeSubstractCount}>-</Button>
+                            </div>
+                        </div>
+                        <div className={useStyles.dailySettings}>
+                            <span>{TEXTS[lang].maxNumberOfCards}</span>
+                            <div className={useStyles.dailySettingsBtnGroup}>
+                                <Button className={useStyles.daylySettingsBtn} onClick={handleChangeAddCountMaxDayCards}>+</Button>
+                                <div>{countMaxDayCards}</div>
+                                <Button className={useStyles.daylySettingsBtn} onClick={handleChangeSubstractCountMaxDayCards}>-</Button>
+                            </div>
+                        </div>
+                    </FormGroup>
+                </FormControl>
         </div>
-        <div>
-            <h2>{TEXTS[lang].voiceSettings}</h2>
-            <FormControlLabel
-                control={
-                    <Switch
-                        checked={isAutoVoice}
-                        onChange={toggleIsAutoVoice}
-                        color="primary"
-                        classes={{switchBase: useStyles.switchBase}}
-                    />
-                }
-                label={TEXTS[lang].autoVoicePrewiew}
-            />            
-        </div>
-        <div>
-            <h2>{TEXTS[lang].dayLearningSettings}</h2>
-            <div className={useStyles.dailySettings}>
-                <span>{TEXTS[lang].numbersNewWords}</span>
-                <div className={useStyles.dailySettingsBtnGroup}>
-                    <Button className={useStyles.daylySettingsBtn} onClick={handleChangeAddCount}>+</Button>
-                    <div>{countNewWords}</div>
-                    <Button className={useStyles.daylySettingsBtn} onClick={handleChangeSubstractCount}>-</Button>
-                </div>
-            </div>
-            <div className={useStyles.dailySettings}>
-                <span>{TEXTS[lang].maxNumberOfCards}</span>
-                <div className={useStyles.dailySettingsBtnGroup}>
-                    <Button className={useStyles.daylySettingsBtn} onClick={handleChangeAddCountMaxDayCards}>+</Button>
-                    <div>{countMaxDayCards}</div>
-                    <Button className={useStyles.daylySettingsBtn} onClick={handleChangeSubstractCountMaxDayCards}>-</Button>
-                </div>
-            </div>
         </div>
     </div>
    );

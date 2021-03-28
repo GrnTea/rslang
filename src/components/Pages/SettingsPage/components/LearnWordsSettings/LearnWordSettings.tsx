@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import LearnSettingsStyles from "./LearnSettingsStyles";
 import FormControl from '@material-ui/core/FormControl';
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
@@ -16,6 +16,12 @@ const BlueCheckbox = withStyles({
     },
     checked: {},
   })((props: CheckboxProps) => <Checkbox color="default" {...props} />);
+
+  const StyledLabel = withStyles({
+    root: {
+      marginBottom: "1em",
+    }
+  })(FormLabel);
 
 const TEXTS = {
     en: {
@@ -88,10 +94,10 @@ const LearnWordSettings: React.FC<Props> = ({lang,  buttonsSettings, toggleButto
   const useStyles = LearnSettingsStyles();
   return (
     <div>
-        <h1>{TEXTS[lang].mainTitle}</h1>
+        <h2>{TEXTS[lang].mainTitle}</h2>
         <div className={useStyles.formsContainer}>
         <FormControl component="fieldset" className={useStyles.formControl}>
-            <FormLabel component="legend">{TEXTS[lang].buttonSettings}</FormLabel>
+            <StyledLabel component="legend">{TEXTS[lang].buttonSettings}</StyledLabel>
             <FormGroup>
             {buttonsSettings.map((checkbox: any) => {
                 const buttonName = BUTTON_NAME[lang][checkbox.id] || undefined;
@@ -100,7 +106,7 @@ const LearnWordSettings: React.FC<Props> = ({lang,  buttonsSettings, toggleButto
             </FormGroup>
        </FormControl>
        <FormControl component="fieldset" className={useStyles.formControl}>
-            <FormLabel component="legend">{TEXTS[lang].cardSettings}</FormLabel>
+            <StyledLabel component="legend">{TEXTS[lang].cardSettings}</StyledLabel>
             <FormGroup>
             {cardSettings.map((checkbox: any) => {
                 const cardName = CARD_SETTINGS[lang][checkbox.id] || undefined;

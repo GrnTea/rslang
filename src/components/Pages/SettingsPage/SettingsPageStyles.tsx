@@ -7,10 +7,8 @@ const settingsStyles = makeStyles({
         display: "flex",
         justifyContent: "space-between",
         flexDirection: "column",
-        flexWrap: "wrap",
-        rowGap: "3em"
+        rowGap: "2em"
     },
-
 });
 
 export default settingsStyles;

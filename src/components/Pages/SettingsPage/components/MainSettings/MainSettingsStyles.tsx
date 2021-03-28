@@ -4,11 +4,16 @@ const mainSettingsStyles = makeStyles({
     "mainSettingsContainer": {
         display: "flex",
         flexDirection: "column",
-        rowGap: "1em"
+        rowGap: "2em"
     },
 
-    "formControl": {
+    "MuiFormLabel-root": {
+        marginBottom: "50px!important",
+    },
+
+    "formControlLang": {
         minWidth: 200,
+        maxWidth: "200px"
     },
 
     "daylySettingsBtn": {
