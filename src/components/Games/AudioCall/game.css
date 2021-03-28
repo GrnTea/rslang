@@ -1,0 +1,69 @@
+.game-body-container{
+  margin: 0 auto;
+  width: 600px;
+}
+
+h2{
+  text-align: center;
+}
+
+.audio-icon{
+  cursor: pointer;
+}
+
+.word-image{
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+img{
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 4px;
+}
+
+.content-conteiner{
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.random-words{
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+  cursor: pointer;
+  text-transform: capitalize;
+  margin-left: 5px;
+}
+
+
+.button-reboot-game{
+  text-align: center;
+  margin: 10px 10px;
+}
+
+.end-game{
+  text-align: center;
+}
+
+.button-play{
+  display: block;
+  margin: 0 auto;
+}
+
+
+.guessed{
+  color: green;
+}
+
+.no-guessed{
+  color: red;
+}
+
+.hide{
+  display: none;
+}
