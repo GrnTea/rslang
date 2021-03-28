@@ -8,7 +8,7 @@ import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import { FormControlLabel } from '@material-ui/core';
 import { connect } from "react-redux";
-import { toggleLang, toggleIsAutoVoice, incrementCountNewWords,  decrimentCountNewWords, decrimentCountMaxDailyCards, incrementCountMaxDailyCards} from "../../../../../redux/settings-reducer";
+import { toggleLang, toggleIsAutoVoice, incrementCountNewWords,  decrimentCountNewWords, decrimentCountMaxDailyCards, incrementCountMaxDailyCards} from "../../../../../redux/main-settings_reducer";
 import  { RootState }  from "../../../../../redux/reducer";
 
 const LANGUAGES = {

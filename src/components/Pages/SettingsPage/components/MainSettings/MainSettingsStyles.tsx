@@ -2,13 +2,9 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const mainSettingsStyles = makeStyles({
     "mainSettingsContainer": {
-        maxWidth: "1200px",
-        margin: "0 auto",
         display: "flex",
-        alignItems: "flex-start",
-        justifyContent: "space-between",
         flexDirection: "column",
-        rowGap: "3em"
+        rowGap: "1em"
     },
 
     "formControl": {

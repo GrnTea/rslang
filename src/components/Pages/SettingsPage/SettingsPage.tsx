@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import SettingsStyles from "./SettingsPageStyles";
 import MainSettings from "./components/MainSettings/MainSettings";
+import LearnWordSettings from "./components/LearnWordsSettings/LearnWordSettings";
 
 const SettingsPage: React.FC = () => {
   const useStyles = SettingsStyles();
@@ -8,6 +9,7 @@ const SettingsPage: React.FC = () => {
   return (
     <div className={useStyles.settingsPageContainer}>
        <MainSettings />
+       <LearnWordSettings/>
     </div>
    );
 };

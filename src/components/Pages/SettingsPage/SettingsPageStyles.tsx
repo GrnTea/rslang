@@ -5,9 +5,8 @@ const settingsStyles = makeStyles({
         maxWidth: "1200px",
         margin: "0 auto",
         display: "flex",
-        alignItems: "center",
         justifyContent: "space-between",
-        flexDirection: "row",
+        flexDirection: "column",
         flexWrap: "wrap",
         rowGap: "3em"
     },
