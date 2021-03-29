@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import TeamCard from './components/TeamCard';
+import React from "react";
+import TeamCard from "./components/TeamCard";
 import TeamStyles from "./TeamCardStyles";
-import teamDescription  from "../../../assets/staticData/teamDescription.json";
+import teamDescription from "../../../assets/staticData/teamDescription.json";
 
 // function getUserData(url:string) {
 //     return fetch(url)
@@ -32,12 +32,10 @@ const TeamPage: React.FC = () => {
   return (
     <div className={useStyles.teamCardsContainer}>
         {
-            teamDescription.team.map((user) => {
-                return <TeamCard key={user.id} userInfo={user} />
-            })
+            teamDescription.team.map((user) => <TeamCard key={user.id} userInfo={user} />)
         }
     </div>
-   );
+  );
 };
 
 export default TeamPage;

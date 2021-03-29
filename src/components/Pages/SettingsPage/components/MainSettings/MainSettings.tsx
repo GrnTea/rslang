@@ -1,55 +1,59 @@
-import React, { useState } from 'react';
-import MainSettingsStyles from "./MainSettingsStyles";
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Switch from '@material-ui/core/Switch';
-import Button from '@material-ui/core/Button';
+import React, { useState } from "react";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import Switch from "@material-ui/core/Switch";
+import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
-import { toggleLang, toggleIsAutoVoice, incrementCountNewWords,  decrimentCountNewWords, decrimentCountMaxDailyCards, incrementCountMaxDailyCards} from "../../../../../redux/main-settings_reducer";
-import  { RootState }  from "../../../../../redux/reducer";
-import { FormControlLabel, FormGroup, FormLabel, withStyles } from '@material-ui/core';
+import {
+  FormControlLabel, FormGroup, FormLabel, withStyles,
+} from "@material-ui/core";
+import {
+  toggleLang, toggleIsAutoVoice, incrementCountNewWords, decrimentCountNewWords, decrimentCountMaxDailyCards, incrementCountMaxDailyCards,
+} from "../../../../../redux/main-settings_reducer";
+import { RootState } from "../../../../../redux/reducer";
+import MainSettingsStyles from "./MainSettingsStyles";
 
 const StyledLabel = withStyles({
-    root: {
-      marginBottom: "1em",
-    }
-  })(FormLabel);
+  root: {
+    marginBottom: "1em",
+  },
+})(FormLabel);
 
 const LANGUAGES = {
-    en: {
-        ru: "Russian",
-        en: "English"
-    },
-    ru: {
-        ru: "Русский",
-        en: "Английский"
-    }
-}
+  en: {
+    ru: "Russian",
+    en: "English",
+  },
+  ru: {
+    ru: "Русский",
+    en: "Английский",
+  },
+};
 
 const TEXTS = {
-    en: {
-        mainTitle: "MAIN SETTINGS",
-        appSettings: "APP SETTINGS",
-        lang: "Language",
-        voiceSettings: "VOICE SETTINGS",
-        autoVoicePrewiew: "Automatic voice preview",
-        dayLearningSettings: "DAY LEARNING SETTINGS",
-        numbersNewWords: "Number of new words to learn per day",
-        maxNumberOfCards: "Maximum number of cards to learn per day"
-    },
-    ru: {
-        mainTitle: "ОСНОВНЫЕ ПАРАМЕТРЫ",
-        appSettings: "НАСТРОЙКИ ПРИЛОЖЕНИЯ",
-        lang: "Язык",
-        voiceSettings: "НАСТРОЙКИ ЗВУКА",
-        autoVoicePrewiew: "Автоматическая озвучка",
-        dayLearningSettings: "НАСТРОЙКИ ЕЖЕДНЕВНОГО ОБУЧЕНИЯ",
-        numbersNewWords: "Количество новых слов в день для изучения",
-        maxNumberOfCards: "Максимальное количество карточек для изучения в день"
-    }
-}
+  en: {
+    mainTitle: "MAIN SETTINGS",
+    appSettings: "APP SETTINGS",
+    lang: "Language",
+    voiceSettings: "VOICE SETTINGS",
+    autoVoicePrewiew: "Automatic voice preview",
+    dayLearningSettings: "DAY LEARNING SETTINGS",
+    numbersNewWords: "Number of new words to learn per day",
+    maxNumberOfCards: "Maximum number of cards to learn per day",
+  },
+  ru: {
+    mainTitle: "ОСНОВНЫЕ ПАРАМЕТРЫ",
+    appSettings: "НАСТРОЙКИ ПРИЛОЖЕНИЯ",
+    lang: "Язык",
+    voiceSettings: "НАСТРОЙКИ ЗВУКА",
+    autoVoicePrewiew: "Автоматическая озвучка",
+    dayLearningSettings: "НАСТРОЙКИ ЕЖЕДНЕВНОГО ОБУЧЕНИЯ",
+    numbersNewWords: "Количество новых слов в день для изучения",
+    maxNumberOfCards: "Максимальное количество карточек для изучения в день",
+  },
+};
 
 type Props = {
     lang: string,
@@ -64,30 +68,32 @@ type Props = {
     decrimentCountMaxDailyCards: (value: number) => void,
 }
 
-const MainSettings: React.FC<Props> = ({lang, toggleLang, isAutoVoice, toggleIsAutoVoice, countNewWords, incrementCountNewWords, decrimentCountNewWords, countMaxDayCards, incrementCountMaxDailyCards, decrimentCountMaxDailyCards }) => {
+const MainSettings: React.FC<Props> = ({
+  lang, toggleLang, isAutoVoice, toggleIsAutoVoice, countNewWords, incrementCountNewWords, decrimentCountNewWords, countMaxDayCards, incrementCountMaxDailyCards, decrimentCountMaxDailyCards,
+}) => {
   const useStyles = MainSettingsStyles();
   const [countNewdaylyWords, setCountNewdaylyWords] = useState<number>(countNewWords);
   const [countMaxCards, setCountMaxCards] = useState<number>(countMaxDayCards);
 
   const handleChangeSubstractCount = () => {
-    setCountNewdaylyWords(countNewdaylyWords-1);
+    setCountNewdaylyWords(countNewdaylyWords - 1);
     decrimentCountNewWords(countNewdaylyWords);
-  }
+  };
 
   const handleChangeAddCount = () => {
-    setCountNewdaylyWords(countNewdaylyWords+1);
+    setCountNewdaylyWords(countNewdaylyWords + 1);
     incrementCountNewWords(countNewdaylyWords);
-  }
+  };
 
   const handleChangeSubstractCountMaxDayCards = () => {
     setCountMaxCards(countMaxCards - 1);
     decrimentCountMaxDailyCards(countMaxCards);
-  }
+  };
 
   const handleChangeAddCountMaxDayCards = () => {
     setCountMaxCards(countMaxCards + 1);
     incrementCountMaxDailyCards(countMaxCards);
-  }
+  };
 
   return (
     <div>
@@ -106,9 +112,7 @@ const MainSettings: React.FC<Props> = ({lang, toggleLang, isAutoVoice, toggleIsA
                         label="Language"
                         >
                             {
-                                Object.keys(LANGUAGES[lang]).map((item)=> {
-                                    return <MenuItem key={item} value={item}>{LANGUAGES[lang][item]}</MenuItem>
-                                })
+                                Object.keys(LANGUAGES[lang]).map((item) => <MenuItem key={item} value={item}>{LANGUAGES[lang][item]}</MenuItem>)
                             }
                         </Select>
                     </FormControl>
@@ -123,11 +127,11 @@ const MainSettings: React.FC<Props> = ({lang, toggleLang, isAutoVoice, toggleIsA
                                     checked={isAutoVoice}
                                     onChange={toggleIsAutoVoice}
                                     color="primary"
-                                    classes={{switchBase: useStyles.switchBase}}
+                                    classes={{ switchBase: useStyles.switchBase }}
                                 />
                             }
                             label={TEXTS[lang].autoVoicePrewiew}
-                        />  
+                        />
                     </FormGroup>
                 </FormControl>
             <div>
@@ -155,23 +159,23 @@ const MainSettings: React.FC<Props> = ({lang, toggleLang, isAutoVoice, toggleIsA
         </div>
         </div>
     </div>
-   );
+  );
 };
 
 const mapStateToProps = (state:RootState) => ({
-    lang: state.lang.lang,
-    isAutoVoice: state.isAutoVoice.isAutoVoice,
-    countNewWords: state.countNewWords.countNewWords,
-    countMaxDayCards: state.countMaxDayCards.countMaxDayCards
-  });
-  
+  lang: state.lang.lang,
+  isAutoVoice: state.isAutoVoice.isAutoVoice,
+  countNewWords: state.countNewWords.countNewWords,
+  countMaxDayCards: state.countMaxDayCards.countMaxDayCards,
+});
+
 const mapDispatchToProps = {
-    toggleLang,
-    toggleIsAutoVoice,
-    decrimentCountNewWords,
-    incrementCountNewWords,
-    incrementCountMaxDailyCards,
-    decrimentCountMaxDailyCards
+  toggleLang,
+  toggleIsAutoVoice,
+  decrimentCountNewWords,
+  incrementCountNewWords,
+  incrementCountMaxDailyCards,
+  decrimentCountMaxDailyCards,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainSettings);

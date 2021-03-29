@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from "react";
 import SettingsStyles from "./SettingsPageStyles";
 import MainSettings from "./components/MainSettings/MainSettings";
 import LearnWordSettings from "./components/LearnWordsSettings/LearnWordSettings";
@@ -11,7 +11,7 @@ const SettingsPage: React.FC = () => {
        <MainSettings />
        <LearnWordSettings/>
     </div>
-   );
+  );
 };
 
 export default SettingsPage;

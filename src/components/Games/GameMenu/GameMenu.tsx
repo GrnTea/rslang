@@ -1,17 +1,16 @@
-import React, {useEffect} from 'react';
-import GameAudioCall from '../AudioCall/GameAudioCall';
-import './gamemenu.css';
+import React, { useEffect } from "react";
+import GameAudioCall from "../AudioCall/GameAudioCall";
+import "./gamemenu.css";
 import {
   Link,
-  Route
+  Route,
 } from "react-router-dom";
-import { ButtonGroup, Button } from '@material-ui/core';
+import { ButtonGroup, Button } from "@material-ui/core";
 
 export default function GameMenu(props: any) {
-
-  let arrLinks = [];
-  for(let i = 1; i < 7; i++) {
-    arrLinks.push(<Link key={i} className="link-navigation" to={`/games/audiocall/level/${i}`}>{i}</Link>)
+  const arrLinks = [];
+  for (let i = 1; i < 7; i++) {
+    arrLinks.push(<Link key={i} className="link-navigation" to={`/games/audiocall/level/${i}`}>{i}</Link>);
   }
 
   return (
@@ -25,9 +24,9 @@ export default function GameMenu(props: any) {
 
       <div className="routes">
         <Route exact path="/games/audiocall/level/:num">
-          <GameAudioCall /> 
+          <GameAudioCall />
         </Route>
       </div>
     </div>
-  )
+  );
 }
