@@ -157,13 +157,16 @@ function Header() {
             onClose: handleDrawerClose,
           }}
         >
-          <IconButton
-            {...{
-              onClick: handleDrawerClose,
-            }}
-          >
-            <CloseIcon fontSize="large"/>
-          </IconButton>
+          <div>
+            <IconButton  color="primary"
+              {...{
+                onClick: handleDrawerClose,
+              }}
+            >
+              <CloseIcon
+                fontSize="large"/>
+            </IconButton>
+          </div>
 
           <List className={list}>
             <Link
