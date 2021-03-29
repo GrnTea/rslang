@@ -1,3 +1,5 @@
+import React from "react";
+
 const TOGGLE_BUTTON_SETTINGS = "TOGGLE_BUTTON_SETTINGS";
 
 export type InitialStateTypeButtons = {
@@ -26,41 +28,41 @@ export type InitialStateTypeButtons = {
 }
 
 const initialStateButtons: InitialStateTypeButtons = {
-    buttonsSettings: [
-        {
-            id: "repeateBtn",
-            state: true
-        },
-        {
-            id: "difficultBtn",
-            state: true
-        },
-        {
-            id: "goodBtn",
-            state: true
-        },
-        {
-            id: "easyBtn",
-            state: true
-        },
-        {
-            id: "deleteBtn",
-            state: true
-        },
-    ]
-}
+  buttonsSettings: [
+    {
+      id: "repeateBtn",
+      state: true,
+    },
+    {
+      id: "difficultBtn",
+      state: true,
+    },
+    {
+      id: "goodBtn",
+      state: true,
+    },
+    {
+      id: "easyBtn",
+      state: true,
+    },
+    {
+      id: "deleteBtn",
+      state: true,
+    },
+  ],
+};
 
 export const settingsReducerButtons = (state = initialStateButtons, action:any): InitialStateTypeButtons => {
-    switch (action.type) {
-        case TOGGLE_BUTTON_SETTINGS:
-            const newButtonSettings = state.buttonsSettings.slice();
-            const index = newButtonSettings.findIndex(item => item.id === action.target);
-            newButtonSettings[index].state = action.value;
-            return {...state, buttonsSettings: [...newButtonSettings]}
+  const newButtonSettings = state.buttonsSettings.slice();
+  const index = newButtonSettings.findIndex((item) => item.id === action.target);
+  switch (action.type) {
+    case TOGGLE_BUTTON_SETTINGS:
+      newButtonSettings[index].state = action.value;
+      return { ...state, buttonsSettings: [...newButtonSettings] };
 
-        default: return state;
-    }
-}
+    default: return state;
+  }
+};
 
 export type ToggleButtonsActionType = {
     type: typeof TOGGLE_BUTTON_SETTINGS,
@@ -70,12 +72,11 @@ export type ToggleButtonsActionType = {
 }
 
 export const toggleButtonsSettings = (buttonsSettings: React.ChangeEvent<HTMLInputElement>):ToggleButtonsActionType => ({
-    type: TOGGLE_BUTTON_SETTINGS,
-    target: buttonsSettings.target.name,
-    value: buttonsSettings.target.checked,
-    payload: buttonsSettings,
+  type: TOGGLE_BUTTON_SETTINGS,
+  target: buttonsSettings.target.name,
+  value: buttonsSettings.target.checked,
+  payload: buttonsSettings,
 });
-
 
 // CARD DISPLAY SETTINGS
 
@@ -111,45 +112,45 @@ export type InitialStateTypeCard = {
 }
 
 const initialStateCard: InitialStateTypeCard = {
-    cardSettings: [
-        {
-            id: "wordTranslate",
-            state: true
-        },
-        {
-            id: "wordMean",
-            state: true
-        },
-        {
-            id: "wordUsing",
-            state: true
-        },
-        {
-            id: "wordTranscription",
-            state: true
-        },
-        {
-            id: "wordAssociation",
-            state: true
-        },
-        {
-            id: "wordAnswer",
-            state: true
-        },
-    ]
-}
+  cardSettings: [
+    {
+      id: "wordTranslate",
+      state: true,
+    },
+    {
+      id: "wordMean",
+      state: true,
+    },
+    {
+      id: "wordUsing",
+      state: true,
+    },
+    {
+      id: "wordTranscription",
+      state: true,
+    },
+    {
+      id: "wordAssociation",
+      state: true,
+    },
+    {
+      id: "wordAnswer",
+      state: true,
+    },
+  ],
+};
 
 export const settingsReducerCard = (state = initialStateCard, action:any): InitialStateTypeCard => {
-    switch (action.type) {
-        case TOGGLE_CARD_SETTINGS:
-            const newCardSettings = state.cardSettings.slice();
-            const index = newCardSettings.findIndex(item => item.id === action.target);
-            newCardSettings[index].state = action.value;
-            return {...state, cardSettings: [...newCardSettings]}
+  const newCardSettings = state.cardSettings.slice();
+  const index = newCardSettings.findIndex((item) => item.id === action.target);
+  switch (action.type) {
+    case TOGGLE_CARD_SETTINGS:
+      newCardSettings[index].state = action.value;
+      return { ...state, cardSettings: [...newCardSettings] };
 
-        default: return state;
-    }
-}
+    default: return state;
+  }
+};
 
 export type ToggleCardSettingsActionType = {
     type: typeof TOGGLE_CARD_SETTINGS,
@@ -159,8 +160,8 @@ export type ToggleCardSettingsActionType = {
 }
 
 export const toggleCardSetting = (cardSettings: React.ChangeEvent<HTMLInputElement>):ToggleCardSettingsActionType => ({
-    type: TOGGLE_CARD_SETTINGS,
-    target: cardSettings.target.name,
-    value: cardSettings.target.checked,
-    payload: cardSettings,
+  type: TOGGLE_CARD_SETTINGS,
+  target: cardSettings.target.name,
+  value: cardSettings.target.checked,
+  payload: cardSettings,
 });

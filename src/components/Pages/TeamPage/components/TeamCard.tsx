@@ -8,7 +8,7 @@ interface UserInfo {
 
 const TeamCard = ({ userInfo }:UserInfo) => {
   const useStyles = TeamStyles();
-  
+
   return (
     <div className={useStyles.userCardContainer}>
         <img className={useStyles.userImg} src={userInfo.userImg} alt={userInfo.userName} />
