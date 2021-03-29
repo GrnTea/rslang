@@ -31,6 +31,19 @@ const headerStyles = makeStyles(
     padding: "0",
     color: "#FFFFFF",
   },
+  listItemContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    "& > img": {
+      width: "24px",
+      margin: "0 10px 10px 0",
+      fill: "#fff",
+      color: "#fff",
+
+    }
+  },
   listLinkItem: {
     textDecoration: "none",
     color: "#FFFFFF",

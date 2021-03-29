@@ -19,6 +19,13 @@ import MenuItem from "@material-ui/core/MenuItem";
 import CloseIcon from '@material-ui/icons/Close';
 import UserProfile from "./UserProfile/UserProfile";
 import GlobalCss from "../../assets/stylesheets/GlobalCSS";
+import homeIcon from "../../assets/icons/main.svg";
+import dictionaryIcon from "../../assets/icons/big-dictionary.svg";
+import gamesIcon from "../../assets/icons/games.svg";
+import settingIcon from "../../assets/icons/settings.svg";
+import statIcon from "../../assets/icons/trend.svg";
+import teamIcon from "../../assets/icons/group.svg";
+import exitIcon from "../../assets/icons/logout.svg";
 
 
 
@@ -34,33 +41,44 @@ const buttonsData = [
   {
     label: "Словарь",
     href: "/dictionary",
+    icon: dictionaryIcon,
   },
   {
     label: "Мини-игры",
     href: "/games",
+    icon: gamesIcon,
+
   },
   {
     label: "Настройки",
     href: "/settings",
+    icon: settingIcon,
+
   },
   {
     label: "Статистика",
     href: "/statistics",
+    icon: statIcon,
+
   },
   {
     label: "Команда",
     href: "/team",
+    icon: teamIcon,
+
   },
   {
-    label: "Log In",
-    href: "/login",
+    label: "Exit",
+    href: "/Exit",
+    icon: exitIcon,
+
   },
 ];
 
 
 function Header() {
 
-  const { appBar, toolbar, logo, list, listLinkItemSection, listLinkItemLearn, collapsedList, listLinkItem, drawerContainer } = headerStyles();
+  const { appBar, toolbar, logo, list, listLinkItemSection, listLinkItemLearn, listItemContainer, collapsedList, listLinkItem, drawerContainer } = headerStyles();
   const [open, setOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -91,14 +109,17 @@ function Header() {
     };
 
     const getDrawerChoices = () => {
-      return buttonsData.map(({ label, href }) => {
+      return buttonsData.map(({ label, href, icon }) => {
         return (
           <Link
             className={listLinkItem}
             to={href}
             key={label}
           >
-            <MenuItem  className={listLinkItem}>{label}</MenuItem>
+            <div className={listItemContainer}>
+              <img src={`${icon}`} alt={`${icon}`}/>
+              <MenuItem className={listLinkItem}>{label}</MenuItem>
+            </div>
           </Link>
         );
       });
