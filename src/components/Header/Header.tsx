@@ -18,6 +18,7 @@ import Drawer from "@material-ui/core/Drawer";
 import MenuItem from "@material-ui/core/MenuItem";
 import CloseIcon from '@material-ui/icons/Close';
 import UserProfile from "./UserProfile/UserProfile";
+import GlobalCss from "../../assets/stylesheets/GlobalCSS";
 
 
 
@@ -59,68 +60,22 @@ const buttonsData = [
 
 function Header() {
 
-  const { appBar, toolbar, logo, burgerButton, list, listItem, menu, drawerContainer } = headerStyles();
+  const { appBar, toolbar, logo, drawerPaper, list, listMenuItem, listLinkItem, drawerContainer } = headerStyles();
   const [open, setOpen] = React.useState(false);
 
-  const [state, setState] = useState({
-    mobileView: false,
-    drawerOpen: false
-  });
-  const { mobileView, drawerOpen } = state;
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleClick = () => {
     setOpen(!open);
   };
 
-  /*useEffect(() => {
-    const setResponsiveness = () => {
-      return window.innerWidth < 800
-        ? setState((prevState) => ({ ...prevState, mobileView: true }))
-        : setState((prevState) => ({ ...prevState, mobileView: false }));
-    };
-    setResponsiveness();
-    window.addEventListener("resize", () => setResponsiveness());
-  }, []);*/
-
-  /*const getMenuButtons = () => {
-    return buttonsData.map(({ label, href }) => {
-      return (
-        <Button
-          {...{
-            key: label,
-            color: "inherit",
-            to: href,
-            component: RouterLink,
-            className: menuButton,
-          }}
-        >
-          {label}
-        </Button>
-      );
-    });
-  };*/
-
-
-  const getDrawerChoices = () => {
-    return buttonsData.map(({ label, href }) => {
-      return (
-        <Link
-          to={href}
-          key={label}
-        >
-          <MenuItem>{label}</MenuItem>
-        </Link>
-      );
-    });
-  };
-
   const displayMenu = () => {
 
     const handleDrawerOpen = () =>
-      setState((prevState) => ({ ...prevState, drawerOpen: true }));
+      setDrawerOpen(true);
 
     const handleDrawerClose = () =>
-      setState((prevState) => ({ ...prevState, drawerOpen: false }));
+      setDrawerOpen(false);
 
     const getListItems = () => {
       function ListItemLink(props: ListItemProps<'a', { button?: true }>) {
@@ -136,7 +91,22 @@ function Header() {
       });
     };
 
+    const getDrawerChoices = () => {
+      return buttonsData.map(({ label, href }) => {
+        return (
+          <Link
+            className={listLinkItem}
+            to={href}
+            key={label}
+          >
+            <MenuItem className={listMenuItem}>{label}</MenuItem>
+          </Link>
+        );
+      });
+    };
+
     return (
+      <div >
       <Toolbar className={toolbar}>
         <IconButton
           {...{
@@ -150,7 +120,7 @@ function Header() {
           <MenuIcon
             fontSize="large"/>
         </IconButton>
-        <Drawer
+        <Drawer classes={{ paper: 'drawerPaper' }}
           {...{
             anchor: "left",
             open: drawerOpen,
@@ -168,11 +138,8 @@ function Header() {
             </IconButton>
           </div>
 
-          <List className={list}>
-            <Link
-              to="/"
-
-            >
+          <List >
+            <Link to="/">
               <MenuItem>{"Главная"}</MenuItem>
             </Link>
 
@@ -186,31 +153,26 @@ function Header() {
               </List>
             </Collapse>
           </List>
-          <div className={drawerContainer}>{getDrawerChoices()}</div>
+
+          <div className={drawerContainer}>
+            {getDrawerChoices()}
+          </div>
         </Drawer>
+
         <Typography variant="h5" component="h1" className={logo}>
           RS Lang
         </Typography>
+
         <UserProfile />
+
       </Toolbar>
+      </div>
     );
   };
 
-/*  const displayDesktop = () => {
-    return (
-    <Toolbar className={toolbar}>
-      <Typography variant="h6" component="h1" className={logo}>
-        RS Lang
-      </Typography>
-      <div className={menu}>
-        {getMenuButtons()}
-      </div>
-    </Toolbar>
-    )
-  };*/
-
   return (
     <>
+      <GlobalCss />
       <AppBar className={appBar}>
         {displayMenu()}
       </AppBar>
