@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Avatar from '@material-ui/core/Avatar';
@@ -10,7 +11,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { useEffect } from 'react';
 
 
 const useStyles = makeStyles((theme) => ({
