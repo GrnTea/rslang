@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
-
+  const history = useHistory();
   const { register, errors, handleSubmit } = useForm({
     mode: "onTouched",
   });
@@ -61,6 +62,25 @@ export default function SignUp() {
   const onSubmit = async (data, e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(data);
+    const rawResponse = await fetch('https://rslernwords.herokuapp.com/users', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+    });
+    console.log(rawResponse);
+    if (rawResponse.ok) {
+      console.log('user successfully added');
+      window.location.href = '/'; //to be deleted when Router implemented 
+      //history.push('/'); //to be uncommented when Router implemented 
+    }
+    else {
+      console.log('server rejected request');
+    }
+    //const content = await rawResponse.json();
+    //console.log(content);
   };
 
   return (
