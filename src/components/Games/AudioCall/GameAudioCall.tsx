@@ -55,7 +55,7 @@ export default function GameAudioCall() {
 
   useEffect(() => {
     if (startGame !== true) return;
-    playWord();
+    // playWord();
   }, [word]);
 
   useEffect(() => {
