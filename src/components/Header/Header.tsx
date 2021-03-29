@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from "react";
-import {AppBar, Toolbar, Typography, Button, ListItemProps} from "@material-ui/core";
-import {Link, Link as RouterLink} from "react-router-dom";
+import React, { useState} from "react";
+import { AppBar, Toolbar, Typography, ListItemProps } from "@material-ui/core";
+import { Link } from "react-router-dom";
 import headerStyles from "./HeaderStyles";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import SendIcon from '@material-ui/icons/Send';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import IconButton from "@material-ui/core/IconButton";
@@ -20,7 +16,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import UserProfile from "./UserProfile/UserProfile";
 import GlobalCss from "../../assets/stylesheets/GlobalCSS";
 import homeIcon from "../../assets/icons/main.svg";
-import dictionaryIcon from "../../assets/icons/big-dictionary.svg";
+import bookIcon from "../../assets/icons/textbook.svg";
+import dictionaryIcon from "../../assets/icons/language.svg";
 import gamesIcon from "../../assets/icons/games.svg";
 import settingIcon from "../../assets/icons/settings.svg";
 import statIcon from "../../assets/icons/trend.svg";
@@ -78,7 +75,9 @@ const buttonsData = [
 
 function Header() {
 
-  const { appBar, toolbar, logo, list, listLinkItemSection, listLinkItemLearn, listItemContainer, collapsedList, listLinkItem, drawerContainer } = headerStyles();
+  const { appBar, toolbar, logo, list, listLinkItemSection, listLinkItemLearn,
+          listItemContainer, collapsedList, listLinkItem, closeButton,
+          closeButtonContainer } = headerStyles();
   const [open, setOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -148,24 +147,30 @@ function Header() {
           }}
         >
           <div>
-            <IconButton color="primary"
+            <IconButton className={closeButtonContainer}
               {...{
                 onClick: handleDrawerClose,
               }}
             >
-              <CloseIcon
+              <CloseIcon className={closeButton}
                 fontSize="large"/>
             </IconButton>
           </div>
 
           <List className={list}>
             <Link to="/" className={listLinkItem}>
-              <MenuItem>{"Главная"}</MenuItem>
+              <div className={listItemContainer}>
+                <img src={homeIcon} alt="home"/>
+                <MenuItem>{"Главная"}</MenuItem>
+              </div>
             </Link>
 
             <ListItem className={collapsedList} button onClick={handleClick}>
-              <ListItemText className={listLinkItemLearn} primary="Изучение" />
-              {open ? <ExpandLess /> : <ExpandMore />}
+              <div className={listItemContainer}>
+                <img src={bookIcon} alt="textbook"/>
+                <ListItemText className={listLinkItemLearn} primary="Изучение" />
+                {open ? <ExpandLess /> : <ExpandMore />}
+              </div>
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
@@ -174,7 +179,7 @@ function Header() {
             </Collapse>
           </List>
 
-          <div className={drawerContainer}>
+          <div>
             {getDrawerChoices()}
           </div>
         </Drawer>

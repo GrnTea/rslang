@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 const headerStyles = makeStyles(
   {
   appBar: {
-    backgroundColor: "#BBDDE1",
+    backgroundColor: "#3f51b5",
     color: "#FFFFFF",
     fontWeight: 700,
     padding: "0",
@@ -39,11 +39,9 @@ const headerStyles = makeStyles(
     "& > img": {
       width: "24px",
       margin: "0 10px 10px 0",
-      fill: "#fff",
-      color: "#fff",
-
-    }
+    },
   },
+
   listLinkItem: {
     textDecoration: "none",
     color: "#FFFFFF",
@@ -51,19 +49,28 @@ const headerStyles = makeStyles(
     marginTop: "5px",
   },
   collapsedList: {
-    color: "#FFFFFF",
+    // color: "#FFFFFF",
     margin: "0",
     paddingRight: "32px",
   },
 
   listLinkItemSection: {
-    color: "#3f51b5",
+    paddingLeft: "36px",
     fontWeight: 700,
     lineHeight: 0.7,
   },
   listLinkItemLearn: {
     paddingTop: "0",
     paddingBottom: "0",
+  },
+  closeButtonContainer: {
+    position: "relative",
+    left: "-12px",
+  },
+  closeButton: {
+
+    color: "#fff",
+    // margin: "10px 0",
   },
 });
 

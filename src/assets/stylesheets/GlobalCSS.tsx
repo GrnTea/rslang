@@ -7,7 +7,8 @@ const GlobalCss = withStyles({
     ".MuiDrawer-paper": {
       width: "240px",
       paddingLeft: "36px",
-      backgroundColor: "#BBDDE1",
+      backgroundColor: "#3f51b5",
+      color: "#fff",
     },
     ".MuiList-padding": {
       padding: "0",
@@ -21,6 +22,10 @@ const GlobalCss = withStyles({
     ".MuiMenuItem-root": {
       margin: "8px 0",
     },
+    ".MuiListItem-gutters": {
+      paddingLeft: "0",
+    }
+  }
 })(() => null);
 
 export default GlobalCss;
