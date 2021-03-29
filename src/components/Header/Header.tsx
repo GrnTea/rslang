@@ -17,7 +17,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Drawer from "@material-ui/core/Drawer";
 import MenuItem from "@material-ui/core/MenuItem";
 import CloseIcon from '@material-ui/icons/Close';
-import {log} from "util";
+import UserProfile from "./UserProfile/UserProfile";
 
 
 
@@ -59,8 +59,8 @@ const buttonsData = [
 
 function Header() {
 
-  const { header, toolbar, logo, menuButton, list, listItem, menu, drawerContainer } = headerStyles();
-  const [open, setOpen] = React.useState(true);
+  const { appBar, toolbar, logo, burgerButton, list, listItem, menu, drawerContainer } = headerStyles();
+  const [open, setOpen] = React.useState(false);
 
   const [state, setState] = useState({
     mobileView: false,
@@ -82,7 +82,7 @@ function Header() {
     window.addEventListener("resize", () => setResponsiveness());
   }, []);*/
 
-  const getMenuButtons = () => {
+  /*const getMenuButtons = () => {
     return buttonsData.map(({ label, href }) => {
       return (
         <Button
@@ -98,7 +98,7 @@ function Header() {
         </Button>
       );
     });
-  };
+  };*/
 
 
   const getDrawerChoices = () => {
@@ -147,7 +147,8 @@ function Header() {
             onClick: handleDrawerOpen,
           }}
         >
-          <MenuIcon />
+          <MenuIcon
+            fontSize="large"/>
         </IconButton>
         <Drawer
           {...{
@@ -161,10 +162,17 @@ function Header() {
               onClick: handleDrawerClose,
             }}
           >
-            <CloseIcon />
+            <CloseIcon fontSize="large"/>
           </IconButton>
 
           <List className={list}>
+            <Link
+              to="/"
+
+            >
+              <MenuItem>{"Главная"}</MenuItem>
+            </Link>
+
             <ListItem button onClick={handleClick}>
               <ListItemText primary="Изучение" />
               {open ? <ExpandLess /> : <ExpandMore />}
@@ -180,62 +188,30 @@ function Header() {
         <Typography variant="h5" component="h1" className={logo}>
           RS Lang
         </Typography>
+        <UserProfile />
       </Toolbar>
     );
   };
 
-  const displayDesktop = () => {
+/*  const displayDesktop = () => {
     return (
     <Toolbar className={toolbar}>
       <Typography variant="h6" component="h1" className={logo}>
         RS Lang
       </Typography>
       <div className={menu}>
-        {/*<List className={list}>*/}
-        {/*<Button button onClick={handleClick}>
-          "Изучение"
-          {open ? <ExpandLess /> : <ExpandMore />}
-        </Button>*/}
-        <Collapse in={open} timeout="auto" unmountOnExit>
-
-          {/*<Button>"Раздел 1"</Button>
-          <Button>"Раздел 1"</Button>
-          <Button>"Раздел 1"</Button>*/}
-          {/*<List component="div" disablePadding>
-            <ListItem button >
-              <ListItemText primary="Раздел 1" />
-            </ListItem>
-            <ListItem button >
-              <ListItemText primary="Раздел 1" />
-            </ListItem>
-            <ListItem button >
-              <ListItemText primary="Раздел 1" />
-            </ListItem>
-            <ListItem button >
-              <ListItemText primary="Раздел 1" />
-            </ListItem>
-            <ListItem button >
-              <ListItemText primary="Раздел 1" />
-            </ListItem>
-            <ListItem button >
-              <ListItemText primary="Раздел 1" />
-            </ListItem>
-          </List>*/}
-        </Collapse>
-      {/*</List>*/}
-
         {getMenuButtons()}
       </div>
     </Toolbar>
     )
-  };
+  };*/
 
   return (
-    <header>
-      <AppBar className={header}>
+    <>
+      <AppBar className={appBar}>
         {displayMenu()}
       </AppBar>
-    </header>
+    </>
   );
 }
 

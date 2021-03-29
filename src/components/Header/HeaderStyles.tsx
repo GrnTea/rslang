@@ -3,35 +3,26 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const headerStyles = makeStyles(
   {
- /* header: {
+  appBar: {
     backgroundColor: "#BBDDE1",
-  },*/
-  header: {
-    backgroundColor: "#BBDDE1",
-    paddingLeft: "0",
+    padding: "0",
+    color: "#FFFFFF",
+    fontWeight: 700,
   },
   toolbar: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-around",
-    padding: "0",
+    justifyContent: "space-between",
+    padding: "0 15px",
   },
   logo: {
-    fontWeight: 600,
-    color: "#FFFFFF",
+    // fontWeight: 600,
     textAlign: "center",
   },
-  menuButton: {
-    fontWeight: 700,
-    size: "18px",
-    marginLeft: "30px",
-  },
   list: {
-    width: "130px",
+    width: "200px",
   },
-    listItem: {
-    color: "yellow",
-  },
+
   menu: {
     display: "flex",
     flexDirection: "row",
