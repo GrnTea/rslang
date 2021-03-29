@@ -1,5 +1,9 @@
 import React from 'react';
 import GameMenu from './GameMenu/GameMenu'
+import {
+  Link,
+  Route
+} from "react-router-dom";
 
 interface IGameMenu {
   gameName: string,
@@ -10,6 +14,8 @@ interface IGameMenu {
 
 export default function AudioCallDescription({ gameName, description, game, gameSelected }: IGameMenu) {
   return (
-    <GameMenu gameName={gameName} description={description} game={game} gameSelected={gameSelected} />
+    <Route path="/games">
+      <GameMenu gameName={gameName} description={description} game={game} gameSelected={gameSelected} />
+    </Route>
   )
 }

@@ -1,0 +1,21 @@
+.sprint {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &__interface {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+    &__bonus{
+        text-align: center;
+    }
+    &__words-container {
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+        padding: 100px;
+        background-color: aliceblue;
+    }
+}
