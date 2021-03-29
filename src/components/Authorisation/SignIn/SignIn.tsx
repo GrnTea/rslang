@@ -54,7 +54,7 @@ const getUser = async (userId, token) => {
       'Authorization': `Bearer ${token}`,
       'Accept': 'application/json',
       'Content-Type': 'application/json'
-    },    
+    },
   });
   if (rawResponse.ok) {
     const user = await rawResponse.json();
@@ -88,9 +88,16 @@ export default function SignIn() {
       console.log(authData);
       const user = await getUser(authData.userId, authData.token);
       console.log(user);
-      setLoginResult({
-        success: `hello ${user.email}`;
-      })
+      if (user) {
+        setLoginResult({
+          success: `hello ${user.email}`;
+        })
+      } else {
+        console.log("something went wrong, try again");
+        setLoginResult({
+          error: "something went wrong, try again";
+        });
+      }
     } else {
       console.log("Incorrect e-mail or password");
       setLoginResult({
@@ -162,7 +169,7 @@ export default function SignIn() {
             Sign In
             {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
           </Button>
-          
+
           <Grid container>
             {/*             <Grid item xs>
               <Link href="#" variant="body2">
