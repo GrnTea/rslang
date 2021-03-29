@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Avatar from '@material-ui/core/Avatar';
@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -31,11 +32,19 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  buttonProgress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 }));
 
 export default function SignUp() {
   const classes = useStyles();
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
   const { register, errors, handleSubmit } = useForm({
     mode: "onTouched",
   });
@@ -62,6 +71,7 @@ export default function SignUp() {
   const onSubmit = async (data, e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(data);
+    setLoading(true);
     const rawResponse = await fetch('https://rslernwords.herokuapp.com/users', {
       method: 'POST',
       headers: {
@@ -79,6 +89,7 @@ export default function SignUp() {
     else {
       console.log('server rejected request');
     }
+    //setLoading(false);
     //const content = await rawResponse.json();
     //console.log(content);
   };
@@ -167,8 +178,10 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={loading}
           >
             Sign Up
+            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
           </Button>
 
         </form>

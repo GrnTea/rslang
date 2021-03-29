@@ -73,6 +73,7 @@ export default function SignIn() {
     mode: "onTouched",
   });
   const onSubmit = async (data, e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setLoading(true);
     console.log(data);
     const rawResponse = await fetch('https://rslernwords.herokuapp.com/signin', {
