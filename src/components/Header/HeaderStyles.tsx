@@ -36,10 +36,10 @@ const headerStyles = makeStyles(
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    "& > img": {
+  },
+  menuIcon: {
       width: "24px",
       margin: "0 10px 10px 0",
-    },
   },
 
   listLinkItem: {
@@ -49,7 +49,6 @@ const headerStyles = makeStyles(
     marginTop: "5px",
   },
   collapsedList: {
-    // color: "#FFFFFF",
     margin: "0",
     paddingRight: "32px",
   },

@@ -77,7 +77,7 @@ function Header() {
 
   const { appBar, toolbar, logo, list, listLinkItemSection, listLinkItemLearn,
           listItemContainer, collapsedList, listLinkItem, closeButton,
-          closeButtonContainer } = headerStyles();
+          closeButtonContainer, menuIcon } = headerStyles();
   const [open, setOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -116,7 +116,7 @@ function Header() {
             key={label}
           >
             <div className={listItemContainer}>
-              <img src={`${icon}`} alt={`${icon}`}/>
+              <img className={menuIcon} src={`${icon}`} alt={`${icon}`}/>
               <MenuItem className={listLinkItem}>{label}</MenuItem>
             </div>
           </Link>
@@ -160,14 +160,14 @@ function Header() {
           <List className={list}>
             <Link to="/" className={listLinkItem}>
               <div className={listItemContainer}>
-                <img src={homeIcon} alt="home"/>
+                <img className={menuIcon} src={homeIcon} alt="home"/>
                 <MenuItem>{"Главная"}</MenuItem>
               </div>
             </Link>
 
             <ListItem className={collapsedList} button onClick={handleClick}>
               <div className={listItemContainer}>
-                <img src={bookIcon} alt="textbook"/>
+                <img className={menuIcon} src={bookIcon} alt="textbook"/>
                 <ListItemText className={listLinkItemLearn} primary="Изучение" />
                 {open ? <ExpandLess /> : <ExpandMore />}
               </div>

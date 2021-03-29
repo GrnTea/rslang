@@ -8,8 +8,12 @@ const userInfoStyles = makeStyles(
       alignItems: "center",
       justifyContent: "space-between",
 
-      '& > span': {
+      "& > span": {
         marginRight: "10px",
+      },
+
+      "& > img": {
+        width: "24px",
       }
     },
   });

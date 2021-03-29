@@ -16,12 +16,16 @@ h2{
   width: 150px;
   height: 150px;
 }
-
-img{
+/*нужно повысить специфичность селектора, чтобы не было конфликтов*/
+/*img{
   position: absolute;
   width: 150px;
   height: 150px;
   border-radius: 4px;
+}*/
+
+img{
+
 }
 
 .content-conteiner{
