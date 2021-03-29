@@ -60,9 +60,8 @@ const buttonsData = [
 
 function Header() {
 
-  const { appBar, toolbar, logo, drawerPaper, list, listMenuItem, listLinkItem, drawerContainer } = headerStyles();
-  const [open, setOpen] = React.useState(false);
-
+  const { appBar, toolbar, logo, list, listLinkItemSection, listLinkItemLearn, collapsedList, listLinkItem, drawerContainer } = headerStyles();
+  const [open, setOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleClick = () => {
@@ -85,7 +84,7 @@ function Header() {
       return [1,2,3,4,5,6].map((listItem) => {
         return (
           <ListItemLink key={`k${listItem}`} href={`#textbook/section/${listItem}`}>
-            <ListItemText primary={`Раздел ${listItem}`}/>
+            <ListItemText className={listLinkItemSection}  primary={`Раздел ${listItem}`}/>
           </ListItemLink>
         );
       });
@@ -99,7 +98,7 @@ function Header() {
             to={href}
             key={label}
           >
-            <MenuItem className={listMenuItem}>{label}</MenuItem>
+            <MenuItem  className={listLinkItem}>{label}</MenuItem>
           </Link>
         );
       });
@@ -120,7 +119,7 @@ function Header() {
           <MenuIcon
             fontSize="large"/>
         </IconButton>
-        <Drawer classes={{ paper: 'drawerPaper' }}
+        <Drawer
           {...{
             anchor: "left",
             open: drawerOpen,
@@ -128,7 +127,7 @@ function Header() {
           }}
         >
           <div>
-            <IconButton  color="primary"
+            <IconButton color="primary"
               {...{
                 onClick: handleDrawerClose,
               }}
@@ -138,13 +137,13 @@ function Header() {
             </IconButton>
           </div>
 
-          <List >
-            <Link to="/">
+          <List className={list}>
+            <Link to="/" className={listLinkItem}>
               <MenuItem>{"Главная"}</MenuItem>
             </Link>
 
-            <ListItem button onClick={handleClick}>
-              <ListItemText primary="Изучение" />
+            <ListItem className={collapsedList} button onClick={handleClick}>
+              <ListItemText className={listLinkItemLearn} primary="Изучение" />
               {open ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
