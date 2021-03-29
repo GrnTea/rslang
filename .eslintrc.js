@@ -26,6 +26,10 @@ module.exports = {
     "quotes": ["error", "double"],
     "max-len": ["error", { "code": 120 }],
     "no-loop-func": 1,
+<<<<<<< HEAD
+=======
+    // "linebreak-style": ["error", "unix"],
+>>>>>>> develop
     "import/extensions": [
       "error",
       "ignorePackages",

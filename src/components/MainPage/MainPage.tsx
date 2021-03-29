@@ -1,6 +1,5 @@
 import React from "react";
-import {Menu} from "@material-ui/core";
-
+import { Menu } from "@material-ui/core";
 
 function MainPage() {
   return (
