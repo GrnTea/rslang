@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
+import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
@@ -45,6 +46,7 @@ export default function SignUp() {
   const classes = useStyles();
   const history = useHistory();
   const [loading, setLoading] = useState(false);
+  const [signUpResult, setSignUpResult] = useState(false);
   const { register, errors, handleSubmit } = useForm({
     mode: "onTouched",
   });
@@ -70,7 +72,6 @@ export default function SignUp() {
 
   const onSubmit = async (data, e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(data);
     setLoading(true);
     const rawResponse = await fetch('https://rslernwords.herokuapp.com/users', {
       method: 'POST',
@@ -80,14 +81,15 @@ export default function SignUp() {
       },
       body: JSON.stringify(data),
     });
-    console.log(rawResponse);
     if (rawResponse.ok) {
-      console.log('user successfully added');
       window.location.href = '/'; //to be deleted when Router implemented 
       //history.push('/'); //to be uncommented when Router implemented 
     }
     else {
-      console.log('server rejected request');
+      setSignUpResult({
+        error: "This email is already registered",
+      });
+      setLoading(false);
     }
     //setLoading(false);
     //const content = await rawResponse.json();
@@ -172,6 +174,7 @@ export default function SignUp() {
             </Grid>
 
           </Grid>
+          {signUpResult?.error && < Alert severity="error">{signUpResult.error}</Alert>}
           <Button
             type="submit"
             fullWidth

@@ -7,6 +7,7 @@ import Header from "../Header";
 // import TeamPage from "../Pages/TeamPage/TeamPage"
 import SignIn from "../Authorisation/SignIn";
 import SignUp from "../Authorisation/SignUp";
+import UserProfile from "../Authorisation/UserProfile";
 
 import AudioCall from "../Games/AudioCall/AudioCallDescription";
 import Games from "../Games/Games";
@@ -22,8 +23,9 @@ const App = () => (
           <Link className="link-navigation" to='/games'>games</Link>
           {/* <TeamPage /> */}
           <SettingsPage />
-          <SignIn/>
-          <SignUp/>
+          <UserProfile />
+          <SignIn />
+          <SignUp />
           <Footer />
         </Route>
         <Route path="/games">

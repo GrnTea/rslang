@@ -1,7 +1,10 @@
 
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { connect } from "react-redux";
 import { useForm } from "react-hook-form";
+import { signIn, UserType } from "../../../redux/user_reducer";
+import { RootState } from "../../../redux/reducer";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,6 +20,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { resourceLimits } from 'worker_threads';
+import { type } from 'os';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -65,7 +69,11 @@ const getUser = async (userId, token) => {
 
 }
 
-export default function SignIn() {
+type Props = {
+  singIn: (value: UserType) => void;
+}
+
+function SignIn({ signIn }) {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const [loginResult, setLoginResult] = useState(false);
@@ -75,7 +83,6 @@ export default function SignIn() {
   const onSubmit = async (data, e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    console.log(data);
     const rawResponse = await fetch('https://rslernwords.herokuapp.com/signin', {
       method: 'POST',
       headers: {
@@ -86,23 +93,20 @@ export default function SignIn() {
     });
     if (rawResponse.status === 200) {
       const authData = await rawResponse.json();
-      console.log(authData);
-      const user = await getUser(authData.userId, authData.token);
-      console.log(user);
-      if (user) {
+      const userData = await getUser(authData.userId, authData.token);
+      if (userData) {
+        signIn({...userData, token: authData.token, refreshToken: authData.refreshToken});
         setLoginResult({
-          success: `hello ${user.email}`;
+          success: `hello ${userData.email}`,
         })
       } else {
-        console.log("something went wrong, try again");
         setLoginResult({
-          error: "something went wrong, try again";
+          error: "something went wrong, try again",
         });
       }
     } else {
-      console.log("Incorrect e-mail or password");
       setLoginResult({
-        error: "Incorrect e-mail or password";
+        error: "Incorrect e-mail or password",
       });
     }
     setLoading(false);
@@ -158,7 +162,7 @@ export default function SignIn() {
             label="Remember me"
           /> */}
           {loginResult?.error && < Alert severity="error">{loginResult.error}</Alert>}
-          {loginResult?.success && < Alert severity="success">{loginResult.success}</Alert>}
+          {/* {loginResult?.success && < Alert severity="success">{loginResult.success}</Alert>} */}
           <Button
             type="submit"
             fullWidth
@@ -189,3 +193,13 @@ export default function SignIn() {
     </Container >
   );
 }
+
+const mapStateToProps = (state:RootState) => ({
+  user: state.user,
+});
+
+const mapDispatchToProps = {
+  signIn,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
