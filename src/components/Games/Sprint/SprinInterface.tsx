@@ -3,9 +3,9 @@ import {
   AccessAlarm, Score, VolumeUp, VolumeOff,
 } from "@material-ui/icons";
 
-const SprintHeader = ({ isVolume }) => {
+const SprintHeader = ({ isVolume, score }) => {
   const [time, setTime] = useState(0);
-  const [score, setScore] = useState(0);
+  // const [score, setScore] = useState(0);
   return (
         <div className="sprint__interface">
             <div className="sprint___timer">
@@ -18,7 +18,6 @@ const SprintHeader = ({ isVolume }) => {
                 {isVolume ? <VolumeUp /> : <VolumeOff />}
             </div>
         </div>
-        
   );
 };
 

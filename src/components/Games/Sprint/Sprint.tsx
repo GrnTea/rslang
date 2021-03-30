@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, {
+  useEffect, useState, useCallback, ReactEventHandler,
+} from "react";
 import { useParams } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 
@@ -6,15 +8,27 @@ import "./sprint.scss";
 import Points from "./Points";
 import SprintHeader from "./SprinInterface";
 
+interface ICurrentWord {
+  mainWord: string,
+  translateWord: string,
+  isTrueTranslate: boolean,
+}
+
 export default function Sprint() {
   const params: { num: string | undefined } = useParams();
   const [words, setWords] = useState<Promise<any>>();
   const [errorFetch, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [score, setScore] = useState(0);
+  const [checkbox, setCheckbox] = useState(0);
   const isVolume = true;
-  const bonus = 20;
+  const bonus = 10;
   const { num } = params;
-  let currentWord = {};
+  let currentWord: ICurrentWord = {
+    mainWord: "",
+    translateWord: "",
+    isTrueTranslate: false,
+  };
 
   const URL = `http://localhost:3001/words?group=${Number(num) - 1}&page=1`;
 
@@ -77,24 +91,39 @@ export default function Sprint() {
   } if (!isLoaded) {
     return <div>Загрузка...</div>;
   }
+
+  function handleClick(event: any) {
+    const btn = event.target.innerHTML === "Верно";
+    if (btn === currentWord.isTrueTranslate) {
+      setScore(score + bonus);
+    }
+    if (checkbox < 3) {
+      setCheckbox(checkbox + 1);
+    } else {
+      setCheckbox(0);
+    }
+
+    console.log(checkbox);
+  }
+
   return (
     <div className="sprint" >
       <h2 className="sprint__header">sprint</h2>
-      <SprintHeader isVolume={isVolume} />
+      <SprintHeader isVolume={isVolume} score={score} />
       <Points bonus={bonus} />
       <div className="sprint__words-container">
         <h3 className="sprint__words">
-
+          {currentWord.mainWord}
         </h3>
         <h4 className="sprint__translate">
-
+          {currentWord.translateWord}
         </h4>
       </div>
       <div>
-        <Button variant="contained" color="secondary">
+        <Button variant="contained" color="secondary" id="asd" onClick={handleClick}>
           Неверно
         </Button>
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="primary" id="fasf" onClick={handleClick}>
           Верно
         </Button>
       </div>
