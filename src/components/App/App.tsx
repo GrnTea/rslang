@@ -5,14 +5,17 @@ import {
 import Footer from "../Footer";
 import Header from "../Header";
 // import TeamPage from "../Pages/TeamPage/TeamPage"
-import SignIn from "../Authorisation/SignIn";
-import SignUp from "../Authorisation/SignUp";
 
 import AudioCall from "../Games/AudioCall/AudioCallDescription";
 import Games from "../Games/Games";
 // import {ThemeProvider} from "styled-components";
 import SettingsPage from "../Pages/SettingsPage/SettingsPage";
+<<<<<<< HEAD
 import DictionaryPage from "../Pages/DictionaryPage/DictionaryPage";
+=======
+import SignInForm from "../Authorisation/SignInForm";
+import SignUpForm from "../Authorisation/SignUpForm";
+>>>>>>> 8fc5621061a7c0a117b5b65ff18b5015171f91b6
 
 const App = () => (
   <React.Fragment>
@@ -22,10 +25,10 @@ const App = () => (
           <Header />
           {/* <Link className="link-navigation" to='/games'>games</Link> */}
           {/* <TeamPage /> */}
-          {/* <SettingsPage /> */}
-          {/* <SignIn/> */}
-          {/* <SignUp/> */}
           <DictionaryPage />
+          {/* <SettingsPage /> */}
+          {/*<SignInForm/>
+          <SignUpForm/>*/}
           <Footer />
         </Route>
         {/* <Route path="/games">
