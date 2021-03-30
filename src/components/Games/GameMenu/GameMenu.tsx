@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import GameAudioCall from '../AudioCall/GameAudioCall';
+import GameSavannah from '../Savannah/GameSavannah';
 import './gamemenu.css';
 import {
   Link,
@@ -11,7 +12,7 @@ export default function GameMenu(props: any) {
 
   let arrLinks = [];
   for(let i = 1; i < 7; i++) {
-    arrLinks.push(<Link key={i} className="link-navigation" to={`/games/audiocall/level/${i}`}>{i}</Link>)
+    arrLinks.push(<Link key={i} className="link-navigation" to={`/games/${props.path}/level/${i}`}>{i}</Link>)
   }
 
   return (
@@ -26,6 +27,9 @@ export default function GameMenu(props: any) {
       <div className="routes">
         <Route exact path="/games/audiocall/level/:num">
           <GameAudioCall /> 
+        </Route>
+        <Route exact path="/games/savannah/level/:num">
+          <GameSavannah /> 
         </Route>
       </div>
     </div>

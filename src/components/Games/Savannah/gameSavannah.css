@@ -1,0 +1,30 @@
+.words-display{
+  font-family: sans-serif;
+  font-size: 20px;
+  position: relative;
+  min-height: 300px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.word-display{
+  margin-top: 100px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.word-absolute{
+  position: absolute;
+  /* cursor: pointer; */
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.guess{
+  color: green;
+}
+
+.not-guess{
+  color: red;
+}

@@ -5,6 +5,6 @@ export default function AudioCallDescription() {
   let gameName = 'аудиовызов';
   let description = 'Тренировка Аудиовызов развивает словарный запас. Чем больше слов ты знаешь, тем больше очков опыта получишь.';
   return (
-    <GameMenu gameName={gameName} description={description} />
+    <GameMenu gameName={gameName} description={description} path="audiocall" />
   )
 }
