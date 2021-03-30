@@ -16,19 +16,14 @@ h2{
   width: 150px;
   height: 150px;
 }
-/*нужно повысить специфичность селектора, чтобы не было конфликтов*/
-/*img{
+.game-image{
   position: absolute;
   width: 150px;
   height: 150px;
   border-radius: 4px;
-}*/
-
-img{
-
 }
 
-.content-conteiner{
+.content-container{
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
