@@ -124,9 +124,9 @@ const LearnWordSettings: React.FC<Props> = ({
 };
 
 const mapStateToProps = (state:RootState) => ({
-  lang: state.lang.lang,
-  buttonsSettings: state.buttonsSettings.buttonsSettings,
-  cardSettings: state.cardSettings.cardSettings,
+  lang: state.settingsReducer.lang.lang,
+  buttonsSettings: state.settingsReducer.buttonsSettings.buttonsSettings,
+  cardSettings: state.settingsReducer.cardSettings.cardSettings,
 });
 
 const mapDispatchToProps = {
