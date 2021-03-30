@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+export default function SignUpForm() {
   const classes = useStyles();
   const history = useHistory();
   const [loading, setLoading] = useState(false);

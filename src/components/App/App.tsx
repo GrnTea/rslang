@@ -13,6 +13,8 @@ import AudioCall from "../Games/AudioCall/AudioCallDescription";
 import Games from "../Games/Games";
 // import {ThemeProvider} from "styled-components";
 import SettingsPage from "../Pages/SettingsPage/SettingsPage";
+import SignInForm from "../Authorisation/SignInForm";
+import SignUpForm from "../Authorisation/SignUpForm";
 
 const App = () => (
   <React.Fragment>
@@ -23,10 +25,9 @@ const App = () => (
           <Link className="link-navigation" to='/games'>games</Link>
           {/* <TeamPage /> */}
           <SettingsPage />
-          <UserProfile />
-          <SignIn />
-          <SignUp />
-          <Footer />
+{/*          <SignInForm/>
+          <SignUpForm/>*/}
+          {/*<Footer />*/}
         </Route>
         <Route path="/games">
           <Games />
