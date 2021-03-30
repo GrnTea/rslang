@@ -1,26 +1,26 @@
 
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React from "react";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useForm } from "react-hook-form";
 import { signIn, UserType } from "../../../redux/user_reducer";
 import { RootState } from "../../../redux/reducer";
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Alert from '@material-ui/lab/Alert';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import { resourceLimits } from 'worker_threads';
-import { type } from 'os';
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Alert from "@material-ui/lab/Alert";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import { resourceLimits } from "worker_threads";
+import { type } from "os";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -42,9 +42,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
   buttonProgress: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
     marginTop: -12,
     marginLeft: -12,
   },
@@ -52,12 +52,12 @@ const useStyles = makeStyles((theme) => ({
 
 const getUser = async (userId, token) => {
   const rawResponse = await fetch(`https://rslernwords.herokuapp.com/users/${userId}`, {
-    method: 'GET',
+    method: "GET",
     withCredentials: true,
     headers: {
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      "Authorization": `Bearer ${token}`,
+      "Accept": "application/json",
+      "Content-Type": "application/json"
     },
   });
   if (rawResponse.ok) {
@@ -83,11 +83,11 @@ function SignIn({ signIn }) {
   const onSubmit = async (data, e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    const rawResponse = await fetch('https://rslernwords.herokuapp.com/signin', {
-      method: 'POST',
+    const rawResponse = await fetch("https://rslernwords.herokuapp.com/signin", {
+      method: "POST",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        "Accept": "application/json",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(data),
     });
