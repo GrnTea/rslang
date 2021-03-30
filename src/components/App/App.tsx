@@ -23,16 +23,22 @@ const App = () => (
         <Route exact path="/">
           <Header />
           <Link className="link-navigation" to='/games'>games</Link>
-          {/* <TeamPage /> */}
           <SettingsPage />
-{/*          <SignInForm/>
-          <SignUpForm/>*/}
-          {/*<Footer />*/}
         </Route>
         <Route path="/games">
           <Games />
         </Route>
+        <Route path="/signin">
+          <SignIn />
+        </Route>
+        <Route path="/signup">
+          <SignUp />
+        </Route>
+        <Route path="/user">
+          <UserProfile />
+        </Route>
       </Switch>
+      <Footer />
     </HashRouter>
   </React.Fragment>
 
