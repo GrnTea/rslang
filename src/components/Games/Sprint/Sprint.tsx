@@ -17,15 +17,21 @@ export default function Sprint() {
 
   const URL = `http://localhost:3001/words?group=${Number(num) - 1}&page=1`;
 
+  const shufleWords = (words) => {
+    if (words) {
+      words.sort(() => Math.random() - 0.5);
+    }
+    return words;
+  };
+
   useEffect(() => {
     setIsLoaded(false);
-    console.log(num);
     fetch(URL)
       .then((res) => res.json())
       .then(
         (result) => {
-          setIsLoaded(true);
           setWords(result);
+          setIsLoaded(true);
         },
         (error) => {
           setIsLoaded(true);
@@ -34,9 +40,18 @@ export default function Sprint() {
       );
   }, [num]);
 
-  const getMainWord = () => {
-
+  const playGame = (words: any) => {
+    const level = 0;
+    const isTrueTranslate = Math.round(Math.random());
+    console.log(words);
+    random(words.length);
+    const mainWord = getWordLesson(words);
+    const translateWord = getWordLesson(words);
   };
+
+  if (isLoaded) {
+    playGame(words);
+  }
 
   if (errorFetch) {
     return <div>Ошибка: {errorFetch.message}</div>;
@@ -67,3 +82,13 @@ export default function Sprint() {
       </div>
   );
 }
+
+const getWordLesson = (words) => {
+
+};
+
+const random = (max: number): number => {
+  const min = 0;
+  const rand = min - 0.5 + Math.random() * (max - min + 1);
+  return Math.round(rand);
+};
