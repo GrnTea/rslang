@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 
@@ -38,20 +38,39 @@ export default function Sprint() {
           setError(error);
         },
       );
+    return function cleanup() {
+      setWords([]);
+    };
   }, [num]);
 
   const playGame = (words: any) => {
+    const playWords = JSON.parse(JSON.stringify(words));
     const level = 0;
     const isTrueTranslate = Math.round(Math.random());
-    console.log(words);
-    random(words.length);
-    const mainWord = getWordLesson(words);
-    const translateWord = getWordLesson(words);
+    const numOfWord = random(words.length - 1);
+    console.log(numOfWord);
+    const numFakeWord = words.length < 19 ? numOfWord + 1 : numOfWord - 1;
+    const mainWord = playWords ? playWords[numOfWord].word : playWords;
+    try {
+      const translateWord = isTrueTranslate ? playWords[numOfWord].word : playWords[numFakeWord].word;
+      const wordData = {
+        mainWord,
+        translateWord,
+        isTrueTranslate,
+      };
+    } catch {
+      console.log("Error");
+    }
+
+
+    console.log(playWords);
   };
 
-  if (isLoaded) {
-    playGame(words);
-  }
+  useEffect(() => {
+    if (isLoaded && words) {
+      playGame(words);
+    }
+  });
 
   if (errorFetch) {
     return <div>Ошибка: {errorFetch.message}</div>;
@@ -59,27 +78,27 @@ export default function Sprint() {
     return <div>Загрузка...</div>;
   }
   return (
-      <div className="sprint" >
-        <h2 className="sprint__header">sprint</h2>
-        <SprintHeader isVolume={isVolume} />
-        <Points bonus={bonus} />
-        <div className="sprint__words-container">
-          <h3 className="sprint__words">
+    <div className="sprint" >
+      <h2 className="sprint__header">sprint</h2>
+      <SprintHeader isVolume={isVolume} />
+      <Points bonus={bonus} />
+      <div className="sprint__words-container">
+        <h3 className="sprint__words">
 
-          </h3>
-          <h4 className="sprint__translate">
+        </h3>
+        <h4 className="sprint__translate">
 
-          </h4>
-        </div>
-        <div>
-          <Button variant="contained" color="secondary">
-            Неверно
-        </Button>
-          <Button variant="contained" color="primary">
-            Верно
-        </Button>
-        </div>
+        </h4>
       </div>
+      <div>
+        <Button variant="contained" color="secondary">
+          Неверно
+        </Button>
+        <Button variant="contained" color="primary">
+          Верно
+        </Button>
+      </div>
+    </div>
   );
 }
 
