@@ -15,7 +15,7 @@ import SettingsPage from "../Pages/SettingsPage/SettingsPage";
 
 const App = () => (
   <React.Fragment>
-    <HashRouter>
+    <BrowserRouter>
       <Switch>
         <Route exact path="/">
           <Header />
@@ -30,7 +30,7 @@ const App = () => (
           <Games />
         </Route>
       </Switch>
-    </HashRouter>
+    </BrowserRouter>
   </React.Fragment>
 
 );
