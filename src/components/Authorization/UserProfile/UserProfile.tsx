@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UserProfile = ({ user, signOut }) => {
+  const history = useHistory();
   const classes = useStyles();
   return user.email ? <Container component="main" maxWidth="xs">
     <CssBaseline />
@@ -43,7 +45,10 @@ const UserProfile = ({ user, signOut }) => {
       variant="contained"
       color="primary"
       className={classes.submit}
-      onClick={() => signOut(user)}
+      onClick={() => {
+        signOut(user);
+        history.push("/");
+      }}
     >
       Sign Out
     </Button>

@@ -13,7 +13,6 @@ import Alert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -76,13 +75,12 @@ export default function SignUpForm() {
       method: "POST",
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
     if (rawResponse.ok) {
-      window.location.href = "/"; //to be deleted when Router implemented 
-      //history.push("/"); //to be uncommented when Router implemented 
+      history.push("/");
     }
     else {
       setSignUpResult({

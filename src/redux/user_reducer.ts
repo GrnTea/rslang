@@ -1,5 +1,6 @@
 export type UserType = {
   id: string | null,
+  name: string | null,
   email: string | null,
   token: string | null,
   refreshToken: string | null,
@@ -7,6 +8,7 @@ export type UserType = {
 
 const InitialStateUser: UserType = {
   id: null,
+  name: null,
   email: null,
   token: null,
   refreshToken: null,
@@ -26,17 +28,20 @@ export const userReducer = (state = InitialStateUser, action: any) => {
   switch (action.type) {
     case SING_IN:
       document.cookie = `id = ${action.value.id}; `;
+      document.cookie = `name = ${action.value.name}; `;
       document.cookie = `email = ${action.value.email}; `;
       document.cookie = `token = ${action.value.token}; `;
       document.cookie = `refreshToken = ${action.value.refreshToken}; `;
       return { ...InitialStateUser, ...action.value };
     case SING_OUT:
       document.cookie = `id = ${action.value.id}; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+      document.cookie = `name = ${action.value.name}; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
       document.cookie = `email = ${action.value.email}; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
       document.cookie = `token = ${action.value.token}; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
       document.cookie = `refreshToken = ${action.value.refreshToken}; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
       return {
         id: null,
+        name: null,
         email: null,
         token: null,
         refreshToken: null,

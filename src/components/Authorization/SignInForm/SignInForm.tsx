@@ -1,16 +1,13 @@
 
 import React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { useForm } from "react-hook-form";
-import { signIn, UserType } from "../../../redux/user_reducer";
-import { RootState } from "../../../redux/reducer";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Alert from "@material-ui/lab/Alert";
 import Link from "@material-ui/core/Link";
@@ -19,9 +16,8 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { resourceLimits } from "worker_threads";
-import { type } from "os";
-
+import { RootState } from "../../../redux/reducer";
+import { signIn, UserType } from "../../../redux/user_reducer";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -63,17 +59,16 @@ const getUser = async (userId, token) => {
   if (rawResponse.ok) {
     const user = await rawResponse.json();
     return user;
-  } else {
-    return null;
   }
-
-}
+  return null;
+};
 
 type Props = {
   singIn: (value: UserType) => void;
 }
 
 function SignIn({ signIn }) {
+  const history = useHistory();
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const [loginResult, setLoginResult] = useState(false);
@@ -95,10 +90,16 @@ function SignIn({ signIn }) {
       const authData = await rawResponse.json();
       const userData = await getUser(authData.userId, authData.token);
       if (userData) {
-        signIn({...userData, token: authData.token, refreshToken: authData.refreshToken});
+        signIn({
+          ...userData,
+          token: authData.token,
+          refreshToken: authData.refreshToken,
+          name: /(.*)@/.exec(userData.email)[1],
+        });
         setLoginResult({
           success: `hello ${userData.email}`,
-        })
+        });
+        history.push("/");
       } else {
         setLoginResult({
           error: "something went wrong, try again",
@@ -134,7 +135,6 @@ function SignIn({ signIn }) {
             label="Email Address"
             name="email"
             autoComplete="email"
-            autoFocus
             inputRef={
               register({
                 required: true,
@@ -182,7 +182,7 @@ function SignIn({ signIn }) {
               </Link>
             </Grid> */}
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link component={RouterLink} to="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
@@ -194,7 +194,7 @@ function SignIn({ signIn }) {
   );
 }
 
-const mapStateToProps = (state:RootState) => ({
+const mapStateToProps = (state: RootState) => ({
   user: state.user,
 });
 
