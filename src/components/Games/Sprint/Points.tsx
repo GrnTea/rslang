@@ -19,15 +19,16 @@ function HomeIcon(props: SvgIconProps) {
   );
 }
 
-const Points = ({ bonus }: { bonus: number }) => {
+const Points = ({ bonus, checkbox }: { bonus: number, checkbox: [] }) => {
   const classes = useStyles();
   const x = bonus;
+  const right = { color: green[500] };
+  const wrong = "secondary";
+  const disabled = "disabled";
   return (
     <div className="sprint__point">
       <div className={classes.root}>
-        <HomeIcon color="secondary" />
-        <HomeIcon style={{ color: green[500] }} />
-        <HomeIcon color="disabled" />
+        {checkbox.map((item) => (item ? <HomeIcon style={right} /> : <HomeIcon color={wrong} />))}
       </div>
       <div className="sprint__bonus">
         {bonus !== 0 && (<div> +{x} за слово </div>)}

@@ -20,7 +20,7 @@ export default function Sprint() {
   const [errorFetch, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [score, setScore] = useState(0);
-  const [checkbox, setCheckbox] = useState(0);
+  const [checkbox, setCheckbox] = useState([]);
   const isVolume = true;
   const bonus = 10;
   const { num } = params;
@@ -97,10 +97,10 @@ export default function Sprint() {
     if (btn === currentWord.isTrueTranslate) {
       setScore(score + bonus);
     }
-    if (checkbox < 3) {
-      setCheckbox(checkbox + 1);
+    if (checkbox.length < 3) {
+      setCheckbox([...checkbox, btn]);
     } else {
-      setCheckbox(0);
+      setCheckbox([btn]);
     }
 
     console.log(checkbox);
@@ -110,7 +110,7 @@ export default function Sprint() {
     <div className="sprint" >
       <h2 className="sprint__header">sprint</h2>
       <SprintHeader isVolume={isVolume} score={score} />
-      <Points bonus={bonus} />
+      <Points bonus={bonus} checkbox = {checkbox} />
       <div className="sprint__words-container">
         <h3 className="sprint__words">
           {currentWord.mainWord}
