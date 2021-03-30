@@ -94,7 +94,6 @@ function SignIn({ signIn }) {
           ...userData,
           token: authData.token,
           refreshToken: authData.refreshToken,
-          name: /(.*)@/.exec(userData.email)[1],
         });
         setLoginResult({
           success: `hello ${userData.email}`,

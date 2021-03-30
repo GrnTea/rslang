@@ -50,7 +50,7 @@ export default function SignUpForm() {
   });
 
   const errorMessages: { [prop: string]: { [prop: string]: string } } = {
-    userName: {
+    name: {
       required: "required field",
       wordChars: "use only latin letters, digits and underscore symbol",
       short: "too short",
@@ -107,14 +107,14 @@ export default function SignUpForm() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                error={!!errors?.userName}
-                helperText={errors.userName && errorMessages.userName[errors.userName.type]}
+                error={!!errors?.name}
+                helperText={errors.name && errorMessages.name[errors.name.type]}
                 autoComplete="fname"
-                name="userName"
+                name="name"
                 variant="outlined"
                 required
                 fullWidth
-                id="userName"
+                id="name"
                 label="Your Name"
                 autoFocus
                 inputRef={register({

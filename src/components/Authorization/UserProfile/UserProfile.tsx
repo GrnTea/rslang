@@ -36,7 +36,7 @@ const UserProfile = ({ user, signOut }) => {
         {user.email[0].toUpperCase()}
       </Avatar>
       <Typography component="h1" variant="h5">
-        {/(.*)@/.exec(user.email)[1]}
+        {user.name}
       </Typography>
     </div>
     <Button
