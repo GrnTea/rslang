@@ -5,16 +5,15 @@ import {
 import Footer from "../Footer";
 import Header from "../Header";
 // import TeamPage from "../Pages/TeamPage/TeamPage"
-import SignIn from "../Authorisation/SignIn";
-import SignUp from "../Authorisation/SignUp";
-import UserProfile from "../Authorisation/UserProfile";
+import SignIn from "../Authorization/SignIn";
+import SignUp from "../Authorization/SignUp";
+import UserProfile from "../Authorization/UserProfile";
 
 import AudioCall from "../Games/AudioCall/AudioCallDescription";
 import Games from "../Games/Games";
 // import {ThemeProvider} from "styled-components";
 import SettingsPage from "../Pages/SettingsPage/SettingsPage";
-import SignInForm from "../Authorisation/SignInForm";
-import SignUpForm from "../Authorisation/SignUpForm";
+
 
 const App = () => (
   <React.Fragment>
