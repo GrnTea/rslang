@@ -24,7 +24,7 @@ const App = () => (
           <SettingsPage />
 {/*          <SignInForm/>
           <SignUpForm/>*/}
-          {/*<Footer />*/}
+          <Footer />
         </Route>
         <Route path="/games">
           <Games />
