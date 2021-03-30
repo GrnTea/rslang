@@ -14,6 +14,7 @@ export default function Sprint() {
   const isVolume = true;
   const bonus = 20;
   const { num } = params;
+  let currentWord = {};
 
   const URL = `http://localhost:3001/words?group=${Number(num) - 1}&page=1`;
 
@@ -43,34 +44,33 @@ export default function Sprint() {
     };
   }, [num]);
 
-  const playGame = (words: any) => {
+  const playGame = useCallback((words: any) => {
+    const wordData = {
+      mainWord: "",
+      translateWord: "вечность",
+      isTrueTranslate: false,
+    };
     const playWords = JSON.parse(JSON.stringify(words));
     const level = 0;
-    const isTrueTranslate = Math.round(Math.random());
+    wordData.isTrueTranslate = Boolean(Math.round(Math.random()));
     const numOfWord = random(words.length - 1);
-    console.log(numOfWord);
     const numFakeWord = words.length < 19 ? numOfWord + 1 : numOfWord - 1;
-    const mainWord = playWords ? playWords[numOfWord].word : playWords;
+    wordData.mainWord = playWords ? playWords[numOfWord].word : playWords;
+    console.log(playWords);
+
     try {
-      const translateWord = isTrueTranslate ? playWords[numOfWord].word : playWords[numFakeWord].word;
-      const wordData = {
-        mainWord,
-        translateWord,
-        isTrueTranslate,
-      };
+      wordData.translateWord = wordData.isTrueTranslate
+        ? playWords[numOfWord].wordTranslate : playWords[numFakeWord].wordTranslate;
     } catch {
       console.log("Error");
     }
+    return wordData;
+  }, [num]);
 
-
-    console.log(playWords);
-  };
-
-  useEffect(() => {
-    if (isLoaded && words) {
-      playGame(words);
-    }
-  });
+  if (isLoaded && words) {
+    currentWord = playGame(words);
+    console.log(currentWord);
+  }
 
   if (errorFetch) {
     return <div>Ошибка: {errorFetch.message}</div>;
@@ -101,10 +101,6 @@ export default function Sprint() {
     </div>
   );
 }
-
-const getWordLesson = (words) => {
-
-};
 
 const random = (max: number): number => {
   const min = 0;
