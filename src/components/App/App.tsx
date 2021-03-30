@@ -12,6 +12,7 @@ import AudioCall from "../Games/AudioCall/AudioCallDescription";
 import Games from "../Games/Games";
 // import {ThemeProvider} from "styled-components";
 import SettingsPage from "../Pages/SettingsPage/SettingsPage";
+import DictionaryPage from "../Pages/DictionaryPage/DictionaryPage";
 
 const App = () => (
   <React.Fragment>
@@ -19,16 +20,17 @@ const App = () => (
       <Switch>
         <Route exact path="/">
           <Header />
-          <Link className="link-navigation" to='/games'>games</Link>
+          {/* <Link className="link-navigation" to='/games'>games</Link> */}
           {/* <TeamPage /> */}
-          <SettingsPage />
-          <SignIn/>
-          <SignUp/>
+          {/* <SettingsPage /> */}
+          {/* <SignIn/> */}
+          {/* <SignUp/> */}
+          <DictionaryPage />
           <Footer />
         </Route>
-        <Route path="/games">
+        {/* <Route path="/games">
           <Games />
-        </Route>
+        </Route> */}
       </Switch>
     </HashRouter>
   </React.Fragment>
