@@ -13,7 +13,7 @@ export default function GameSavannah() {
   const [data, setData] = useState([]);
   const [word, setWord] = useState({});
   const [displayWords, setDisplayWords] = useState([]);
-  const [gravity, setGravity] = useState(true);
+  let [gravityCounter, setGravityCounter] = useState(0);
 
   function initGame() {
     fetch(`https://react-learnwords-example.herokuapp.com/words?group=${num - 1}&page=1`)
@@ -21,8 +21,10 @@ export default function GameSavannah() {
       return response.json();
     })
     .then((jsonData) => {
-      setWord(jsonData.pop());
-      setData(jsonData);
+      const dataShuffle = shuffle(jsonData);
+      
+      setWord(dataShuffle.pop());
+      setData(dataShuffle);
      })
   }
 
@@ -30,6 +32,17 @@ export default function GameSavannah() {
     initGame();
   }, []);
 
+  // 
+  useEffect(() => {
+    if(counter === 0) return;
+    
+    setData(data);
+    setWord(data.pop());
+
+  }, [counter])
+
+
+  // запушить новую пачку слов в стейт для отображения на экране
   useEffect(() => {
     let res = data.filter((elem, index) => {
       if(index > 2) return;
@@ -42,86 +55,57 @@ export default function GameSavannah() {
 
   }, [data, word])
 
-  useEffect(() => {
-    if(gravity === true) return;
+  
 
-    console.log(gravity)
-  }, [gravity])
-
+//  проверка ответа
   function checkWord(e: any) {
     let selectElemValue = e.target.dataset.value;
     let selectElem = e.target;
     let currentElem = document.querySelector(`[data-value="${word.word}"]`);
-    let gravityElem = document.querySelector(".word-absolute");
 
-    // console.log(gravityElem)
+    const resetWorld = (time: number) => {
+      setTimeout(() => {
+        setGravityCounter(0);
+        setCounter(prev => prev + 1);
+      }, time);
+    }
 
     if(selectElemValue === word.word){
       selectElem.classList.add("guess");
-      setCounter(prev => prev + 1);
-      // gravityElem.style.top = 0 + 'px';
+      
+      resetWorld(500);
     } else {
       selectElem.classList.add("not-guess");
       currentElem.classList.add("guess");
+      
+      resetWorld(1500);
     }
   }
 
+
+// сброс стилей угадал / не угадал
   useEffect(() => {
     if(counter === 0) return;
-    const dataShuffle = shuffle(data);
-
-    setTimeout(() => {
-      setWord(dataShuffle.pop());
-      setData(dataShuffle);
-    }, 2000);
-
-    setTimeout(() => setGravity(false), 1500);
+    document.querySelectorAll(".word-display").forEach((elem, index) => {
+      elem.classList.remove("guess");
+      elem.classList.remove("not-guess");
+    })
   }, [counter])
 
 
-// restart
+  // движение слова вниз
   useEffect(() => {
-    if(counter === 0) return;
-    // let elem: any = document.querySelector(`.word-absolute-${counter}`);
-    let elem: any = document.querySelector(`.word-absolute`);
-    
-    // console.log(elem)
-    setTimeout(() => {
-      elem.style.top = 0 + 'px';
-      // elem.style.color = 'blue';
-      
-      document.querySelectorAll(".word-display").forEach((elem, index) => {
-        elem.classList.remove("guess");
-      })
-    }, 2000);
-  }, [counter])
-
-  useEffect(() => {
-    // if(counter === 0) return;
-    // let documentElem = document.querySelector(`.word-absolute-${counter}`);
-    let documentElem = document.querySelector(`.word-absolute`);
-    let start = Date.now();
-
-    // let coordinates = documentElem.getBoundingClientRect();
-
     let intervalId = setInterval(() => {
-      let diffTime = Date.now() - start;
+      gravityCounter++;
+      setGravityCounter(gravityCounter)
+      document.querySelector(`.word-absolute`).style.top = gravityCounter + "px";
+    }, 50)
 
-      if(diffTime > 6000){
-        clearInterval(intervalId);
-        setGravity(false);
-        return;
-      }
-      
-      draw(diffTime, documentElem);
-    }, 20);
-  }, [counter])
+    // console.log(gravityCounter)    
+    return () => clearInterval(intervalId);
+  }, [gravityCounter])
 
 
-
-  function draw(diffTime: number, elem: any){
-    elem.style.top = diffTime / 20 + 'px';
-  }
 
   function isEmpty(obj: object) {
     for(let key in obj){
@@ -130,16 +114,14 @@ export default function GameSavannah() {
     return true;
   }
 
-  function shuffle(array) {
+  function shuffle(array: any) {
     return array.sort(() => Math.random() - 0.5);
   }
 
   return (
     <div className="words-display">
-      {/* <div className={`word-absolute-${counter}`}>{word.word}</div> */}
       <div className={`word-absolute`}>{word.word}</div>
       {displayWords.map((elem, index) => {
-        // console.log(elem)
         return(
           <div 
           data-value={elem.word} 
