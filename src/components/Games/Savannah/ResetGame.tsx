@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
+import EmojiEmotionsTwoToneIcon from '@material-ui/icons/EmojiEmotionsTwoTone';
 
 const ResetGame = (props: any) => {
 
@@ -55,14 +56,13 @@ const ResetGame = (props: any) => {
       audioUrl = props.wrongAnswers[id].audio;
     }
    
-    // console.log(audioUrl)
     let audio = new Audio(herokuUrl + audioUrl);
     audio.play();
   }
 
   return (
     <div className="reset-game">
-      <div>это конец :)</div> 
+      <div className="end-game-emotion">это конец <EmojiEmotionsTwoToneIcon color="primary"/></div> 
       <h4>правильные ответы:</h4>
       <div className="right-answers">
         {trueWords}
