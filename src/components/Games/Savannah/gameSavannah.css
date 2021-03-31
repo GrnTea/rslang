@@ -32,3 +32,26 @@
 .not-guess{
   color: red;
 }
+
+.life-container{
+  position: absolute;
+  right: 0;
+}
+
+.life-icon{
+  position: absolute;
+  right: 0;
+}
+
+.life-counter{
+  position: absolute;
+  right: 40px;
+}
+
+.reset-game{
+  margin-top: 20px;
+}
+
+.wrong-answers{
+  margin-bottom: 20px;
+}
