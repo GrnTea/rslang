@@ -1,9 +1,12 @@
 import { Drawer } from '@material-ui/core';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   useParams,
 } from "react-router-dom";
 import './gameSavannah.css';
+
+import succes from '../../../assets/sound/succes.mp3';
+import error from '../../../assets/sound/error.mp3';
 
 const URL = 'https://rslernwords.herokuapp.com/';
 
@@ -16,7 +19,7 @@ export default function GameSavannah() {
   let [gravityCounter, setGravityCounter] = useState(0);
 
   function initGame() {
-    fetch(`https://react-learnwords-example.herokuapp.com/words?group=${num - 1}&page=1`)
+    fetch(`${URL}words?group=${num - 1}&page=1`)
     .then((response) => {
       return response.json();
     })
@@ -35,10 +38,9 @@ export default function GameSavannah() {
   // 
   useEffect(() => {
     if(counter === 0) return;
-    
-    setData(data);
-    setWord(data.pop());
 
+    setWord(data.pop());
+    setData(data);
   }, [counter])
 
 
@@ -55,7 +57,15 @@ export default function GameSavannah() {
 
   }, [data, word])
 
-  
+
+  useEffect(() => {
+    if(gravityCounter < 170) return;
+
+    setGravityCounter(0);
+    setCounter(prev => prev + 1);
+    // audioPlay(error);
+  }, [gravityCounter])
+
 
 //  проверка ответа
   function checkWord(e: any) {
@@ -72,14 +82,19 @@ export default function GameSavannah() {
 
     if(selectElemValue === word.word){
       selectElem.classList.add("guess");
-      
+      audioPlay(succes);
       resetWorld(500);
     } else {
       selectElem.classList.add("not-guess");
       currentElem.classList.add("guess");
-      
+      audioPlay(error);
       resetWorld(1500);
     }
+  }
+
+  function audioPlay(src) {
+    const audio = new Audio(src);
+    audio.play();
   }
 
 

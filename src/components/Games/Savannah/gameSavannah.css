@@ -2,23 +2,27 @@
   font-family: sans-serif;
   font-size: 20px;
   position: relative;
-  min-height: 300px;
+  min-height: 200px;
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
+  margin-bottom: 50px;
+  margin-top: 50px;
 }
 
 .word-display{
-  margin-top: 100px;
   height: 20px;
   cursor: pointer;
 }
 
 .word-absolute{
   position: absolute;
-  /* cursor: pointer; */
-  left: 50%;
+  left: 60%;
   transform: translate(-50%);
+  font-size: 20px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #fd79a8;
 }
 
 .guess{
