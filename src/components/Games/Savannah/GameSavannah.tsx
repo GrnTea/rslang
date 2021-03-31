@@ -21,8 +21,12 @@ export default function GameSavannah() {
   let [gravityCounter, setGravityCounter] = useState(0);
   let [lifeCounter, setLifeCounter] = useState(2);
   
-  let [rightAnswers, setRightAnswers] = useState(0);
-  let [wrongAnswers, setWrongAnswers] = useState(0);
+  let [rightAnswersCounter, setRightAnswersCounter] = useState(0);
+  let [wrongAnswersCounter, setWrongAnswersCounter] = useState(0);
+
+  let [rightAnswers, setRightAnswers] = useState([]);
+  let [wrongAnswers, setWrongAnswers] = useState([]);
+
   let [endGame, setEndGame] = useState(false);
   let [wordsDisplayedOnTheScreen, setWordsDisplayedOnTheScreen] = useState('');
 
@@ -73,7 +77,8 @@ export default function GameSavannah() {
     setGravityCounter(0);
     setCounter(prev => prev + 1);
     setLifeCounter(prev => prev - 1);
-    setWrongAnswers(prev => prev + 1);
+    setWrongAnswersCounter(prev => prev + 1);
+    addAnswers(word, setWrongAnswers, wrongAnswers);
     // audioPlay(error);
   }, [gravityCounter])
 
@@ -95,16 +100,30 @@ export default function GameSavannah() {
       selectElem.classList.add("guess");
       audioPlay(succes);
       resetWorld(500);
-      setRightAnswers(prev => prev + 1);
+      setRightAnswersCounter(prev => prev + 1);
+      // передаём слово, стейт правильных или не правильных ответов, состояние
+      addAnswers(word, setRightAnswers, rightAnswers);
     } else {
       selectElem.classList.add("not-guess");
       currentElem.classList.add("guess");
       audioPlay(error);
       resetWorld(1500);
       setLifeCounter(prev => prev - 1);
-      setWrongAnswers(prev => prev + 1);
+      setWrongAnswersCounter(prev => prev + 1);
+      addAnswers(word, setWrongAnswers, wrongAnswers);
     }
   }
+
+  function addAnswers(word, state, elems) {
+    if(elems.length === 0) {
+      state([word])
+    } else {
+      let copy = elems;
+      copy.push(word);
+      state(copy);
+    }
+  }
+
 
   function audioPlay(src) {
     const audio = new Audio(src);
@@ -171,10 +190,12 @@ export default function GameSavannah() {
     initGame();
     setLifeCounter(2);
     setGravityCounter(0);
-    setRightAnswers(0);
-    setWrongAnswers(0);
+    setRightAnswersCounter(0);
+    setWrongAnswersCounter(0);
     setCounter(0);
     setEndGame(false);
+    setRightAnswers([]);
+    setWrongAnswers([]);
   }
 
   return (
@@ -191,8 +212,10 @@ export default function GameSavannah() {
         </div> 
       : 
         <ResetGame 
-          rightAnswers={rightAnswers} 
-          wrongAnswers={wrongAnswers} 
+          rightAnswersCounter={rightAnswersCounter} 
+          wrongAnswersCounter={wrongAnswersCounter} 
+          rightAnswers={rightAnswers}
+          wrongAnswers={wrongAnswers}
           resetgame={resetgame}
         />  
       }

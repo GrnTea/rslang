@@ -52,6 +52,20 @@
   margin-top: 20px;
 }
 
+.right-answers{
+  margin-top: 20px;
+}
+
 .wrong-answers{
+  margin-top: 20px;
   margin-bottom: 20px;
+}
+
+.true-words,
+.false-words{
+  display: flex;
+}
+
+.play-sound{
+  cursor: pointer;
 }
