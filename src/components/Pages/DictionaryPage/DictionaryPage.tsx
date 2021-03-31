@@ -9,24 +9,24 @@ type Props = {
 }
 
 const TEXTS = {
-  en: {
-    mainTitle: "Dictionary",
-    studiedWords: "Studied",
-    difficultWords: "Сomplicated",
-    removedWords: "Deleted",
-    toDifficultBtn: "To difficult",
-    deleteBtn: "Delete",
-    placeholderTab: "The list of words is empty.",
-  },
-  ru: {
-    mainTitle: "Словарь",
-    studiedWords: "Изученные",
-    difficultWords: "Сложные",
-    removedWords: "Удаленные",
-    toDifficultBtn: "В сложные",
-    deleteBtn: "Удалить",
-    placeholderTab: "Список слов пуст.",
-  },
+    en: {
+        mainTitle: "Dictionary",
+        studiedWords: "Studied",
+        difficultWords: "Difficult",
+        removedWords: "Deleted",
+        toDifficultBtn: "To difficult",
+        deleteBtn: "Delete",
+        placeholderTab: "The list of words is empty.",
+    },
+    ru: {
+        mainTitle: "Словарь",
+        studiedWords: "Изучаемые",
+        difficultWords: "Сложные",
+        removedWords: "Удаленные",
+        toDifficultBtn: "В сложные",
+        deleteBtn: "Удалить",
+        placeholderTab: "Список слов пуст."
+    }
 };
 
 const DictionaryPage: React.FC<Props> = ({ lang }) => {
@@ -69,7 +69,8 @@ const DictionaryPage: React.FC<Props> = ({ lang }) => {
 };
 
 const mapStateToProps = (state:RootState) => ({
-  lang: state.settingsReducer.lang.lang,
-});
-
-export default connect(mapStateToProps)(DictionaryPage);
+    lang: state.settingsReducer.lang.lang,
+  });
+  
+  export default connect(mapStateToProps)(DictionaryPage);
+  
