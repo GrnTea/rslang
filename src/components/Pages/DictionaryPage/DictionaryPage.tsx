@@ -52,7 +52,7 @@ const DictionaryPage: React.FC<Props> = ({lang}) => {
 }
 
 const mapStateToProps = (state:RootState) => ({
-    lang: state.lang.lang,
+    lang: state.settingsReducer.lang.lang,
   });
   
   export default connect(mapStateToProps)(DictionaryPage);
