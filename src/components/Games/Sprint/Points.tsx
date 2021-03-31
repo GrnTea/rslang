@@ -25,10 +25,12 @@ const Points = ({ bonus, checkbox }: { bonus: number, checkbox: [] }) => {
   const right = { color: green[500] };
   const wrong = "secondary";
   const disabled = "disabled";
+  console.log(Date.now());
   return (
     <div className="sprint__point">
       <div className={classes.root}>
-        {checkbox.map((item) => (item ? <HomeIcon style={right} /> : <HomeIcon color={wrong} />))}
+        {checkbox.map((item, index) => (item
+          ? <HomeIcon key={Date.now() + index} style={right} /> : <HomeIcon key={Date.now() + index} color={wrong} />))}
       </div>
       <div className="sprint__bonus">
         {bonus !== 0 && (<div> +{x} за слово </div>)}

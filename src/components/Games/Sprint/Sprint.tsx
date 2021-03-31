@@ -70,8 +70,6 @@ export default function Sprint() {
     const numOfWord = random(words.length - 1);
     const numFakeWord = words.length < 19 ? numOfWord + 1 : numOfWord - 1;
     wordData.mainWord = playWords ? playWords[numOfWord].word : playWords;
-    console.log(playWords);
-
     try {
       wordData.translateWord = wordData.isTrueTranslate
         ? playWords[numOfWord].wordTranslate : playWords[numFakeWord].wordTranslate;
@@ -93,24 +91,31 @@ export default function Sprint() {
   }
 
   function handleClick(event: any) {
+    const addCheckbox = (state: boolean) => {
+      if (checkbox.length < 3) {
+        setCheckbox([...checkbox, state]);
+      } else {
+        setCheckbox([state]);
+      }
+    };
     const btn = event.target.innerHTML === "Верно";
     if (btn === currentWord.isTrueTranslate) {
       setScore(score + bonus);
-    }
-    if (checkbox.length < 3) {
-      setCheckbox([...checkbox, btn]);
+      addCheckbox(true);
     } else {
-      setCheckbox([btn]);
+      addCheckbox(false);
     }
-
-    console.log(checkbox);
   }
+
+  useEffect(() => {
+    console.log(checkbox);
+  });
 
   return (
     <div className="sprint" >
       <h2 className="sprint__header">sprint</h2>
       <SprintHeader isVolume={isVolume} score={score} />
-      <Points bonus={bonus} checkbox = {checkbox} />
+      <Points bonus={bonus} checkbox={checkbox} key={Date.now()} />
       <div className="sprint__words-container">
         <h3 className="sprint__words">
           {currentWord.mainWord}
