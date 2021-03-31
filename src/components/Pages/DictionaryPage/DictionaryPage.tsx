@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { RootState } from "../../../redux/reducer";
 import DictionaryStyles from "./DicrionaryPageStyles";
+import CardOfWord from "./components/CardForWord/CardForWord";
 
 type Props = {
     lang: string
@@ -31,6 +32,17 @@ const TEXTS = {
 const DictionaryPage: React.FC<Props> = ({lang}) => {
     const useStyles = DictionaryStyles();
     const [category, setCategory] = useState("studiedWords");
+    const [listOfWords, setListOfWords] = useState([]);
+
+    useEffect(() => {
+        fetch("https://rslernwords.herokuapp.com/words?group=1&page=1")
+        .then(
+            (response) => response.json()
+        )
+        .then((jsonData) => {
+            setListOfWords(jsonData);
+        });
+    }, [])
 
     return (
         <div>
@@ -46,7 +58,15 @@ const DictionaryPage: React.FC<Props> = ({lang}) => {
                     {TEXTS[lang].removedWords}
                 </button>
             </div>
-            { category === "studiedWords" ? "studiedWords" : category === "difficultWords" ? "difficultWords" : "removedWords"}
+            {/* { category === "studiedWords" ? "studiedWords" : category === "difficultWords" ? "difficultWords" : "removedWords"} */}
+            <div className={useStyles.cards}>
+                {
+                    listOfWords.map((card) => {
+                        console.log(card)
+                        return <CardOfWord key={card.id} cardInfo={card} />
+                    })               
+                }
+            </div>
         </div>
     )
 }

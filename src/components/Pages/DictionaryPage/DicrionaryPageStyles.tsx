@@ -19,6 +19,12 @@ const dictionaryStyles = makeStyles({
       fontSize: "23px",
       cursor: "pointer",
       outline: "none",
+  },
+
+  cards: {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: "3em"
   }
 });
 
