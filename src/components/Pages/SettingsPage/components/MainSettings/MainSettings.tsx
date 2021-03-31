@@ -163,10 +163,10 @@ const MainSettings: React.FC<Props> = ({
 };
 
 const mapStateToProps = (state:RootState) => ({
-  lang: state.lang.lang,
-  isAutoVoice: state.isAutoVoice.isAutoVoice,
-  countNewWords: state.countNewWords.countNewWords,
-  countMaxDayCards: state.countMaxDayCards.countMaxDayCards,
+  lang: state.settingsReducer.lang.lang,
+  isAutoVoice: state.settingsReducer.isAutoVoice.isAutoVoice,
+  countNewWords: state.settingsReducer.countNewWords.countNewWords,
+  countMaxDayCards: state.settingsReducer.countMaxDayCards.countMaxDayCards,
 });
 
 const mapDispatchToProps = {

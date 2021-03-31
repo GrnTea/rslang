@@ -65,7 +65,7 @@ export default function GameAudioCall() {
       setStartGame(false);
       setRebootButton(true);
 
-      document.querySelector(".content-conteiner").classList.add("hide");
+      document.querySelector(".content-container").classList.add("hide");
     }
   }, [counter]);
 
@@ -146,7 +146,7 @@ export default function GameAudioCall() {
     setDisplayWords([]);
     setStartGame(true);
     initGame();
-    document.querySelector(".content-conteiner").classList.remove("hide");
+    document.querySelector(".content-container").classList.remove("hide");
   }
 
   const SpeakerIconStyles = {
@@ -161,7 +161,7 @@ export default function GameAudioCall() {
       <h2>аудиовызов</h2>
       <LinearProgress color="secondary" variant="determinate" value={counter * 10 } />
 
-      <div className="content-conteiner">
+      <div className="content-container">
 
         <div className="random-words">
           {
@@ -177,7 +177,7 @@ export default function GameAudioCall() {
         </div>
 
         <div className="word-image">
-          {showImage ? <img src={URL + word.image} alt=""/> : ""}
+          {showImage ? <img className="game-image" src={URL + word.image} alt=""/> : ""}
         </div>
 
         <div className="speaker-icon">
@@ -189,7 +189,7 @@ export default function GameAudioCall() {
       {endGame
         ? <div className="end-game">
           <div>правильных ответов: {trueAnswer}</div>
-          <div>не правильных ответов: {falseAnswer}</div>
+          <div>неправильных ответов: {falseAnswer}</div>
         </div> : ""
       }
       {rebootButton

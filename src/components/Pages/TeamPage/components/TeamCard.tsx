@@ -1,6 +1,6 @@
 import React from "react";
 import TeamStyles from "../TeamCardStyles";
-import github from "../../../../assets/images/github.svg";
+import github from "../../../../assets/icons/github.svg";
 
 interface UserInfo {
     userInfo: any
