@@ -25,7 +25,7 @@ export default function GameAudioCall(){
   const [startGame, setStartGame] = useState(true);
   const [rebootButton, setRebootButton] = useState(false);
 
-  const url = `https://react-learnwords-example.herokuapp.com/words?group=${num - 1}&page=1`;
+  const url = `https://rslernwords.herokuapp.com/words?group=${num - 1}&page=1`;
   
   function initGame() {
     fetch(url)
