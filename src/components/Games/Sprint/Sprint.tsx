@@ -1,12 +1,15 @@
 import React, {
   useEffect, useState, useCallback, ReactEventHandler,
 } from "react";
+import useSound from "use-sound";
 import { useParams } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "./sprint.scss";
 import Points from "./Points";
 import SprintHeader from "./SprinInterface";
 import Begin from "./Begin";
+import correct from "../../../assets/sound/correct-choice.wav";
+import wrong from "../../../assets/sound/error.wav";
 
 const random = (max: number): number => {
   const min = 0;
@@ -31,6 +34,8 @@ export default function Sprint() {
   const [bonus, setBonus] = useState(10);
   const [finish, setFinish] = useState(false);
   const [begin, setBegin] = useState(true);
+  const [playCorrect] = useSound(correct);
+  const [playWrong] = useSound(wrong);
   const { num } = params;
   let currentWord: ICurrentWord = {
     mainWord: "",
@@ -112,22 +117,19 @@ export default function Sprint() {
       }
     };
     const btn = event.target.innerHTML === "Верно" || event.key === "ArrowRight";
-
-    // onst btn = event.key === ;
-
-    console.log(btn);
-    console.log(currentWord.isTrueTranslate);
     if (btn === currentWord.isTrueTranslate) {
       setScore(score + bonus);
+      playCorrect();
       addCheckbox(true);
     } else {
+      playWrong();
       addCheckbox(false);
     }
   }
 
   if (begin) {
     return (
-      <Begin setBegin={setBegin}/>
+      <Begin setBegin={setBegin} />
     );
   }
 
