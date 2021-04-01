@@ -1,9 +1,10 @@
 import React, {
-  useEffect, useState, useCallback, ReactEventHandler,
+  useEffect, useState, useCallback, useRef
 } from "react";
 import useSound from "use-sound";
 import { useParams } from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import AspectRatioIcon from '@material-ui/icons/AspectRatio';
 import "./sprint.scss";
 import Points from "./Points";
 import SprintHeader from "./SprinInterface";
@@ -26,6 +27,7 @@ interface ICurrentWord {
 
 export default function Sprint() {
   const params: { num: string | undefined } = useParams();
+  const sprintEl = useRef(null);
   const [words, setWords] = useState<Promise<any>>();
   const [errorFetch, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -102,6 +104,16 @@ export default function Sprint() {
     }
   }, [checkbox.length]);
 
+  function fullscreen () {
+    const x = sprintEl.current;
+    x.webkitRequestFullScreen();
+    if (document.fullscreenEnabled){
+      console.log('full')
+      document.webkitCancelFullScreen();
+    }
+    // requestFullScreen()
+  }
+
   function handleClick(event: any) {
     const addCheckbox = (state: boolean) => {
       if (checkbox.length < 3) {
@@ -160,7 +172,7 @@ export default function Sprint() {
   }
 
   return (
-    <div className="sprint" >
+    <div ref={sprintEl} className="sprint" >
       <h2 className="sprint__header">sprint</h2>
       <SprintHeader setFinish={setFinish} isVolume={isVolume} score={score} />
       <Points bonus={bonus} checkbox={checkbox} key={Date.now()} />
@@ -180,6 +192,9 @@ export default function Sprint() {
           Верно
         </Button>
       </div>
+      <Button variant="contained" onClick={fullscreen}>
+        <AspectRatioIcon/>
+        </Button>
     </div>
   );
 }

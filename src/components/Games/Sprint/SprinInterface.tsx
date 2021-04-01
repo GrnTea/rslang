@@ -11,7 +11,7 @@ const SprintHeader = ({ isVolume, score, setFinish }:
   { isVolume: boolean, score: number, finish: React.SetStateAction<boolean> }) => {
   const [playTada] = useSound(tada, { volume: 0.2 });
 
-  const [time, setTime] = useState(10);
+  const [time, setTime] = useState(100);
   const [timeIn, setTimeIn] = useState();
 
   useEffect(() => {
