@@ -3,10 +3,10 @@ import React, {
 } from "react";
 import { useParams } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-
 import "./sprint.scss";
 import Points from "./Points";
 import SprintHeader from "./SprinInterface";
+import Begin from "./Begin";
 
 interface ICurrentWord {
   mainWord: string,
@@ -22,7 +22,9 @@ export default function Sprint() {
   const [score, setScore] = useState(0);
   const [checkbox, setCheckbox] = useState([]);
   const isVolume = true;
-  const bonus = 10;
+  const [bonus, setBonus] = useState(10);
+  const [finish, setFinish] = useState(false);
+  const [beginTimer, setBeginTimer] = useState(3);
   const { num } = params;
   let currentWord: ICurrentWord = {
     mainWord: "",
@@ -65,7 +67,6 @@ export default function Sprint() {
       isTrueTranslate: false,
     };
     const playWords = JSON.parse(JSON.stringify(words));
-    const level = 0;
     wordData.isTrueTranslate = Boolean(Math.round(Math.random()));
     const numOfWord = random(words.length - 1);
     const numFakeWord = words.length < 19 ? numOfWord + 1 : numOfWord - 1;
@@ -84,11 +85,17 @@ export default function Sprint() {
     console.log(currentWord);
   }
 
-  if (errorFetch) {
-    return <div>Ошибка: {errorFetch.message}</div>;
-  } if (!isLoaded) {
-    return <div>Загрузка...</div>;
-  }
+  useEffect(() => {
+    if (checkbox.length === 3) {
+      const checked = checkbox.indexOf(false);
+      if (checked === -1) {
+        setBonus(bonus * 2);
+        console.log(bonus);
+      } else {
+        setBonus(10);
+      }
+    }
+  }, [checkbox.length]);
 
   function handleClick(event: any) {
     const addCheckbox = (state: boolean) => {
@@ -98,7 +105,12 @@ export default function Sprint() {
         setCheckbox([state]);
       }
     };
-    const btn = event.target.innerHTML === "Верно";
+    const btn = event.target.innerHTML === "Верно" || event.key === "ArrowRight";
+
+    // onst btn = event.key === ;
+
+    console.log(btn);
+    console.log(currentWord.isTrueTranslate);
     if (btn === currentWord.isTrueTranslate) {
       setScore(score + bonus);
       addCheckbox(true);
@@ -107,14 +119,37 @@ export default function Sprint() {
     }
   }
 
-  useEffect(() => {
-    console.log(checkbox);
-  });
+  if (beginTimer) {
+    return (
+      <Begin beginTimer={beginTimer} setBeginTimer={setBeginTimer}/>
+    );
+  }
+
+  if (errorFetch) {
+    return <div>Ошибка: {errorFetch.message}</div>;
+  }
+
+  if (!isLoaded) {
+    return <div>Загрузка...</div>;
+  }
+
+  if (finish) {
+    return (
+      <div className="sprint">
+        <h2 className="sprint__header">Результаты</h2>
+        <div className="sprint__words-container">
+          <div>{score} очков</div>
+          <div>{score / 2} опыта</div>
+        </div>
+        Ваш рекорд {score};
+      </div>
+    );
+  }
 
   return (
     <div className="sprint" >
       <h2 className="sprint__header">sprint</h2>
-      <SprintHeader isVolume={isVolume} score={score} />
+      <SprintHeader setFinish={setFinish} isVolume={isVolume} score={score} />
       <Points bonus={bonus} checkbox={checkbox} key={Date.now()} />
       <div className="sprint__words-container">
         <h3 className="sprint__words">
@@ -124,11 +159,11 @@ export default function Sprint() {
           {currentWord.translateWord}
         </h4>
       </div>
-      <div>
-        <Button variant="contained" color="secondary" id="asd" onClick={handleClick}>
+      <div className="sprint__button">
+        <Button variant="contained" color="secondary" onClick={handleClick} >
           Неверно
         </Button>
-        <Button variant="contained" color="primary" id="fasf" onClick={handleClick}>
+        <Button variant="contained" color="primary" onClick={handleClick} onKeyDown={handleClick}>
           Верно
         </Button>
       </div>
