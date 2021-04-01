@@ -17,7 +17,7 @@ const initialStateDictionary: dictionaryType ={
   success: 0,
 };
 
-const SET_STUDYING = "ADD_TO_STUDYING";
+const SET_STUDYING = "SET_STUDYING";
 const SET_DIFFICULT = "SET_DIFFICULT";
 const SET_DELETED = "SET_DELETED";
 const SET_ERRORS = "SET_ERRORS";

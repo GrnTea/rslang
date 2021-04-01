@@ -13,9 +13,45 @@ import AudioCall from "../Games/AudioCall/AudioCallDescription";
 import Games from "../Games/Games";
 // import {ThemeProvider} from "styled-components";
 import SettingsPage from "../Pages/SettingsPage/SettingsPage";
-import Dictionary from "../Pages/DictionaryPage/DictionaryPage";
+import DictionaryPage from "../Pages/DictionaryPage/DictionaryPage";
+import SignInForm from "../Authorisation/SignInForm";
+import SignUpForm from "../Authorisation/SignUpForm";
+import TextbookPage from "../Pages/TextbookPage/TextbookPage";
+import appStyles from "./AppStyles";
 
 
+
+const App = () => {
+  const useStyles = appStyles();
+  return (
+    <React.Fragment>
+      <HashRouter>
+        <Switch>
+          <Route exact path="/">
+            <header>
+              <Header/>
+            </header>
+            <main className={useStyles.content}>
+
+
+              {/* <Link className="link-navigation" to='/games'>games</Link> */}
+              {/* <TeamPage /> */}
+
+              <DictionaryPage/>
+              <TextbookPage/>
+
+              {/* <SettingsPage /> */}
+              {/*<SignInForm/>
+            <SignUpForm/>*/}
+            </main>
+            <Footer/>
+          </Route>
+          {/* <Route path="/games">
+            <Games />
+          </Route> */}
+        </Switch>
+      </HashRouter>
+    </React.Fragment>
 const App = () => (
   <React.Fragment>
 
@@ -55,6 +91,7 @@ const App = () => (
 
   </React.Fragment>
 
-);
+  );
+};
 
 export default App;

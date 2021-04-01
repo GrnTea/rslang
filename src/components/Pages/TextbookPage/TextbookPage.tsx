@@ -1,9 +1,18 @@
 import React from "react";
+import Pagination from "../../Pagination/Pagination";
+
+
+
 
 
 const TextbookPage: React.FC = () => {
   return (
-    <>textbook</>
+
+    <>
+      <div>Textbook</div>
+      <Pagination />
+    </>
+
   )
 };
 
