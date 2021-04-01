@@ -4,7 +4,7 @@ import {
 } from "react-router-dom";
 import Footer from "../Footer";
 import Header from "../Header";
-// import TeamPage from "../Pages/TeamPage/TeamPage"
+import TeamPage from "../Pages/TeamPage/TeamPage";
 
 import AudioCall from "../Games/AudioCall/AudioCallDescription";
 import Games from "../Games/Games";
@@ -17,21 +17,27 @@ import SignUpForm from "../Authorisation/SignUpForm";
 const App = () => (
   <React.Fragment>
     <HashRouter>
+      <Header />
       <Switch>
         <Route exact path="/">
-          <Header />
-          {/* <Link className="link-navigation" to='/games'>games</Link> */}
-          {/* <TeamPage /> */}
-          <DictionaryPage />
-          {/* <SettingsPage /> */}
           {/*<SignInForm/>
           <SignUpForm/>*/}
-          <Footer />
+          main page
         </Route>
-        {/* <Route path="/games">
+        <Route path="/dictionary">
+          <DictionaryPage />
+        </Route>
+        <Route path="/settings">
+          <SettingsPage />
+        </Route>
+        <Route path="/games">
           <Games />
-        </Route> */}
+        </Route>
+        <Route path="/team">
+          <TeamPage /> 
+        </Route>
       </Switch>
+      <Footer />
     </HashRouter>
   </React.Fragment>
 

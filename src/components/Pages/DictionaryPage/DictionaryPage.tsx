@@ -62,7 +62,6 @@ const DictionaryPage: React.FC<Props> = ({lang}) => {
             <div className={useStyles.cards}>
                 {
                     listOfWords.map((card) => {
-                        console.log(card)
                         return <CardOfWord key={card.id} cardInfo={card} />
                     })               
                 }
