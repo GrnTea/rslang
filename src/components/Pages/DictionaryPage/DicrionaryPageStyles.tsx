@@ -24,7 +24,7 @@ const dictionaryStyles = makeStyles({
   cards: {
     display: "flex",
     flexDirection: "column",
-    rowGap: "3em"
+    rowGap: "3em",
   }
 });
 

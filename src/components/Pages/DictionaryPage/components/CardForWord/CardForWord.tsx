@@ -9,18 +9,25 @@ interface Cardinfo {
 const CardForWords = ({cardInfo}:Cardinfo) => {
     const url = "https://rslernwords.herokuapp.com/";
     const useStyles = CardStyles();
-    const voiceActing = new Audio(`${url}${cardInfo.audio}`);
-    const audioExample = new Audio(`${url}${cardInfo.audioExample}`);
-    const audioMeaning = new Audio(`${url}${cardInfo.audioMeaning}`);
-
     const handlePlay = () => {
-        voiceActing.play();
-        if (voiceActing.ended) {
-            audioExample.play();
-        } else if (audioMeaning.ended) {
-            audioMeaning.play();
+        const allAudio = document.getElementsByTagName("audio");
+
+        for (let i=0; i < allAudio.length; i++) {
+            allAudio[i].pause();
         }
-        console.log("play!");
+        
+        const cardAudio:HTMLMediaElement  = document.getElementById(`${cardInfo.word}_audio`) as HTMLMediaElement;
+        const audioExample:HTMLMediaElement   = document.getElementById(`${cardInfo.word}_audioExample`) as HTMLMediaElement;
+        const audioMeaning:HTMLMediaElement   = document.getElementById(`${cardInfo.word}_audioMeaning`) as HTMLMediaElement;
+
+        cardAudio.play();
+
+        cardAudio.addEventListener("ended", () => {
+            audioExample.play();
+        });
+        audioExample.addEventListener("ended", () => {
+            audioMeaning.play();
+        });
     }
 
     return (
@@ -38,7 +45,16 @@ const CardForWords = ({cardInfo}:Cardinfo) => {
                         {` - ${cardInfo.wordTranslate}`}
                     </div>
                     <div className={useStyles.wordVoiceActing} onClick={handlePlay}>
-                        <img src={voiceImg} alt="Voice acting for word"/>                    
+                        <img src={voiceImg} alt="Voice acting for word"/>
+                        <audio id={`${cardInfo.word}_audio`}>
+                            <source src={`${url}${cardInfo.audio}`} type="audio/mpeg" />
+                        </audio>
+                        <audio id={`${cardInfo.word}_audioExample`}>
+                            <source src={`${url}${cardInfo.audioExample}`} type="audio/mpeg" />
+                        </audio>
+                        <audio id={`${cardInfo.word}_audioMeaning`}>
+                            <source src={`${url}${cardInfo.audioMeaning}`} type="audio/mpeg" />
+                        </audio>
                     </div>
                 </div>
                 <div className={useStyles.exampleContainer}>
