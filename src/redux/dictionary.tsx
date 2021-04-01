@@ -1,5 +1,5 @@
 
-export type dictionaryType = {
+export type dictItemType = {
   isStudying: boolean;
   isDifficult: boolean;
   isDeleted: boolean;
@@ -8,7 +8,7 @@ export type dictionaryType = {
   success: number;
 };
 
-const initialStateDictionary: dictionaryType ={
+const initialStateDictionary: dictItemType ={
   isStudying: false,
   isDifficult: false,
   isDeleted: false,

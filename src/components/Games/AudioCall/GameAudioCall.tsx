@@ -44,7 +44,7 @@ export default function GameAudioCall() {
   // -------
   useEffect(() => {
     if (isEmpty(data)) return;
-    if (startGame !== true) return;
+    if (!startGame) return;
 
     const copyData = [...data];
     const elem = copyData.pop();
@@ -54,7 +54,7 @@ export default function GameAudioCall() {
   }, [counter]);
 
   useEffect(() => {
-    if (startGame !== true) return;
+    if (!startGame) return;
     // playWord();
   }, [word]);
 

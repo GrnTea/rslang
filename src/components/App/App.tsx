@@ -32,18 +32,17 @@ const App = () => {
               <Header/>
             </header>
             <main className={useStyles.content}>
-
-
               {/* <Link className="link-navigation" to='/games'>games</Link> */}
               {/* <TeamPage /> */}
 
-              <DictionaryPage/>
+              {/*<DictionaryPage/>*/}
               <TextbookPage/>
 
               {/* <SettingsPage /> */}
               {/*<SignInForm/>
             <SignUpForm/>*/}
             </main>
+
             <Footer/>
           </Route>
           {/* <Route path="/games">
