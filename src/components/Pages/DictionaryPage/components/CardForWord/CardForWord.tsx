@@ -97,7 +97,7 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
         const data = {
             "difficulty": "true",
             "optional": {
-                "removed": "true"
+                "deleted": "true"
             }
         }
 
