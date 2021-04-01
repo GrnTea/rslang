@@ -5,13 +5,17 @@ import {
 import { settingsReducerButtons, settingsReducerCard } from "./learning-settings_reducer";
 import { userReducer } from "./user_reducer";
 
-const rootReducer = combineReducers({
+const settingsReducer = combineReducers({
   lang: settingsReducerLang,
   isAutoVoice: settingsReducerAutoVoice,
   countNewWords: settingsReducerCountNewWords,
   countMaxDayCards: settingsReducerCountMaxDailyCards,
   buttonsSettings: settingsReducerButtons,
   cardSettings: settingsReducerCard,
+});
+
+const rootReducer = combineReducers({
+  settingsReducer: settingsReducer,
   user: userReducer,
 });
 
