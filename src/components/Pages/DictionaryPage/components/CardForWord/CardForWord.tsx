@@ -48,11 +48,9 @@ function updateListOfUserWords(data:any, metod:string, url:string, authorization
 }
 
 const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSettings, user}) => {
-    console.log(user)
-    const authorizationToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNjVmZDY1YzljZTZhMDAxNWYyNzUzMSIsImlhdCI6MTYxNzI5Njk0NywiZXhwIjoxNjE3MzExMzQ3fQ.tDHKXWtXCa24jPYF-Wla2DqRjpV1BvLXTglp_INktXI";
-    const userId = "6065fd65c9ce6a0015f27531";
+    const authorizationToken = user.token;
+    const userId = user.id;
     const url = "https://rslernwords.herokuapp.com/";
-    const userWordId = "60661963c9ce6a0015f27546";
     const useStyles = CardStyles();
     const handlePlay = () => {
         const allAudio = document.getElementsByTagName("audio");
@@ -84,7 +82,7 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
         const data = {
             "difficulty": "true",
             "optional": {
-                "removed": "false"
+                "deleted": "false"
             }
         }
 
