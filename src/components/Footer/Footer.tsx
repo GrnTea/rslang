@@ -5,18 +5,12 @@ import "./FooterStyles.scss";
 
 const githubData = ["GrnTea", "ArseniyXaoc", "JuliaGvozdeva", "conservativ007", "Beljar"];
 
-
 const Footer = () => {
-
-  const getGithubLinks = () => {
-    return githubData.map((github) => {
-      return (
+  const getGithubLinks = () => githubData.map((github) => (
         <a className="footer_link" key={github} href={`https://github.com/${github}`}>{github}</a>
-      )
-    })
-  };
+  ));
 
-  return(
+  return (
     <footer className="footer">
       <div className="footer_container">
         <span> 2021 ©</span>
@@ -28,7 +22,7 @@ const Footer = () => {
         <img src={RSSLogo} className="footer_icon footer_rss" alt="rs-school"/>
       </a>
     </footer>
-  )
+  );
 };
 
-export default Footer
+export default Footer;

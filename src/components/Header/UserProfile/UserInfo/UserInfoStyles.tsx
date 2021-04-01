@@ -14,8 +14,9 @@ const userInfoStyles = makeStyles(
 
       "& > img": {
         width: "24px",
-      }
+      },
     },
-  });
+  },
+);
 
 export default userInfoStyles;

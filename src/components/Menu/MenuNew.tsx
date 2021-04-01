@@ -1,7 +1,6 @@
-import React from 'react';
+import React from "react";
+import Drawer from "@material-ui/core/Drawer";
 import MenuStyles from "./MenuStyles";
-import Drawer from '@material-ui/core/Drawer';
-
 
 const Menu: React.FC = () => {
   const useStyles = MenuStyles();
@@ -17,9 +16,9 @@ const Menu: React.FC = () => {
 
   return (
     <div>
-      <div className={''}></div>
+      <div className={""}></div>
     </div>
-  )
+  );
 };
 
-export default Menu
+export default Menu;

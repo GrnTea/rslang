@@ -20,8 +20,8 @@ const App = () => (
       <Header />
       <Switch>
         <Route exact path="/">
-          {/*<SignInForm/>
-          <SignUpForm/>*/}
+          {/* <SignInForm/>
+          <SignUpForm/> */}
           main page
         </Route>
         <Route path="/dictionary">
@@ -34,7 +34,7 @@ const App = () => (
           <Games />
         </Route>
         <Route path="/team">
-          <TeamPage /> 
+          <TeamPage />
         </Route>
       </Switch>
       <Footer />

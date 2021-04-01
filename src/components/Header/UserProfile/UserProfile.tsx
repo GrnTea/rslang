@@ -1,9 +1,8 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import UserInfo from "./UserInfo/UserInfo";
 import SignInButton from "../../Authorisation/SignInButton/SignInButton";
 
 function UserProfile() {
-
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   return (
@@ -13,7 +12,7 @@ function UserProfile() {
         : <SignInButton/>
       }
     </div>
-  )
+  );
 }
 
-export default UserProfile
+export default UserProfile;

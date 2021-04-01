@@ -1,18 +1,25 @@
 import React from "react";
 import CardStyles from "./CardStyles";
 import voiceImg from "../../../../../assets/icons/voiceIcon.svg";
+import { RootState } from "../../../../../redux/reducer";
+import { connect } from "react-redux";
+import { Button } from "@material-ui/core";
 
-interface Cardinfo {
-    cardInfo: any
+type Props = {
+    cardInfo: any,
+    lang: string,
+    buttonsSettings: any,
+    cardSettings: any
 }
 
-const CardForWords = ({cardInfo}:Cardinfo) => {
+const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSettings}) => {
+    console.log(buttonsSettings);
     const url = "https://rslernwords.herokuapp.com/";
     const useStyles = CardStyles();
     const handlePlay = () => {
         const allAudio = document.getElementsByTagName("audio");
 
-        for (let i=0; i < allAudio.length; i++) {
+        for (let i = 0; i < allAudio.length; i++) {
             allAudio[i].pause();
         }
         
@@ -22,28 +29,39 @@ const CardForWords = ({cardInfo}:Cardinfo) => {
 
         cardAudio.play();
 
-        cardAudio.addEventListener("ended", () => {
-            audioExample.play();
-        });
-        audioExample.addEventListener("ended", () => {
-            audioMeaning.play();
-        });
+        if (cardSettings[2].state) {
+            cardAudio.addEventListener("ended", () => {
+                audioExample.play();
+            });
+        }
+
+        if (cardSettings[1].state) {
+            audioExample.addEventListener("ended", () => {
+                audioMeaning.play();
+            });
+        }
     }
 
     return (
         <div className={useStyles.cardContainer}>
-            <div className={useStyles.cardImg} style={{backgroundImage: `url(${url}${cardInfo.image})`}} />
+            { cardSettings[4].state ? 
+            <div className={useStyles.cardImg} style={{backgroundImage: `url(${url}${cardInfo.image})`}} /> : null}
             <div className={useStyles.cardDescription}>
                 <div className={useStyles.mainWordContsiner}>
                     <div className={useStyles.mainWord}>
                         {cardInfo.word}
                     </div>
+                    { cardSettings[3].state ? 
                     <div className={useStyles.wordTranscription}>
                         {cardInfo.transcription}
-                    </div>
-                    <div className={useStyles.wordTranslate}>
-                        {` - ${cardInfo.wordTranslate}`}
-                    </div>
+                    </div> 
+                    : null }
+                    {
+                        cardSettings[0].state ?
+                        <div className={useStyles.wordTranslate}>
+                            {` - ${cardInfo.wordTranslate}`}
+                        </div> : null
+                    }
                     <div className={useStyles.wordVoiceActing} onClick={handlePlay}>
                         <img src={voiceImg} alt="Voice acting for word"/>
                         <audio id={`${cardInfo.word}_audio`}>
@@ -57,22 +75,45 @@ const CardForWords = ({cardInfo}:Cardinfo) => {
                         </audio>
                     </div>
                 </div>
-                <div className={useStyles.exampleContainer}>
-                    <div className={useStyles.example} dangerouslySetInnerHTML={{__html: `${cardInfo.textExample}`}}>
-                    </div>
-                    <div className={useStyles.exampleTranslate} >
-                        {cardInfo.textExampleTranslate}
-                    </div>
-                </div>
-                <div className={useStyles.exampleContainer}>
-                    <div className={useStyles.example} dangerouslySetInnerHTML={{__html: `${cardInfo.textMeaning}`}}></div>
-                    <div className={useStyles.exampleTranslate} >
-                        {cardInfo.textMeaningTranslate}
-                    </div>
-                </div>
+                {
+                    cardSettings[2].state ? 
+                    <div className={useStyles.exampleContainer}>
+                        <div className={useStyles.example} dangerouslySetInnerHTML={{__html: `${cardInfo.textExample}`}}></div>
+                        <div className={useStyles.exampleTranslate} >
+                            {cardInfo.textExampleTranslate}
+                        </div>
+                    </div> : null
+                }
+                {
+                    cardSettings[1].state ? 
+                    <div className={useStyles.exampleContainer}>
+                        <div className={useStyles.example} dangerouslySetInnerHTML={{__html: `${cardInfo.textMeaning}`}}></div>
+                        <div className={useStyles.exampleTranslate} >
+                            {cardInfo.textMeaningTranslate}
+                        </div>
+                    </div> : null
+                }
             </div>
+            <div className={useStyles.cardButtons}>
+                    {
+                        buttonsSettings[1].state ? 
+                        <Button className={useStyles.cardBtn}>Сложное</Button>
+                        : null
+                    }
+                    {
+                        buttonsSettings[4].state ? 
+                        <Button className={useStyles.cardBtn}>Удалить</Button>
+                        : null
+                    }
+                </div>
         </div>
     )
 }
 
-export default CardForWords;
+const mapStateToProps = (state:RootState) => ({
+    lang: state.settingsReducer.lang.lang,
+    buttonsSettings: state.settingsReducer.buttonsSettings.buttonsSettings,
+    cardSettings: state.settingsReducer.cardSettings.cardSettings,
+  });
+  
+  export default connect(mapStateToProps)(CardForWords);

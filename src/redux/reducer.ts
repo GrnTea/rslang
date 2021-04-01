@@ -11,10 +11,10 @@ const settingsReducer = combineReducers({
   countMaxDayCards: settingsReducerCountMaxDailyCards,
   buttonsSettings: settingsReducerButtons,
   cardSettings: settingsReducerCard,
-})
+});
 
 const rootReducer = combineReducers({
-  settingsReducer: settingsReducer,
+  settingsReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
