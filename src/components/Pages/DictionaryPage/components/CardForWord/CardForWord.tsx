@@ -20,7 +20,8 @@ type Props = {
     cardInfo: any,
     lang: string,
     buttonsSettings: any,
-    cardSettings: any
+    cardSettings: any,
+    user: any
 }
 
 function updateListOfUserWords(data:any, metod:string, url:string, authorizationToken:string):void {
@@ -46,7 +47,8 @@ function updateListOfUserWords(data:any, metod:string, url:string, authorization
       .catch((error)=> {alert(error)});
 }
 
-const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSettings}) => {
+const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSettings, user}) => {
+    console.log(user)
     const authorizationToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNjVmZDY1YzljZTZhMDAxNWYyNzUzMSIsImlhdCI6MTYxNzI5Njk0NywiZXhwIjoxNjE3MzExMzQ3fQ.tDHKXWtXCa24jPYF-Wla2DqRjpV1BvLXTglp_INktXI";
     const userId = "6065fd65c9ce6a0015f27531";
     const url = "https://rslernwords.herokuapp.com/";
@@ -176,6 +178,7 @@ const mapStateToProps = (state:RootState) => ({
     lang: state.settingsReducer.lang.lang,
     buttonsSettings: state.settingsReducer.buttonsSettings.buttonsSettings,
     cardSettings: state.settingsReducer.cardSettings.cardSettings,
+    user: state.user,
   });
   
   export default connect(mapStateToProps)(CardForWords);
