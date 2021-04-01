@@ -8,6 +8,12 @@ import Points from "./Points";
 import SprintHeader from "./SprinInterface";
 import Begin from "./Begin";
 
+const random = (max: number): number => {
+  const min = 0;
+  const rand = min - 0.5 + Math.random() * (max - min + 1);
+  return Math.round(rand);
+};
+
 interface ICurrentWord {
   mainWord: string,
   translateWord: string,
@@ -24,7 +30,7 @@ export default function Sprint() {
   const isVolume = true;
   const [bonus, setBonus] = useState(10);
   const [finish, setFinish] = useState(false);
-  const [beginTimer, setBeginTimer] = useState(3);
+  const [begin, setBegin] = useState(true);
   const { num } = params;
   let currentWord: ICurrentWord = {
     mainWord: "",
@@ -34,12 +40,12 @@ export default function Sprint() {
 
   const URL = `http://localhost:3001/words?group=${Number(num) - 1}&page=1`;
 
-  const shufleWords = (words) => {
-    if (words) {
-      words.sort(() => Math.random() - 0.5);
-    }
-    return words;
-  };
+  // const shufleWords = (words: Promise<Array<{}>) => {
+  //   if (words) {
+  //     words.sort(() => Math.random() - 0.5);
+  //   }
+  //   return words;
+  // };
 
   useEffect(() => {
     setIsLoaded(false);
@@ -119,9 +125,9 @@ export default function Sprint() {
     }
   }
 
-  if (beginTimer) {
+  if (begin) {
     return (
-      <Begin beginTimer={beginTimer} setBeginTimer={setBeginTimer}/>
+      <Begin setBegin={setBegin}/>
     );
   }
 
@@ -171,8 +177,3 @@ export default function Sprint() {
   );
 }
 
-const random = (max: number): number => {
-  const min = 0;
-  const rand = min - 0.5 + Math.random() * (max - min + 1);
-  return Math.round(rand);
-};

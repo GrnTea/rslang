@@ -1,16 +1,17 @@
-import React, { Dispatch, useEffect } from "react";
+import React, { Dispatch, useEffect, useState } from "react";
 import { AccessAlarm } from "@material-ui/icons";
 
 type BeginTipe = {
-  beginTimer: number,
-  setBeginTimer: Dispatch<number>,
+  setBegin: Dispatch<boolean>,
 }
-const Begin = ({ beginTimer, setBeginTimer }: BeginTipe) => {
+const Begin = ({ setBegin }: BeginTipe) => {
+  const [beginTimer, setBeginTimer] = useState(3);
   useEffect(() => {
     const interval = setInterval(() => {
       setBeginTimer(beginTimer - 1);
     }, 1000);
     if (beginTimer === 0) {
+      setBegin(false);
       clearInterval(interval);
     }
     return () => {
