@@ -5,6 +5,17 @@ import { RootState } from "../../../../../redux/reducer";
 import { connect } from "react-redux";
 import { Button } from "@material-ui/core";
 
+const BUTTONS = {
+    en: {
+        difficultBtn: "Difficult",
+        removeBtn: "Delete"
+    },
+    ru: {
+        difficultBtn: "Сложное",
+        removeBtn: "Удалить"  
+    }
+}
+
 type Props = {
     cardInfo: any,
     lang: string,
@@ -12,9 +23,34 @@ type Props = {
     cardSettings: any
 }
 
+function updateListOfUserWords(data:any, metod:string, url:string, authorizationToken:string):void {
+    fetch(url, {
+        method: metod,
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authorizationToken}`
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify(data)
+      })
+      .then((response) => {  
+        if (!response.ok) {
+            throw Error(response.statusText);
+        }
+        return response;
+        })
+      .catch((error)=> {alert(error)});
+}
+
 const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSettings}) => {
-    console.log(buttonsSettings);
+    const authorizationToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNjVmZDY1YzljZTZhMDAxNWYyNzUzMSIsImlhdCI6MTYxNzI5Njk0NywiZXhwIjoxNjE3MzExMzQ3fQ.tDHKXWtXCa24jPYF-Wla2DqRjpV1BvLXTglp_INktXI";
+    const userId = "6065fd65c9ce6a0015f27531";
     const url = "https://rslernwords.herokuapp.com/";
+    const userWordId = "60661963c9ce6a0015f27546";
     const useStyles = CardStyles();
     const handlePlay = () => {
         const allAudio = document.getElementsByTagName("audio");
@@ -40,6 +76,32 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
                 audioMeaning.play();
             });
         }
+    }
+
+    const handleSetAsDifficult = () => {
+        const data = {
+            "difficulty": "true",
+            "optional": {
+                "removed": "false"
+            }
+        }
+
+        const urlRequest = `${url}users/${userId}/words/${cardInfo.id}`;
+
+        updateListOfUserWords(data, "POST", urlRequest, authorizationToken);
+    }
+
+    const handleRemoveWord = () => {
+        const data = {
+            "difficulty": "true",
+            "optional": {
+                "removed": "true"
+            }
+        }
+
+        const urlRequest = `${url}users/${userId}/words/${cardInfo.id}`;
+
+        updateListOfUserWords(data, "PUT", urlRequest, authorizationToken);
     }
 
     return (
@@ -93,19 +155,19 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
                         </div>
                     </div> : null
                 }
-            </div>
-            <div className={useStyles.cardButtons}>
+                <div className={useStyles.cardButtons}>
                     {
                         buttonsSettings[1].state ? 
-                        <Button className={useStyles.cardBtn}>Сложное</Button>
+                        <Button className={useStyles.cardBtn} onClick={handleSetAsDifficult}>{BUTTONS[lang].difficultBtn}</Button>
                         : null
                     }
                     {
                         buttonsSettings[4].state ? 
-                        <Button className={useStyles.cardBtn}>Удалить</Button>
+                        <Button className={useStyles.cardBtn} onClick={handleRemoveWord}>{BUTTONS[lang].removeBtn}</Button>
                         : null
                     }
                 </div>
+            </div>
         </div>
     )
 }

@@ -5,7 +5,7 @@ const cardStyles = makeStyles({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-evenly",
+    columnGap: "3em",
   },
 
   cardImg: {
@@ -21,7 +21,6 @@ const cardStyles = makeStyles({
   },
 
   cardDescription: {
-    width: "500px",
     display: "flex",
     flexDirection: "column",
     rowGap: "1em",
@@ -76,9 +75,9 @@ const cardStyles = makeStyles({
 
   cardButtons: {
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "row",
     alignItems: "flex-start",
-    rowGap: "1em",
+    columnGap: "1em",
   },
 
   cardBtn: {
