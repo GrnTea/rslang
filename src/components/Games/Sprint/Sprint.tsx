@@ -10,6 +10,7 @@ import SprintHeader from "./SprinInterface";
 import Begin from "./Begin";
 import correct from "../../../assets/sound/correct-choice.wav";
 import wrong from "../../../assets/sound/error.wav";
+import { ERROR, URL, ERROR_WORD, RIGHT_ARROW, RIGHT } from "./sprintconstants";
 
 const random = (max: number): number => {
   const min = 0;
@@ -30,31 +31,24 @@ export default function Sprint() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [score, setScore] = useState(0);
   const [checkbox, setCheckbox] = useState([]);
-  const isVolume = true;
   const [bonus, setBonus] = useState(10);
   const [finish, setFinish] = useState(false);
   const [begin, setBegin] = useState(true);
   const [playCorrect] = useSound(correct);
   const [playWrong] = useSound(wrong);
   const { num } = params;
+  const isVolume = true;
   let currentWord: ICurrentWord = {
     mainWord: "",
     translateWord: "",
     isTrueTranslate: false,
   };
 
-  const URL = `http://localhost:3001/words?group=${Number(num) - 1}&page=1`;
-
-  // const shufleWords = (words: Promise<Array<{}>) => {
-  //   if (words) {
-  //     words.sort(() => Math.random() - 0.5);
-  //   }
-  //   return words;
-  // };
+  const url = `${URL}/words?group=${Number(num) - 1}&page=1`;
 
   useEffect(() => {
     setIsLoaded(false);
-    fetch(URL)
+    fetch(url)
       .then((res) => res.json())
       .then(
         (result) => {
@@ -74,7 +68,7 @@ export default function Sprint() {
   const playGame = useCallback((words: any) => {
     const wordData = {
       mainWord: "",
-      translateWord: "вечность",
+      translateWord: ERROR_WORD,
       isTrueTranslate: false,
     };
     const playWords = JSON.parse(JSON.stringify(words));
@@ -85,8 +79,8 @@ export default function Sprint() {
     try {
       wordData.translateWord = wordData.isTrueTranslate
         ? playWords[numOfWord].wordTranslate : playWords[numFakeWord].wordTranslate;
-    } catch {
-      console.log("Error");
+    } catch (e) {
+      console.log(ERROR + e);
     }
     return wordData;
   }, [num]);
@@ -116,7 +110,7 @@ export default function Sprint() {
         setCheckbox([state]);
       }
     };
-    const btn = event.target.innerHTML === "Верно" || event.key === "ArrowRight";
+    const btn = event.target.innerHTML === RIGHT || event.key === RIGHT_ARROW;
     if (btn === currentWord.isTrueTranslate) {
       setScore(score + bonus);
       playCorrect();
@@ -141,10 +135,21 @@ export default function Sprint() {
     return <div>Загрузка...</div>;
   }
 
+  function beginNow() {
+    setScore(0);
+    setCheckbox([]);
+    setBonus(10);
+    setFinish(false);
+    setBegin(true);
+  }
+
   if (finish) {
     return (
       <div className="sprint">
         <h2 className="sprint__header">Результаты</h2>
+        <Button variant="contained" color="secondary" onClick={beginNow} >
+          Играть заново
+        </Button>
         <div className="sprint__words-container">
           <div>{score} очков</div>
           <div>{score / 2} опыта</div>
