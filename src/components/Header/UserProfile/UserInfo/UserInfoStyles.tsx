@@ -15,11 +15,13 @@ const userInfoStyles = makeStyles(
       "& > img": {
         width: "24px",
       },
+      
       "& > a": {
         color: "white",
         marginRight: "10px",
       },
     },
-  });
+  },
+);
 
 export default userInfoStyles;

@@ -1,6 +1,5 @@
 import React from "react";
-import { withStyles } from '@material-ui/core/styles';
-
+import { withStyles } from "@material-ui/core/styles";
 
 const GlobalCss = withStyles({
   "@global": {
@@ -24,8 +23,8 @@ const GlobalCss = withStyles({
     },
     ".MuiListItem-gutters": {
       paddingLeft: "0",
-    }
-  }
+    },
+  },
 })(() => null);
 
 export default GlobalCss;
