@@ -18,8 +18,10 @@ import Dictionary from "../Pages/DictionaryPage/DictionaryPage";
 
 const App = () => (
   <React.Fragment>
+
     <HashRouter>
     <Header />
+
       <Switch>
         <Route exact path="/">
           <Header />
@@ -47,8 +49,10 @@ const App = () => (
           <SettingsPage />
         </Route>
       </Switch>
+
       <Footer />
     </HashRouter>
+
   </React.Fragment>
 
 );
