@@ -1,19 +1,23 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import UserInfo from "./UserInfo/UserInfo";
-import SignInButton from "../../Authorisation/SignInButton/SignInButton";
+import SignInButton from "../../Authorization/SignInButton/SignInButton";
+import { connect } from "react-redux";
+import { RootState } from "../../../redux/reducer";
 
-function UserProfile() {
-
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+function UserProfile({ user }) {
 
   return (
     <div>
-      {isLoggedIn
-        ? <UserInfo/>
+      {user.name
+        ? <UserInfo user={user}/>
         : <SignInButton/>
       }
     </div>
-  )
+  );
 }
 
-export default UserProfile
+const mapStateToProps = (state: RootState) => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps)(UserProfile);

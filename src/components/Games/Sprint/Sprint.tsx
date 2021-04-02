@@ -25,6 +25,7 @@ interface ICurrentWord {
   isTrueTranslate: boolean,
 }
 
+
 export default function Sprint() {
   const params: { num: string | undefined } = useParams();
   const sprintEl = useRef(null);
