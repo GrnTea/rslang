@@ -5,7 +5,7 @@ export type dictItemType = {
   isDeleted: boolean;
   word: string;
   errors: number;
-  success: number;
+  correct: number;
 };
 
 const initialStateDictionary: dictItemType ={
@@ -14,14 +14,14 @@ const initialStateDictionary: dictItemType ={
   isDeleted: false,
   word: '',
   errors: 0,
-  success: 0,
+  correct: 0,
 };
 
 const SET_STUDYING = "SET_STUDYING";
 const SET_DIFFICULT = "SET_DIFFICULT";
 const SET_DELETED = "SET_DELETED";
 const SET_ERRORS = "SET_ERRORS";
-const SET_SUCCESS = "SET_SUCCESS";
+const SET_CORRECT = "SET_CORRECT";
 
 export default (state = initialStateDictionary, action: any) => {
   switch(action.type) {
@@ -45,10 +45,10 @@ export default (state = initialStateDictionary, action: any) => {
         ...state,
         errors: 1,
       };
-    case SET_SUCCESS:
+    case SET_CORRECT:
       return {
         ...state,
-        success: 1 ,
+        correct: 1 ,
       };
     default:
       return state;

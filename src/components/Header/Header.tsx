@@ -26,6 +26,8 @@ import statIcon from "../../assets/icons/trend.svg";
 import teamIcon from "../../assets/icons/group.svg";
 import exitIcon from "../../assets/icons/logout.svg";
 
+listItem => state
+
 const buttonsData = [
   /* {
     label: "Главная",
