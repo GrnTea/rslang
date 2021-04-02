@@ -8,6 +8,7 @@ import Header from "../Header";
 import SignIn from "../Authorization/SignIn";
 import SignUp from "../Authorization/SignUp";
 import UserProfile from "../Authorization/UserProfile";
+import Stat from "../Statistics";
 
 import AudioCall from "../Games/AudioCall/AudioCallDescription";
 import Games from "../Games/Games";
@@ -35,6 +36,9 @@ const App = () => (
         </Route>
         <Route path="/profile">
           <UserProfile />
+        </Route>
+        <Route path="/stat">
+          <Stat />
         </Route>
       </Switch>
       <Footer />
