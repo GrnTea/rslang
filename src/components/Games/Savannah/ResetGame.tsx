@@ -19,15 +19,15 @@ const ResetGame = (props: any) => {
             <VolumeUpIcon />
           </div>
           
-          <div>{elem.word}</div>
-          <span> - </span>  
-          <div>{elem.wordTranslate}</div>
+          <div className="word-answer en">{elem.word}</div>
+          <span className="separator"></span>  
+          <div className="word-answer ru">{elem.wordTranslate}</div>
         </div>  
       )
     });
 
     setTrueWords(res)
-  }, [])
+  }, []);
   
   useEffect(() => {
     let res = props.wrongAnswers.map((elem: any, index: number) => {
@@ -37,9 +37,9 @@ const ResetGame = (props: any) => {
             <VolumeUpIcon />
           </div>
           
-          <div>{elem.word}</div>
-          <span> - </span>  
-          <div>{elem.wordTranslate}</div>
+          <div className="word-answer en">{elem.word}</div>
+          <span className="separator"></span>  
+          <div className="word-answer ru">{elem.wordTranslate}</div>
         </div>  
       )
     });
@@ -63,11 +63,18 @@ const ResetGame = (props: any) => {
   return (
     <div className="reset-game">
       <div className="end-game-emotion">это конец <EmojiEmotionsTwoToneIcon color="primary"/></div> 
-      <h4>правильные ответы:</h4>
+      <div className="right-answers-counter">
+        <div className="answers">Знаю: </div>
+        <div className="right-counter">{props.rightAnswersCounter}</div>
+      </div>
       <div className="right-answers">
         {trueWords}
       </div>
-      <h4>не правильные ответы:</h4>
+      <div className="answers-separator"></div>
+      <div className="wrong-answers-counter">
+        <div className="answers">Ошибок: </div>
+        <div className="wrong-counter">{props.wrongAnswersCounter}</div>
+      </div>
       <div className="wrong-answers">
         {falseWords}
       </div>

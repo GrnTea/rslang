@@ -1,14 +1,15 @@
-import { Drawer } from '@material-ui/core';
 import React, {useState, useEffect, useRef} from 'react';
 import ResetGame from './ResetGame';
 import {
   useParams,
 } from "react-router-dom";
 import './gameSavannah.css';
-
+import useSound from "use-sound";
 import succes from '../../../assets/sound/succes.mp3';
 import error from '../../../assets/sound/error.mp3';
 import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
+
+import FullScreenButton from "./FullScreenButton";
 
 const URL = 'https://rslernwords.herokuapp.com/';
 
@@ -29,6 +30,8 @@ export default function GameSavannah() {
 
   let [endGame, setEndGame] = useState(false);
   let [wordsDisplayedOnTheScreen, setWordsDisplayedOnTheScreen] = useState('');
+
+  const [playError] = useSound(error);
 
   function initGame() {
     fetch(`${URL}words?group=${num - 1}&page=1`)
@@ -79,8 +82,8 @@ export default function GameSavannah() {
     setLifeCounter(prev => prev - 1);
     setWrongAnswersCounter(prev => prev + 1);
     addAnswers(word, setWrongAnswers, wrongAnswers);
-    // audioPlay(error);
-  }, [gravityCounter])
+    playError();
+  }, [gravityCounter]);
 
 
 //  проверка ответа
@@ -200,16 +203,23 @@ export default function GameSavannah() {
 
   return (
     <>
-      {endGame === false ? 
-        <div className="words-display">
-          <div className="life-container">
-            <div className="life-counter">{lifeCounter}</div>
-            <FavoriteTwoToneIcon className="life-icon" />
+      {endGame === false ?
+        <div className="words-container">
+          <div className="words-display">
+            <div className="life-container">
+              <div className="life-counter">{lifeCounter}</div>
+              <FavoriteTwoToneIcon className="life-icon" />
+            </div>
+            
+            <div className="word-absolute">{word.word}</div>
+              {wordsDisplayedOnTheScreen}
+          </div> 
+          <div className="fullscreen-button">
+            <FullScreenButton />
           </div>
-          
-          <div className="word-absolute">{word.word}</div>
-            {wordsDisplayedOnTheScreen}
-        </div> 
+          <input className="input-hidden" type="hidden" onClick={() => audioPlay(error)}/>   
+        </div>   
+        
       : 
         <ResetGame 
           rightAnswersCounter={rightAnswersCounter} 
