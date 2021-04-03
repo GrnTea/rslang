@@ -7,7 +7,7 @@ import { Grid, Paper } from "@material-ui/core";
 
 const getPercent = (stat) => Math.round((stat.rightAnswers / (stat.rightAnswers + stat.wrongAnswers)) * 100);
 
-const GameStatCard = ({ gameName, stat, img }) => {
+const GameStatCard = ({ stat, img }) => {
   console.log(stat);
   const classes = styles();
   return <Grid container spacing={3} className={classes.container}>
@@ -15,7 +15,7 @@ const GameStatCard = ({ gameName, stat, img }) => {
       <Paper>
         <Grid container>
           <Grid item xs={6}>
-            <span className={classes.title}>{gameName}</span>
+            <span className={classes.title}>{stat.gameId}</span>
             <img src={img} className={classes.img}></img>
           </Grid>
           <Grid item xs={6}>

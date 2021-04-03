@@ -51,7 +51,7 @@ const testStat = [
   }
 ];
 
-testStat.forEach((itm) => {itm.date = (new Date()).getTime()});
+testStat.forEach((itm) => { itm.date = (new Date()).getTime() });
 
 const getDailyStat = async (user) => {
   /*   const rawData = await fetch(`https://rslernwords.herokuapp.com/users/${user.id}/statistics`, {
@@ -76,22 +76,23 @@ const getDailyStat = async (user) => {
   return stat.filter((itm) => (itm.date >= timeStart)
     && (itm.date < timeEnd))
     .reduce((acc, itm) => {
-      const gameStat = acc[itm.gameId];
+      const gameStat = acc.find((stat) => itm.gameId === stat.gameId);
       if (gameStat) {
         gameStat.learnedWords += itm.learnedWords;
         gameStat.rightAnswers += itm.rightAnswers;
         gameStat.wrongAnswers += itm.wrongAnswers;
         gameStat.maxSerie = Math.max(itm.wrongAnswers, gameStat.maxSerie);
       } else {
-        acc[itm.gameId] = {
+        acc.push({
+          gameId: itm.gameId,
           learnedWords: itm.learnedWords,
           rightAnswers: itm.rightAnswers,
           wrongAnswers: itm.wrongAnswers,
           maxSerie: itm.maxSerie,
-        };
+        });
       }
       return acc;
-    }, {});
+    }, []);
 };
 
 const renderGameStat = (gameId, gameStat) => <div key={gameId}>
@@ -103,7 +104,7 @@ const renderGameStat = (gameId, gameStat) => <div key={gameId}>
 </div>;
 
 const DailyStat = ({ user }) => {
-  const [stat, setStat] = useState({});
+  const [stat, setStat] = useState([]);
   useEffect(() => {
     console.log('getDailyStat');
     getDailyStat(user).then((res) => {
@@ -112,14 +113,13 @@ const DailyStat = ({ user }) => {
     });
   }, []);
   useEffect(() => {
-    console.log(Object.keys(stat).map((key) => console.log(key, stat[key])));
+    console.log(stat.map((itm) => console.log(itm)));
   }, [stat]);
-  return <div>{Object.keys(stat).map((key) => <GameStatCard
-    key={key}
-    gameName={key}
-    stat={stat[key]}
+  return <div>{stat.map((itm, idx) => <GameStatCard
+    key={idx}
+    stat={itm}
     img={img}
-    />)}</div>;
+  />)}</div>;
 };
 
 const mapStateToProps = (state: RootState) => ({
