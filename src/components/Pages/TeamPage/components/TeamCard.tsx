@@ -1,6 +1,6 @@
 import React from "react";
 import TeamStyles from "../TeamCardStyles";
-import github from "../../../../assets/images/github.svg";
+import github from "../../../../assets/icons/github.svg";
 
 interface UserInfo {
     userInfo: any
@@ -8,7 +8,7 @@ interface UserInfo {
 
 const TeamCard = ({ userInfo }:UserInfo) => {
   const useStyles = TeamStyles();
-  
+
   return (
     <div className={useStyles.userCardContainer}>
         <img className={useStyles.userImg} src={userInfo.userImg} alt={userInfo.userName} />
