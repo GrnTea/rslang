@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { RootState } from "../../../redux/reducer";
+import GameStatCard from "./GameStatCard/GameStatCard";
+import img from "../../assets/images/games/Savanna/bg.jpg";
 
 const testStat = [
   {
@@ -49,6 +51,8 @@ const testStat = [
   }
 ];
 
+testStat.forEach((itm) => {itm.date = (new Date()).getTime()});
+
 const getDailyStat = async (user) => {
   /*   const rawData = await fetch(`https://rslernwords.herokuapp.com/users/${user.id}/statistics`, {
       method: "GET",
@@ -74,10 +78,16 @@ const getDailyStat = async (user) => {
     .reduce((acc, itm) => {
       const gameStat = acc[itm.gameId];
       if (gameStat) {
+        gameStat.learnedWords += itm.learnedWords;
         gameStat.rightAnswers += itm.rightAnswers;
+        gameStat.wrongAnswers += itm.wrongAnswers;
+        gameStat.maxSerie = Math.max(itm.wrongAnswers, gameStat.maxSerie);
       } else {
         acc[itm.gameId] = {
+          learnedWords: itm.learnedWords,
           rightAnswers: itm.rightAnswers,
+          wrongAnswers: itm.wrongAnswers,
+          maxSerie: itm.maxSerie,
         };
       }
       return acc;
@@ -104,7 +114,12 @@ const DailyStat = ({ user }) => {
   useEffect(() => {
     console.log(Object.keys(stat).map((key) => console.log(key, stat[key])));
   }, [stat]);
-  return <div>{Object.keys(stat).map((key) => renderGameStat(key, stat[key]))}</div>;
+  return <div>{Object.keys(stat).map((key) => <GameStatCard
+    key={key}
+    gameName={key}
+    stat={stat[key]}
+    img={img}
+    />)}</div>;
 };
 
 const mapStateToProps = (state: RootState) => ({
