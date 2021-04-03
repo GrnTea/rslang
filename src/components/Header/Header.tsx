@@ -96,7 +96,7 @@ function Header() {
       }
 
       return [1, 2, 3, 4, 5, 6].map((listItem) => (
-          <ListItemLink key={`k${listItem}`} href={`#textbook/section/${listItem}`}>
+          <ListItemLink key={`k${listItem}`} href={`#section/${listItem}`}>
             <ListItemText className={listLinkItemSection} primary={`Раздел ${listItem}`}/>
           </ListItemLink>
       ));

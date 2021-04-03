@@ -173,7 +173,7 @@ export default function Sprint() {
   }
 
   return (
-    <div ref={sprintEl} className="sprint" >
+    <div ref={sprintEl} className="sprint">
       <h2 className="sprint__header">sprint</h2>
       <SprintHeader setFinish={setFinish} isVolume={isVolume} score={score} />
       <Points bonus={bonus} checkbox={checkbox} key={Date.now()} />
