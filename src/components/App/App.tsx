@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  BrowserRouter, Switch, Route, HashRouter, Link,
+  BrowserRouter, Switch, Route, HashRouter, Link, Redirect,
 } from "react-router-dom";
 import Footer from "../Footer";
 import Header from "../Header";
@@ -13,12 +13,12 @@ import AudioCall from "../Games/AudioCall/AudioCallDescription";
 import Games from "../Games/Games";
 // import {ThemeProvider} from "styled-components";
 import SettingsPage from "../Pages/SettingsPage/SettingsPage";
-import Dictionary from "../Pages/DictionaryPage/DictionaryPage";
 import SignInForm from "../Authorisation/SignInForm";
 import SignUpForm from "../Authorisation/SignUpForm";
 import TextbookPage from "../Pages/TextbookPage/TextbookPage";
 import appStyles from "./AppStyles";
 import DictionaryPage from "../Pages/DictionaryPage/DictionaryPage";
+import SectionComponent from "../SectionComponent/SectionComponent";
 
 
 
@@ -80,9 +80,11 @@ const App = () => {
           <Route path="/profile">
             <UserProfile />
           </Route>
-          <Route path="/section/:id">
-            <SectionComponent />
-          </Route>
+
+          <Route path="/section/:sectionId/:pageId" render={props => <TextbookPage {...props.match.params}/>} />
+          <Route path="/section/:sectionId" render={props => <SectionComponent {...props.match.params}/>} />
+
+
           <Route path="/dictionary">
             <DictionaryPage />
           </Route>
@@ -104,3 +106,15 @@ const App = () => {
 };
 
 export default App;
+
+
+{/*// render={props =>*/}
+{/*// <SectionComponent {...props.match.params}/>*/}
+//   {/*<Switch>
+{/*<Route path={`${path}/:pageId`} component={TextbookPage} />*/}
+// </Switch>*!/}
+// </SectionComponent>*/
+// {/*<Route path="/:pageId"><TextbookPage/>}<Route/>*/}
+
+{/*<Route path="/section/:sectionId/:pageId" render={props => <TextbookPage {...props.match.params}/>} />*/}
+/**/

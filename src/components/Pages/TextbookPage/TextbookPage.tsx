@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Pagination from "../../Pagination/Pagination";
+//import Pagination from "@material-ui/lab/Pagination";
+import {useParams, useRouteMatch} from "react-router";
 
 interface IWord {
   id: string
@@ -20,14 +22,18 @@ interface IWord {
 
 const TextbookPage: React.FC = () => {
 
-  const group = 1;
-  const page = 1;
-  const url = `https://rslernwords.herokuapp.com/words?group=${group - 1}&page=${page - 1}`;
+  const { sectionId, pageId } = useParams();
+  let { path, url } = useRouteMatch();
+  console.log('tbook: path url', path, url, 'ids:', sectionId, pageId);
+
+  /*const group = 1;
+  const page = 1;*/
+  const wordsUrl = `https://rslernwords.herokuapp.com/words?group=${sectionId - 1}&page=${pageId - 1}`;
 
   const [pageWords, setPageWords] = useState([]);
 
   function getWords() {
-    fetch(url)
+    fetch(wordsUrl)
       .then((response) => response.json())
       .then((jsonData) => {
         console.log(jsonData);
@@ -37,7 +43,7 @@ const TextbookPage: React.FC = () => {
 
   useEffect(() => {
     getWords();
-  }, []);
+  }, [wordsUrl]);
 
   console.log("pageWords", pageWords);
 
@@ -45,14 +51,13 @@ const TextbookPage: React.FC = () => {
 
     <div>
       <h3>Textbook</h3>
-      <div>{pageWords.map((wordObj: IWord) => (
-
-        <div key={wordObj.id}>{wordObj.word}</div>
-        )
-      )}
+      <div>
+        {pageWords.map((wordObj: IWord) => (
+          <div key={wordObj.id}>{wordObj.word}</div>
+        ))}
       </div>
 
-      <Pagination />
+      <Pagination page={pageId} count={20} />
     </div>
 
   )

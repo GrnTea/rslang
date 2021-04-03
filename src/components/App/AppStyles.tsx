@@ -1,7 +1,5 @@
 import {makeStyles} from "@material-ui/core/styles";
 
-
-
 const appStyles = makeStyles({
     content: {
       display: "flex",
@@ -9,7 +7,7 @@ const appStyles = makeStyles({
       // alignItems: "center",
       // justifyContent: "center",
       flexGrow: 1,
-      paddingTop: "64px",
+      padding: "70px 10px 0",
     },
 });
 
