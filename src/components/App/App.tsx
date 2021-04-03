@@ -80,11 +80,8 @@ const App = () => {
           <Route path="/profile">
             <UserProfile />
           </Route>
-
           <Route path="/section/:sectionId/:pageId" render={props => <TextbookPage {...props.match.params}/>} />
           <Route path="/section/:sectionId" render={props => <SectionComponent {...props.match.params}/>} />
-
-
           <Route path="/dictionary">
             <DictionaryPage />
           </Route>

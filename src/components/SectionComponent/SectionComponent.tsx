@@ -12,7 +12,7 @@ export default function SectionComponent() {
     <>
         <h3>Раздел {sectionId}</h3>
         {Array(30).fill(1).map((_, pageId) => (
-          <Link key={`k${pageId}`} to={`${url}${pageId + 1}`}>Страница {`${pageId + 1}`}</Link>
+          <Link key={`k${pageId}`} to={`${url}/${pageId + 1}`}>Страница {`${pageId + 1}`}</Link>
           )
         )}
     </>

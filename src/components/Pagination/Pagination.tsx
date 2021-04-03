@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { MemoryRouter, Route } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -17,14 +17,19 @@ const useStyles = makeStyles((theme) =>
   }),
 );
 
-export default function PaginationLink() {
+
+export default function PaginationLink(page, sectionId) {
   const classes = useStyles();
+  // const sectionUrl = `/section/${sectionId}`;
+  console.log("sectionId", sectionId, "page", page);
+
   return (
-    <MemoryRouter initialEntries={['/inbox']} initialIndex={0}>
+    <MemoryRouter initialEntries={[`/section/${sectionId}`]} initialIndex={0}>
       <Route>
         {({ location }) => {
           const query = new URLSearchParams(location.search);
           const page = parseInt(query.get('page') || '1', 10);
+
           return (
             <div className={classes.root}>
               <Pagination
@@ -36,7 +41,7 @@ export default function PaginationLink() {
                 renderItem={(item) => (
                   <PaginationItem
                     component={Link}
-                    to={`/inbox${item.page === 1 ? '' : `?page=${item.page}`}`}
+                    to={`/section/${sectionId}/${item.page === 1 ? '' : `?page=${item.page}`}`}
                     {...item}
                   />
               )}
