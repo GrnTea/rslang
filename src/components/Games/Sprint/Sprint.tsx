@@ -1,17 +1,19 @@
 import React, {
-  useEffect, useState, useCallback, useRef
+  useEffect, useState, useCallback, useRef,
 } from "react";
 import useSound from "use-sound";
 import { useParams } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import AspectRatioIcon from '@material-ui/icons/AspectRatio';
+import AspectRatioIcon from "@material-ui/icons/AspectRatio";
 import "./sprint.scss";
 import Points from "./Points";
 import SprintHeader from "./SprinInterface";
 import Begin from "./Begin";
 import correct from "../../../assets/sound/correct-choice.wav";
 import wrong from "../../../assets/sound/error.wav";
-import { ERROR, URL, ERROR_WORD, RIGHT_ARROW, RIGHT } from "./sprintconstants";
+import {
+  ERROR, URL, ERROR_WORD, RIGHT_ARROW, RIGHT,
+} from "./sprintconstants";
 
 const random = (max: number): number => {
   const min = 0;
@@ -24,7 +26,6 @@ interface ICurrentWord {
   translateWord: string,
   isTrueTranslate: boolean,
 }
-
 
 export default function Sprint() {
   const params: { num: string | undefined } = useParams();
@@ -41,11 +42,16 @@ export default function Sprint() {
   const [playWrong] = useSound(wrong);
   const { num } = params;
   const isVolume = true;
-  let currentWord: ICurrentWord = {
+  // let currentWord: ICurrentWord = {
+  //   mainWord: "",
+  //   translateWord: "",
+  //   isTrueTranslate: false,
+  // };
+  const [currentWord, setCurrentWord] = useState({
     mainWord: "",
     translateWord: "",
     isTrueTranslate: false,
-  };
+  });
 
   const url = `${URL}/words?group=${Number(num) - 1}&page=1`;
 
@@ -85,31 +91,37 @@ export default function Sprint() {
     } catch (e) {
       console.log(ERROR + e);
     }
+    setCurrentWord(wordData);
     return wordData;
   }, [num]);
 
-  if (isLoaded && words) {
-    currentWord = playGame(words);
-    console.log(currentWord);
-  }
+  useEffect(() => {
+    if (isLoaded && words) {
+      playGame(words);
+    }
+  }, [checkbox.length]);
+
+  useEffect(() => {
+    if (isLoaded && words) {
+      playGame(words);
+    }
+  }, [isLoaded]);
 
   useEffect(() => {
     if (checkbox.length === 3) {
       const checked = checkbox.indexOf(false);
       if (checked === -1) {
         setBonus(bonus * 2);
-        console.log(bonus);
       } else {
         setBonus(10);
       }
     }
   }, [checkbox.length]);
 
-  function fullscreen () {
+  function fullscreen() {
     const x = sprintEl.current;
     x.webkitRequestFullScreen();
-    if (document.fullscreenEnabled){
-      console.log('full')
+    if (document.fullscreenEnabled) {
       document.webkitCancelFullScreen();
     }
     // requestFullScreen()
@@ -194,9 +206,8 @@ export default function Sprint() {
         </Button>
       </div>
       <Button variant="contained" onClick={fullscreen}>
-        <AspectRatioIcon/>
-        </Button>
+        <AspectRatioIcon />
+      </Button>
     </div>
   );
 }
-
