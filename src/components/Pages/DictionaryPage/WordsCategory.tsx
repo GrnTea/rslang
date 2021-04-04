@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import DictionaryStyles from "./DicrionaryPageStyles";
 import CardOfWord from "./components/CardForWord/CardForWord";
-import Pagination from "@material-ui/lab/Pagination";
 
 type Props = {
     user: any,
-    section: object
+    section: object,
+    filter: string
 }
 
-const DifficultWords: React.FC<Props> = ({user, section}) => {
+const DifficultWords: React.FC<Props> = ({user, section, filter}) => {
   const useStyles = DictionaryStyles();
   const [listOfWords, setListOfWords] = useState([]);
-  const url = `https://rslernwords.herokuapp.com/users/${user.id}/aggregatedWords?group=${section-1}&page=0&filter={"$and":[{"userWord.difficulty":"true", "userWord.optional.deleted":"false"}]}&wordsPerPage=20`;
+  const url = `https://rslernwords.herokuapp.com/users/${user.id}/aggregatedWords?group=${section-1}&page=0&filter=${filter}&wordsPerPage=20`;
+
 
   useEffect(() => {
     fetch(url, {
@@ -27,7 +28,7 @@ const DifficultWords: React.FC<Props> = ({user, section}) => {
       .then((jsonData) => {
         setListOfWords(jsonData);
       });
-  }, [section]);
+  }, [section, filter]);
 
   const listOfCard = listOfWords.length !== 0 ? listOfWords[0].paginatedResults : null;
 

@@ -68,18 +68,18 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
     const userId = user.id;
     const url = "https://rslernwords.herokuapp.com/";
     const useStyles = CardStyles();
+    const cardId = cardInfo.id || cardInfo._id;
     const [checkedWord, setCheckedWord] = useState("");
     const [isDeleted, setIsDeleted] = useState(checkedWord ? checkedWord.optional.deleted : "false");
     const [isDifficult, setIsDifficult] = useState(checkedWord ? checkedWord.difficulty : "false");
 
     useEffect(() => {
-        const checkURL = `${url}users/${userId}/words/${cardInfo.id}`;
+        const checkURL = `${url}users/${userId}/words/${cardId}`;
         checkWords(checkURL, authorizationToken, setCheckedWord);
     }, [isDeleted]);
 
     useEffect(() => {
         setIsDeleted(checkedWord ? checkedWord.optional.deleted : "false");
-        console.log(cardInfo.word, checkedWord.difficulty)
         setIsDifficult(checkedWord ? checkedWord.difficulty : "false");
     }, [checkedWord]);
 
@@ -118,7 +118,7 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
             }
         }
 
-        const urlRequest = `${url}users/${userId}/words/${cardInfo.id}`;
+        const urlRequest = `${url}users/${userId}/words/${cardId}`;
         
         updateListOfUserWords(data, "POST", urlRequest, authorizationToken); 
 
@@ -133,7 +133,7 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
             }
         }
 
-        const urlRequest = `${url}users/${userId}/words/${cardInfo.id}`;
+        const urlRequest = `${url}users/${userId}/words/${cardId}`;
 
         if (checkedWord) {
             updateListOfUserWords(data, "PUT", urlRequest, authorizationToken);
@@ -144,11 +144,12 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
         checkWords(urlRequest, authorizationToken, setCheckedWord);
         setIsDeleted(checkedWord ? checkedWord.optional.deleted : "false");
     }
-
+    
     return (
         <div className={useStyles.cardContainer}>
             { cardSettings[4].state ? 
-            <div className={useStyles.cardImg} style={{backgroundImage: `url(${url}${cardInfo.image})`}} /> : null}
+                <div className={useStyles.cardImg} style={{backgroundImage: `url(${url}${cardInfo.image})`}} /> 
+            : null}
             <div className={useStyles.cardDescription}>
                 <div className={useStyles.mainWordContsiner}>
                     <div className={isDifficult === "true" ? useStyles.mainDifficultWord : useStyles.mainWord}>

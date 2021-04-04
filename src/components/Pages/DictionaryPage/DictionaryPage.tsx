@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { RootState } from "../../../redux/reducer";
 import DictionaryStyles from "./DicrionaryPageStyles";
-// import CardOfWord from "./components/CardForWord/CardForWord";
 import {useParams, useRouteMatch} from 'react-router';
-import DifficultWords from "./DifficultWords";
+import WordsCategory from "./WordsCategory";
+// import DifficultWords from "./DifficultWords";
+// import DeletedWords from "./DeletedWords";
 
 type Props = {
     lang: string,
@@ -38,17 +39,11 @@ const DictionaryPage: React.FC<Props> = ({ lang, user }) => {
   const { sectionId } = useParams();
   const useStyles = DictionaryStyles();
   const [category, setCategory] = useState("studiedWords");
-  const [listOfWords, setListOfWords] = useState([]);
-
-  useEffect(() => {
-    fetch(`https://rslernwords.herokuapp.com/words?group=${sectionId}&page=1`)
-      .then(
-        (response) => response.json(),
-      )
-      .then((jsonData) => {
-        setListOfWords(jsonData);
-      });
-  }, [sectionId]);
+  const filters = {
+      studing: '{"userWord.optional.studed":"true"}',
+      difficult: '{"$and":[{"userWord.difficulty":"true", "userWord.optional.deleted":"false"}]}',
+      deleted: '{"userWord.optional.deleted":"true"}'
+  }
 
   return (
       <div>
@@ -64,12 +59,10 @@ const DictionaryPage: React.FC<Props> = ({ lang, user }) => {
                   {TEXTS[lang].removedWords}
               </button>
           </div>
-          { category === "studiedWords" ? "studiedWords" : category === "difficultWords" ? <DifficultWords user={user} section={sectionId}/>: "removedWords"}
-          {/* <div className={useStyles.cards}>
-              {
-                  listOfWords.map((card) => <CardOfWord key={card.id} cardInfo={card} />)
-              }
-          </div> */}
+          { category === "studiedWords" ? 
+          <WordsCategory user={user} section={sectionId} filter={filters.studing}/>
+           : category === "difficultWords" ? <WordsCategory user={user} section={sectionId} filter={filters.difficult}/> 
+           : <WordsCategory user={user} section={sectionId} filter={filters.deleted} />}
       </div>
   );
 };
