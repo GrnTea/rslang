@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { RootState } from "../../../redux/reducer";
+import { RootState } from "../../redux/reducer";
 import GameStatCard from "./GameStatCard/GameStatCard";
-import img from "../../assets/images/games/Savanna/bg.jpg";
+import "./styles.scss";
+
 
 const testStat = [
   {
@@ -95,6 +96,12 @@ const getDailyStat = async (user) => {
     }, []);
 };
 
+const getOverallPercent = (stat) => {
+  const rightAnswers = stat.reduce((acc, itm) => acc + itm.rightAnswers, 0);
+  const wrongAnswers = stat.reduce((acc, itm) => acc + itm.wrongAnswers, 0);
+  return Math.round((rightAnswers / (rightAnswers + wrongAnswers)) * 100);
+}
+
 const renderGameStat = (gameId, gameStat) => <div key={gameId}>
   <h2>{gameId}</h2>
   {Object.keys(gameStat).map((key) => <div key={key}>
@@ -115,11 +122,15 @@ const DailyStat = ({ user }) => {
   useEffect(() => {
     console.log(stat.map((itm) => console.log(itm)));
   }, [stat]);
-  return <div>{stat.map((itm, idx) => <GameStatCard
-    key={idx}
-    stat={itm}
-    img={img}
-  />)}</div>;
+  return <div>
+    <h1>{"Today"}</h1>
+    <div><i className={"icon icon__study"}></i><span>{`Words learned: ${stat.reduce((acc, itm) => acc + itm.learnedWords, 0)}`}</span></div>
+    <div>{`Correct answers: ${getOverallPercent(stat)}%`}</div>
+    <div>{"Games activity:"}</div>
+    {stat.map((itm, idx) => <GameStatCard
+      key={idx}
+      stat={itm}
+    />)}</div>;
 };
 
 const mapStateToProps = (state: RootState) => ({

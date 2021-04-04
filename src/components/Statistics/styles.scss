@@ -1,0 +1,9 @@
+.icon{
+  display: inline-block;
+  width:20px;
+  height: 20px;
+  &__study{
+    background: url('../../assets/icons/reading-book.svg');
+    background-size: contain;
+  }
+}
