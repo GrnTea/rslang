@@ -5,6 +5,10 @@ import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import EmojiEmotionsTwoToneIcon from '@material-ui/icons/EmojiEmotionsTwoTone';
 import "./resetGame.css";
 
+import { signOut } from "../../../redux/user_reducer";
+import { RootState } from "../../../redux/reducer";
+import { connect } from "react-redux";
+
 const ResetGame = (props: any) => {
 
   let buttonStyles = {
@@ -19,11 +23,17 @@ const ResetGame = (props: any) => {
   let [trueWords, setTrueWords] = useState([]);
   let [falseWords, setFalseWords] = useState([]);
 
+  const [gameStatistics, setGameStatistics] = useState(0);
+
+  useEffect(() => {
+    console.log(RootState)
+  }, []);
+
   useEffect(() => {
     let res = props.rightAnswers.map((elem: any, index: number) => {
       return (
         <div key={index} className="true-words">
-          <div className="play-sound" onClick={() => playAudio(index, true)}>
+          <div className="play-sound" onClick={() => playAudio(index, props.rightAnswers)}>
             <VolumeUpIcon />
           </div>
           
@@ -41,7 +51,7 @@ const ResetGame = (props: any) => {
     let res = props.wrongAnswers.map((elem: any, index: number) => {
       return (
         <div key={index} className="false-words">
-          <div className="play-sound" onClick={() => playAudio(index, false)}>
+          <div className="play-sound" onClick={() => playAudio(index, props.wrongAnswers)}>
             <VolumeUpIcon />
           </div>
           
@@ -55,25 +65,65 @@ const ResetGame = (props: any) => {
     setFalseWords(res)
   }, [])
 
-  function playAudio(id: number, bool: boolean) {
-    let audioUrl = '';
-
-    if(bool) {
-      audioUrl = props.rightAnswers[id].audio;
-    } else {
-      audioUrl = props.wrongAnswers[id].audio;
-    }
-   
+  
+  function playAudio(id: number, answers: any) {
+    let audioUrl = answers[id].audio;
     let audio = new Audio(herokuUrl + audioUrl);
     audio.play();
   }
+
+  type StatType = {
+    learnedWords: Number,
+    date: Number, //  (current time in UTCmiliseconds)
+    gameId: String,
+    rightAnswers: Number,
+    wrongAnswers: Number,
+    maxSerie: Number
+  }
+
+  useEffect(() => {
+    let res = {
+      "learnedWords": props.rightAnswersCounter,
+      "date": Date.now(), //(current time in UTCmiliseconds)
+      "gameId": "1",
+      "rightAnswers": props.rightAnswersCounter,
+      "wrongAnswers": props.wrongAnswersCounter,
+      "maxSerie": props.maxSerie
+    }
+    setGameStatistics(res);
+  }, []);
+
+  useEffect(() => {
+    if(gameStatistics === 0) return;
+    // let userId = "42";
+    
+    // const sendStat = async (gameStatistics: StatType, userId: String) => {
+    //   fetch(`https://rslernwords.herokuapp.com/users/${userId}/statistics`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Accept": "application/json",
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(gameStatistics),
+    //   })
+    //   .then(response => response.json())
+    //   .then(data => console.log(data))
+    //   .catch(error => {
+    //     console.log(error);
+    //   })
+
+    // };
+
+    // sendStat(gameStatistics, userId);
+  }, [gameStatistics]);
+ 
 
   return (
     <div className="reset-game">
       <div className="end-game-emotion">это конец <EmojiEmotionsTwoToneIcon color="primary"/></div> 
       <div className="right-answers-counter">
         <div className="answers">Знаю: </div>
-        <div className="right-counter">{props.rightAnswersCounter}</div>
+        <div className="right-counter">{props.rightAnswers.length}</div>
       </div>
       <div className="right-answers">
         {trueWords}
@@ -81,7 +131,7 @@ const ResetGame = (props: any) => {
       <div className="answers-separator"></div>
       <div className="wrong-answers-counter">
         <div className="answers">Ошибок: </div>
-        <div className="wrong-counter">{props.wrongAnswersCounter}</div>
+        <div className="wrong-counter">{props.wrongAnswers.length}</div>
       </div>
       <div className="wrong-answers">
         {falseWords}

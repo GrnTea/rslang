@@ -4,7 +4,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 import useSound from "use-sound";
 import DisplayWordsComponent from "./DisplayWordsComponent";
-import ResetGame from "./ResetGame";
+import ResetGame from "../ResetGame/ResetGame";
 import FullScreenButton from "./FullScreenButton";
 
 import "./game.css";
@@ -30,7 +30,8 @@ export default function GameAudioCall() {
 
   const [rightAnswers, setRightAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
-  
+
+  const [maxSerie, setMaxSerie] = useState(0);
 
   const url = `https://react-learnwords-example.herokuapp.com/words?group=${num - 1}&page=1`;
 
@@ -99,6 +100,7 @@ export default function GameAudioCall() {
       setShowImage(true)
       setTrueanswer(prev => prev + 1);
       addAnswers(word, setRightAnswers, rightAnswers);
+      setMaxSerie(prev => prev + 1);
 
       targetElem.classList.add("guessed");
       setTimeout(() => {
@@ -113,6 +115,7 @@ export default function GameAudioCall() {
       setShowImage(true)
       setFalseAnswer(prev => prev + 1);
       addAnswers(word, setWrongAnswers, wrongAnswers);
+      setMaxSerie(0);
      
       setTimeout(() => {
         targetElem.classList.remove("no-guessed");
@@ -199,6 +202,7 @@ export default function GameAudioCall() {
           rightAnswers={rightAnswers}
           wrongAnswers={wrongAnswers}
           resetgame={rebootGame}
+          maxSerie={maxSerie}
         />  
       }
     </>
