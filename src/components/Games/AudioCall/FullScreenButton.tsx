@@ -16,16 +16,13 @@ const FullScreenButton = (props) => {
     }
   }
 
-  // let fullscreenButtonStyles = {
-  //   backgroundColor: '#3498db', 
-  //   color: 'white',
-  //   cursor: 'pointer',
-  //   margin: '0 auto'
-  // }
+  let fullscreenButtonStyles = {
+    marginTop: "20px"
+  }
 
   return (
     <AspectRatioIcon 
-      // style={{...fullscreenButtonStyles}}
+      style={{...fullscreenButtonStyles}}
       onClick={toggleFulscreen} 
       className="fullscreen-button-cursor" 
       fontSize="large" 

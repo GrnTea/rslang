@@ -7,14 +7,14 @@ import DisplayWordsComponent from "./DisplayWordsComponent";
 import ResetGame from "./ResetGame";
 import FullScreenButton from "./FullScreenButton";
 
-import './game.css';
+import "./game.css";
 import {
   useParams,
 } from "react-router-dom";
 
-const URL = 'https://rslernwords.herokuapp.com/';
+const URL = "https://rslernwords.herokuapp.com/";
 
-export default function GameAudioCall(){
+export default function GameAudioCall() {
   const { num } = useParams();
   
   const [counter, setCounter] = useState(0);
@@ -26,15 +26,14 @@ export default function GameAudioCall(){
 
   const [trueAnswer, setTrueanswer] = useState(0);
   const [falseAnswer, setFalseAnswer] = useState(0);
-  const [endGame, setEndGame] = useState(false);
   const [startGame, setStartGame] = useState(true);
 
-  let [rightAnswers, setRightAnswers] = useState([]);
-  let [wrongAnswers, setWrongAnswers] = useState([]);
+  const [rightAnswers, setRightAnswers] = useState([]);
+  const [wrongAnswers, setWrongAnswers] = useState([]);
   
 
   const url = `https://react-learnwords-example.herokuapp.com/words?group=${num - 1}&page=1`;
-  
+
   function initGame() {
     fetch(url)
     .then((response) => {
@@ -48,10 +47,9 @@ export default function GameAudioCall(){
      })
   }
 
-
   useEffect(() => {
     initGame();
-  }, [])
+  }, []);
 
   // -------
   useEffect(() => {
@@ -70,12 +68,9 @@ export default function GameAudioCall(){
 
   useEffect(() => {
     if(counter === 10){
-      setEndGame(true);
       setStartGame(false);
-      document.querySelector('.content-conteiner').classList.add('hide');
     }
-  }, [counter])
-
+  }, [counter]);
 
   useEffect(() => {
     let res = data.filter((elem, index) => { 
@@ -83,7 +78,7 @@ export default function GameAudioCall(){
       if(index > 3) return;
       
       return elem.word;
-    })
+    });
 
     res.push(word);
     res = shuffle(res);
@@ -98,20 +93,19 @@ export default function GameAudioCall(){
   }
 
   function checkWord(e) {
-    let targetElem = e.target;
+    const targetElem = e.target;
     let currentElem: any;
     if(e.target.dataset.value === word.word){
       setShowImage(true)
       setTrueanswer(prev => prev + 1);
       addAnswers(word, setRightAnswers, rightAnswers);
 
-      targetElem.classList.add('guessed')
+      targetElem.classList.add("guessed");
       setTimeout(() => {
-        setShowImage(false)
-        setCounter(prev => prev + 1);
-        targetElem.classList.remove('guessed');
+        setShowImage(false);
+        setCounter((prev) => prev + 1);
+        targetElem.classList.remove("guessed");
       }, 2000);
-
     } else {
       currentElem = document.querySelector(`[data-value="${word.word}"]`);
       targetElem.classList.add('no-guessed')
@@ -121,13 +115,12 @@ export default function GameAudioCall(){
       addAnswers(word, setWrongAnswers, wrongAnswers);
      
       setTimeout(() => {
-        targetElem.classList.remove('no-guessed')
-        currentElem.classList.remove('guessed')
-        setShowImage(false)
-        setCounter(prev => prev + 1);
-      }, 2000)
+        targetElem.classList.remove("no-guessed");
+        currentElem.classList.remove("guessed");
+        setShowImage(false);
+        setCounter((prev) => prev + 1);
+      }, 2000);
     }
-    
   }
 
   function addAnswers(word, state, elems) {
@@ -146,7 +139,6 @@ export default function GameAudioCall(){
 
   function rebootGame() {
     setCounter(0);
-    setEndGame(false);
     setTrueanswer(0);
     setFalseAnswer(0);
     setCounter(0);
@@ -154,8 +146,18 @@ export default function GameAudioCall(){
     setData([]);
     setDisplayWords([]);
     setStartGame(true);
+    setRightAnswers([]);
+    setWrongAnswers([]);
     initGame();
-    document.querySelector('.content-conteiner').classList.remove('hide');
+  }
+
+  let LinearProgressStyles = {
+    color: "primary",
+    marginTop: "10px",
+    width: "600px",
+    height: "5px",
+    margin: '0 auto',
+    marginBottom: "20px"
   }
 
   let SpeakerIconStyles = {
@@ -165,27 +167,32 @@ export default function GameAudioCall(){
     margin: '0 auto'
   }
 
-  let LinearProgressStyles = {
-    color: "primary",
-    marginTop: "10px"
-  }
-
   return (
-    <div className="game-body-container">
-      <LinearProgress style={{...LinearProgressStyles}} variant="determinate" value={counter * 10 } />
-      <div className="content-conteiner">
-        <DisplayWordsComponent displayWords={displayWords} checkWord={checkWord} />
+    <>
+      {startGame ? 
+        <div className="game-body-container">
+        
+          <div className="content-conteiner">
+            <LinearProgress style={{...LinearProgressStyles}} variant="determinate" value={counter * 10 } />
+            
+            <div className="content">
+              <DisplayWordsComponent displayWords={displayWords} checkWord={checkWord} />
 
-        <div className="word-image">
-          {showImage ? <img src={URL + word.image} alt=""/> : ''}
-        </div>
+              <div className="word-image">
+                {showImage ? <img className="game-image" src={URL + word.image} alt=""/> : ""}
+              </div>
 
-        <div className="speaker-icon">
-          <SpeakerIcon style={{...SpeakerIconStyles}}  onClick={() => playWord()} />
-        </div>
-      </div>    
-      
-      {endGame ? 
+              <div className="speaker-icon">
+                <SpeakerIcon style={{ ...SpeakerIconStyles }} onClick={() => playWord()} />
+              </div>
+            </div>
+
+            <div className="fullscreen-button">
+              <FullScreenButton />
+            </div>
+          </div>    
+        </div> 
+      :
         <ResetGame 
           rightAnswersCounter={trueAnswer} 
           wrongAnswersCounter={falseAnswer} 
@@ -193,11 +200,7 @@ export default function GameAudioCall(){
           wrongAnswers={wrongAnswers}
           resetgame={rebootGame}
         />  
-        : ''
       }
-      <div className="fullscreen-button">
-        <FullScreenButton />
-      </div>
-    </div> 
+    </>
   )
 }

@@ -4,7 +4,25 @@
 
 .game-body-container{
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   width: 600px;
+  height: 220px;
+}
+
+.content-conteiner{
+  margin-top: 20px;
+  margin: 0 auto;
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.content{
+  display: flex;
+  justify-content: space-between;
 }
 
 h2{
@@ -20,16 +38,14 @@ h2{
   width: 150px;
   height: 150px;
 }
-
-img{
+.game-image{
   position: absolute;
   width: 150px;
   height: 150px;
   border-radius: 4px;
 }
 
-
-.content-conteiner{
+.content-container{
   margin-top: 20px;
   width: 600px;
   margin: 0 auto;
