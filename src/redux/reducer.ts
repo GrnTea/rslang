@@ -4,6 +4,7 @@ import {
 } from "./main-settings_reducer";
 import { settingsReducerButtons, settingsReducerCard } from "./learning-settings_reducer";
 import { userReducer } from "./user_reducer";
+import gameReducer from "./game_reducer";
 
 const settingsReducer = combineReducers({
   lang: settingsReducerLang,
@@ -17,6 +18,7 @@ const settingsReducer = combineReducers({
 const rootReducer = combineReducers({
   settingsReducer: settingsReducer,
   user: userReducer,
+  game: gameReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

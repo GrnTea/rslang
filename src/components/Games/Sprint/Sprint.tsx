@@ -4,8 +4,9 @@ import React, {
 import useSound from "use-sound";
 import { useParams } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import ResetGame from "../AudioCall/ResetGame";
 import AspectRatioIcon from "@material-ui/icons/AspectRatio";
+import { connect } from "react-redux";
+import ResetGame from "../AudioCall/ResetGame";
 import "./sprint.scss";
 import Points from "./Points";
 import SprintHeader from "./SprinInterface";
@@ -29,7 +30,8 @@ interface ICurrentWord {
   id: string,
 }
 
-export default function Sprint() {
+function Sprint(props: any) {
+  console.log(props);
   const params: { num: string | undefined } = useParams();
   const sprintEl = useRef(null);
   const [words, setWords] = useState<Promise<{}[]>>();
@@ -216,3 +218,9 @@ export default function Sprint() {
     </div>
   );
 }
+
+const mapStateToProps = (state: any) => ({
+  game: state.game,
+});
+
+export default connect(mapStateToProps, null)(Sprint);
