@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { RootState } from "../../../redux/reducer";
 import DictionaryStyles from "./DicrionaryPageStyles";
 import CardOfWord from "./components/CardForWord/CardForWord";
+import {useParams, useRouteMatch} from 'react-router';
 
 type Props = {
     lang: string
@@ -17,6 +18,7 @@ const TEXTS = {
         toDifficultBtn: "To difficult",
         deleteBtn: "Delete",
         placeholderTab: "The list of words is empty.",
+        section: "Section"
     },
     ru: {
         mainTitle: "Словарь",
@@ -25,28 +27,30 @@ const TEXTS = {
         removedWords: "Удаленные",
         toDifficultBtn: "В сложные",
         deleteBtn: "Удалить",
-        placeholderTab: "Список слов пуст."
+        placeholderTab: "Список слов пуст.",
+        section: "Раздел"
     }
 };
 
 const DictionaryPage: React.FC<Props> = ({ lang }) => {
+  const { sectionId } = useParams();
   const useStyles = DictionaryStyles();
   const [category, setCategory] = useState("studiedWords");
   const [listOfWords, setListOfWords] = useState([]);
 
   useEffect(() => {
-    fetch("https://rslernwords.herokuapp.com/words?group=1&page=1")
+    fetch(`https://rslernwords.herokuapp.com/words?group=${sectionId}&page=1`)
       .then(
         (response) => response.json(),
       )
       .then((jsonData) => {
         setListOfWords(jsonData);
       });
-  }, []);
+  }, [sectionId]);
 
   return (
       <div>
-          <h1>{TEXTS[lang].mainTitle}</h1>
+          <h1>{`${TEXTS[lang].mainTitle} ->  ${TEXTS[lang].section} ${sectionId}`}</h1>
           <div className={useStyles.dictionaryMenu}>
               <button className={useStyles.dictionaryMenuItem} onClick={() => { setCategory("studiedWords"); }}>
                   {TEXTS[lang].studiedWords}
