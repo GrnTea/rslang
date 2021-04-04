@@ -155,7 +155,9 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
                         </div>
                     </div> : null
                 }
-                <div className={useStyles.cardButtons}>
+                {
+                    user.id ? 
+                    <div className={useStyles.cardButtons}>
                     {
                         buttonsSettings[1].state ? 
                         <Button className={useStyles.cardBtn} onClick={handleSetAsDifficult}>{BUTTONS[lang].difficultBtn}</Button>
@@ -166,7 +168,8 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
                         <Button className={useStyles.cardBtn} onClick={handleRemoveWord}>{BUTTONS[lang].removeBtn}</Button>
                         : null
                     }
-                </div>
+                </div> : null
+                }
             </div>
         </div>
     )
