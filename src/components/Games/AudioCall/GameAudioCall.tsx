@@ -1,7 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import SpeakerIcon from '@material-ui/icons/Speaker';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Button from '@material-ui/core/Button';
+
+import useSound from "use-sound";
+import DisplayWordsComponent from "./DisplayWordsComponent";
+import ResetGame from "./ResetGame";
+import FullScreenButton from "./FullScreenButton";
 
 import './game.css';
 import {
@@ -12,6 +16,7 @@ const URL = 'https://rslernwords.herokuapp.com/';
 
 export default function GameAudioCall(){
   const { num } = useParams();
+  
   const [counter, setCounter] = useState(0);
   const [data, setData] = useState([]);
   const [word, setWord] = useState({});
@@ -23,7 +28,10 @@ export default function GameAudioCall(){
   const [falseAnswer, setFalseAnswer] = useState(0);
   const [endGame, setEndGame] = useState(false);
   const [startGame, setStartGame] = useState(true);
-  const [rebootButton, setRebootButton] = useState(false);
+
+  let [rightAnswers, setRightAnswers] = useState([]);
+  let [wrongAnswers, setWrongAnswers] = useState([]);
+  
 
   const url = `https://react-learnwords-example.herokuapp.com/words?group=${num - 1}&page=1`;
   
@@ -33,9 +41,10 @@ export default function GameAudioCall(){
       return response.json();
     })
     .then((jsonData) => {
-      jsonData = shuffle(jsonData);
-      setData(jsonData)
-      setWord(jsonData[counter])
+      const dataShuffle = shuffle(jsonData);
+
+      setWord(dataShuffle.pop())
+      setData(dataShuffle)
      })
   }
 
@@ -46,43 +55,32 @@ export default function GameAudioCall(){
 
   // -------
   useEffect(() => {
-    if(isEmpty(data)) return;
-    if(startGame !== true) return;
+    if(counter === 0) return;
 
-    let copyData = [...data];
-    let elem = copyData.pop();
-    setData(copyData);
-
-    setWord(elem)
+    setWord(data.pop());
+    setData(data);
   }, [counter]);
 
   useEffect(() => {
-    if(startGame !== true) return;
+    if(startGame !== true) return; 
+    if(counter === 0) return;
+
     playWord();
   }, [word]);
 
   useEffect(() => {
-    // console.log(counter)
     if(counter === 10){
       setEndGame(true);
       setStartGame(false);
-      setRebootButton(true);
-
       document.querySelector('.content-conteiner').classList.add('hide');
     }
   }, [counter])
 
 
   useEffect(() => {
-    let i = 0;
-
-    let arrShuffle = shuffle(data);
-    
-    let res = arrShuffle.filter((elem) => { 
+    let res = data.filter((elem, index) => { 
       if(elem.word === word.word) return;
-      i++;
-
-      if(i > 4) return;
+      if(index > 3) return;
       
       return elem.word;
     })
@@ -91,16 +89,8 @@ export default function GameAudioCall(){
     res = shuffle(res);
 
     setDisplayWords(res);
-    
-  }, [counter, word])
+  }, [data, word])
 
-
-  function isEmpty(obj) {
-    for(let key in obj){
-      return false;
-    }
-    return true;
-  }
 
   function playWord() {
     const audio = new Audio(URL + word.audio);
@@ -113,6 +103,7 @@ export default function GameAudioCall(){
     if(e.target.dataset.value === word.word){
       setShowImage(true)
       setTrueanswer(prev => prev + 1);
+      addAnswers(word, setRightAnswers, rightAnswers);
 
       targetElem.classList.add('guessed')
       setTimeout(() => {
@@ -127,6 +118,7 @@ export default function GameAudioCall(){
       currentElem.classList.add('guessed')
       setShowImage(true)
       setFalseAnswer(prev => prev + 1);
+      addAnswers(word, setWrongAnswers, wrongAnswers);
      
       setTimeout(() => {
         targetElem.classList.remove('no-guessed')
@@ -138,13 +130,22 @@ export default function GameAudioCall(){
     
   }
 
+  function addAnswers(word, state, elems) {
+    if(elems.length === 0) {
+      state([word])
+    } else {
+      let copy = elems;
+      copy.push(word);
+      state(copy);
+    }
+  }
+
   function shuffle(array) {
     return array.sort(() => Math.random() - 0.5);
   }
 
   function rebootGame() {
     setCounter(0);
-    setRebootButton(false);
     setEndGame(false);
     setTrueanswer(0);
     setFalseAnswer(0);
@@ -164,31 +165,16 @@ export default function GameAudioCall(){
     margin: '0 auto'
   }
 
-
+  let LinearProgressStyles = {
+    color: "primary",
+    marginTop: "10px"
+  }
 
   return (
     <div className="game-body-container">
-      <h2>аудиовызов</h2>
-      <LinearProgress color="secondary" variant="determinate" value={counter * 10 } />
-      
-      
+      <LinearProgress style={{...LinearProgressStyles}} variant="determinate" value={counter * 10 } />
       <div className="content-conteiner">
-
-        <div className="random-words">
-          {
-          displayWords.map((e, i) => {
-            
-            return (
-              <div key={i} 
-                data-value={e.word}
-                className="random-word"
-                onClick={e => checkWord(e)} >
-                  {e.wordTranslate}
-              </div>
-            )
-          } )
-          }
-        </div>
+        <DisplayWordsComponent displayWords={displayWords} checkWord={checkWord} />
 
         <div className="word-image">
           {showImage ? <img src={URL + word.image} alt=""/> : ''}
@@ -197,26 +183,21 @@ export default function GameAudioCall(){
         <div className="speaker-icon">
           <SpeakerIcon style={{...SpeakerIconStyles}}  onClick={() => playWord()} />
         </div>
-
       </div>    
       
       {endGame ? 
-        <div className="end-game">
-          <div>правильных ответов: {trueAnswer}</div>  
-          <div>не правильных ответов: {falseAnswer}</div>  
-        </div> : ''
-      }
-      {rebootButton ? 
-        <div className="button-reboot-game">
-          <Button 
-            onClick={rebootGame} 
-            variant="contained" 
-            color="primary">
-              сыграть ещё раз
-          </Button> 
-        </div>
+        <ResetGame 
+          rightAnswersCounter={trueAnswer} 
+          wrongAnswersCounter={falseAnswer} 
+          rightAnswers={rightAnswers}
+          wrongAnswers={wrongAnswers}
+          resetgame={rebootGame}
+        />  
         : ''
       }
+      <div className="fullscreen-button">
+        <FullScreenButton />
+      </div>
     </div> 
   )
 }
