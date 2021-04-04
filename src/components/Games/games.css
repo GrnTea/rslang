@@ -1,6 +1,12 @@
+.games {
+  height: 75vh;
+}
+/*
+
 h2{
   text-align: center;
 }
+*/
 
 .routes{
   display: flex;

@@ -13,6 +13,7 @@ const cardStyles = makeStyles({
     width: "170px",
     height: "170px",
     display: "flex",
+    flexShrink: 0,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: "50%",
@@ -30,6 +31,7 @@ const cardStyles = makeStyles({
 
   mainWordContsiner: {
     display: "flex",
+    flexWrap: "wrap",
     flexDirection: "row",
     columnGap: "0.5em",
     fontSize: "23px",

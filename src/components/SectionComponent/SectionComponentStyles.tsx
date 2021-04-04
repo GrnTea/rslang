@@ -15,7 +15,8 @@ const sectionStyles = makeStyles({
   sectionLink: {
     textDecoration: "none",
     color: "#2980b9",
-    margin: "10px",
+    fontWeight: 600,
+    margin: "13px auto",
     "&:hover": {
       cursor: "pointer",
       color: "#1010B9",

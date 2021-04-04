@@ -4,7 +4,6 @@ import { MemoryRouter, Route } from 'react-router';
 import { Link } from 'react-router-dom';
 import Pagination from '@material-ui/lab/Pagination';
 import PaginationItem from '@material-ui/lab/PaginationItem';
-import {Typography} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -21,8 +20,6 @@ const useStyles = makeStyles((theme) =>
 
 export default function PaginationLink({page, sectionId}) {
   const classes = useStyles();
-  // const sectionUrl = `/section/${sectionId}`;
-  console.log("sectionId", sectionId, "page", page);
 
   // return (
    {/* <MemoryRouter initialEntries={[`/section/${sectionId}`]} initialIndex={0}>
@@ -30,7 +27,6 @@ export default function PaginationLink({page, sectionId}) {
         {({ location }) => {*/}
           // const query = new URLSearchParams(location.search);
           // const page = parseInt(query.get('page') || '1', 10);
-          console.log("sectionId-1", sectionId, typeof(sectionId), "page-1", page, typeof(page));
 
           return (
             <>
@@ -61,17 +57,3 @@ export default function PaginationLink({page, sectionId}) {
     </MemoryRouter>*/
   // );
 }
-
-
-
-/*
-export default function BasicPagination() {
-  const classes = useStyles();
-  return (
-    <div className={classes.root}>
-      <Pagination count={20} color="primary" showFirstButton showLastButton />
-    </div>
-  );
-}
-*/
-
