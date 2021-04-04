@@ -18,33 +18,35 @@ const GameStatCard = ({ stat }) => {
     <Grid item xs={12}>
       <Paper>
         <Grid container>
-          <Grid item xs={4}>
+          <Grid item xs={12} sm={4}>
             <div className={classes.wrapper}>
               <h2 className={classes.title}>{game?.name}</h2>
               <img src={game?.image} className={classes.img}></img>
 
             </div>
           </Grid>
-          <Grid container xs={8} justify={"center"} direction={"column"}>
-            <Box p={3}>
-              <div className={classes.entry}>
-                <span>{"Words learned: "}</span>
-                <span>{stat.learnedWords}</span>
-              </div>
-              <div className={classes.entry}>
-                <span>{"Correct answers: "}</span>
-                <span>{`${getPercent(stat)}%`}</span>
-              </div>
-              <div className={classes.entry}>
-                <span>{"Maximum serie of right answers: "}</span>
-                <span>{stat.maxSerie}</span>
-              </div>
-            </Box>
+          <Grid item xs={12} sm={8}>
+            <Grid container justify={"center"} direction={"column"}>
+              <Box p={3}>
+                <div className={classes.entry}>
+                  <span>{"Words learned: "}</span>
+                  <span>{stat.learnedWords}</span>
+                </div>
+                <div className={classes.entry}>
+                  <span>{"Correct answers: "}</span>
+                  <span>{`${getPercent(stat)}%`}</span>
+                </div>
+                <div className={classes.entry}>
+                  <span>{"Maximum serie of right answers: "}</span>
+                  <span>{stat.maxSerie}</span>
+                </div>
+              </Box>
+            </Grid>
           </Grid>
         </Grid>
       </Paper>
     </Grid>
-  </Grid>
-}
+  </Grid>;
+};
 
 export default GameStatCard;

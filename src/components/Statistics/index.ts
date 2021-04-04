@@ -1,3 +1,3 @@
-import DailyStat from "./DailyStat";
+import Statistics from "./Statistics";
 
-export default DailyStat;
+export default Statistics;
