@@ -3,7 +3,7 @@ import GithubLogo from "../../assets/icons/github.svg";
 import RSSLogo from "../../assets/icons/rsschool.svg";
 import "./FooterStyles.scss";
 
-const githubData = ["GrnTea", "ArseniyXaoc", "JuliaGvozdeva", "conservativ007", "Beljar"];
+const githubData = ["ArseniyXaoc", "JuliaGvozdeva", "conservativ007", "Beljar", "GrnTea"];
 
 const Footer = () => {
   const getGithubLinks = () => githubData.map((github) => (
