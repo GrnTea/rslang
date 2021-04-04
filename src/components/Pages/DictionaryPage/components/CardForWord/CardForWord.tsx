@@ -200,7 +200,7 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
                     user.id ?  isDeleted === "true" ? null :
                     <div className={useStyles.cardButtons}>
                     {
-                        buttonsSettings[1].state ? 
+                        buttonsSettings[1].state ? isDifficult === "true" ? null : 
                         <Button className={useStyles.cardBtn} onClick={handleSetAsDifficult}>{BUTTONS[lang].difficultBtn}</Button>
                         : null
                     }
