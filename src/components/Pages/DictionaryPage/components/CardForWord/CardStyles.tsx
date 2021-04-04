@@ -39,6 +39,11 @@ const cardStyles = makeStyles({
     fontWeight: "bold",
   },
 
+  mainDifficultWord: {
+    color: "red",
+    fontWeight: "bold",
+  },
+
   wordTranscription: {
     color: "#828282",
   },

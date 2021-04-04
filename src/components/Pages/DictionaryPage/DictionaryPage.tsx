@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { RootState } from "../../../redux/reducer";
 import DictionaryStyles from "./DicrionaryPageStyles";
-import CardOfWord from "./components/CardForWord/CardForWord";
+// import CardOfWord from "./components/CardForWord/CardForWord";
 import {useParams, useRouteMatch} from 'react-router';
+import DifficultWords from "./DifficultWords";
 
 type Props = {
-    lang: string
+    lang: string,
+    user: any
 }
 
 const TEXTS = {
@@ -32,7 +34,7 @@ const TEXTS = {
     }
 };
 
-const DictionaryPage: React.FC<Props> = ({ lang }) => {
+const DictionaryPage: React.FC<Props> = ({ lang, user }) => {
   const { sectionId } = useParams();
   const useStyles = DictionaryStyles();
   const [category, setCategory] = useState("studiedWords");
@@ -62,18 +64,19 @@ const DictionaryPage: React.FC<Props> = ({ lang }) => {
                   {TEXTS[lang].removedWords}
               </button>
           </div>
-          {/* { category === "studiedWords" ? "studiedWords" : category === "difficultWords" ? "difficultWords" : "removedWords"} */}
-          <div className={useStyles.cards}>
+          { category === "studiedWords" ? "studiedWords" : category === "difficultWords" ? <DifficultWords user={user} section={sectionId}/>: "removedWords"}
+          {/* <div className={useStyles.cards}>
               {
                   listOfWords.map((card) => <CardOfWord key={card.id} cardInfo={card} />)
               }
-          </div>
+          </div> */}
       </div>
   );
 };
 
 const mapStateToProps = (state:RootState) => ({
     lang: state.settingsReducer.lang.lang,
+    user: state.user,
   });
   
   export default connect(mapStateToProps)(DictionaryPage);
