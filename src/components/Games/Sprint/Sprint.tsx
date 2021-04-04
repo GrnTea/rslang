@@ -4,6 +4,7 @@ import React, {
 import useSound from "use-sound";
 import { useParams } from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import ResetGame from "../AudioCall/ResetGame";
 import AspectRatioIcon from "@material-ui/icons/AspectRatio";
 import "./sprint.scss";
 import Points from "./Points";
@@ -42,11 +43,6 @@ export default function Sprint() {
   const [playWrong] = useSound(wrong);
   const { num } = params;
   const isVolume = true;
-  // let currentWord: ICurrentWord = {
-  //   mainWord: "",
-  //   translateWord: "",
-  //   isTrueTranslate: false,
-  // };
   const [currentWord, setCurrentWord] = useState({
     mainWord: "",
     translateWord: "",
@@ -124,7 +120,6 @@ export default function Sprint() {
     if (document.fullscreenEnabled) {
       document.webkitCancelFullScreen();
     }
-    // requestFullScreen()
   }
 
   function handleClick(event: any) {
@@ -170,17 +165,13 @@ export default function Sprint() {
 
   if (finish) {
     return (
-      <div className="sprint">
-        <h2 className="sprint__header">Результаты</h2>
-        <Button variant="contained" color="secondary" onClick={beginNow} >
-          Играть заново
-        </Button>
-        <div className="sprint__words-container">
-          <div>{score} очков</div>
-          <div>{score / 2} опыта</div>
-        </div>
-        Ваш рекорд {score};
-      </div>
+      <ResetGame
+        rightAnswersCounter={1}
+        wrongAnswersCounter={1}
+        rightAnswers={[]}
+        wrongAnswers={[]}
+        resetgame={beginNow}
+      />
     );
   }
 
