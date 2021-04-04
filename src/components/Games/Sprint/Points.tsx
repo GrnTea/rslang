@@ -19,7 +19,7 @@ function HomeIcon(props: SvgIconProps) {
   );
 }
 
-const Points = ({ bonus, checkbox }: { bonus: number, checkbox: [] }) => {
+const Points = ({ bonus, checkbox }: { bonus: number, checkbox: boolean[] }) => {
   const classes = useStyles();
   const x = bonus;
   const right = { color: green[500] };

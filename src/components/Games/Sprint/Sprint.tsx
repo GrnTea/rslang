@@ -23,30 +23,36 @@ const random = (max: number): number => {
 };
 
 interface ICurrentWord {
-  mainWord: string,
-  translateWord: string,
+  word: string,
+  wordTranslate: string,
   isTrueTranslate: boolean,
+  id: string,
 }
 
 export default function Sprint() {
   const params: { num: string | undefined } = useParams();
   const sprintEl = useRef(null);
-  const [words, setWords] = useState<Promise<any>>();
+  const [words, setWords] = useState<Promise<{}[]>>();
   const [errorFetch, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [score, setScore] = useState(0);
-  const [checkbox, setCheckbox] = useState([]);
+  const [checkbox, setCheckbox] = useState<boolean[]>([]);
   const [bonus, setBonus] = useState(10);
   const [finish, setFinish] = useState(false);
   const [begin, setBegin] = useState(true);
   const [playCorrect] = useSound(correct);
   const [playWrong] = useSound(wrong);
+  const [trueAnswer, setTrueanswer] = useState(0);
+  const [falseAnswer, setFalseAnswer] = useState(0);
+  const [rightAnswers, setRightAnswers] = useState<ICurrentWord[]>([]);
+  const [wrongAnswers, setWrongAnswers] = useState<ICurrentWord[]>([]);
   const { num } = params;
   const isVolume = true;
-  const [currentWord, setCurrentWord] = useState({
-    mainWord: "",
-    translateWord: "",
+  const [currentWord, setCurrentWord] = useState<ICurrentWord>({
+    word: "",
+    wordTranslate: "",
     isTrueTranslate: false,
+    id: "",
   });
 
   const url = `${URL}/words?group=${Number(num) - 1}&page=1`;
@@ -72,21 +78,24 @@ export default function Sprint() {
 
   const playGame = useCallback((words: any) => {
     const wordData = {
-      mainWord: "",
-      translateWord: ERROR_WORD,
+      word: "",
+      wordTranslate: ERROR_WORD,
+      id: "",
       isTrueTranslate: false,
     };
     const playWords = JSON.parse(JSON.stringify(words));
     wordData.isTrueTranslate = Boolean(Math.round(Math.random()));
     const numOfWord = random(words.length - 1);
     const numFakeWord = words.length < 19 ? numOfWord + 1 : numOfWord - 1;
-    wordData.mainWord = playWords ? playWords[numOfWord].word : playWords;
+    wordData.id = playWords.id;
+    wordData.word = playWords ? playWords[numOfWord].word : playWords;
     try {
-      wordData.translateWord = wordData.isTrueTranslate
+      wordData.wordTranslate = wordData.isTrueTranslate
         ? playWords[numOfWord].wordTranslate : playWords[numFakeWord].wordTranslate;
     } catch (e) {
       console.log(ERROR + e);
     }
+    console.log(wordData);
     setCurrentWord(wordData);
     return wordData;
   }, [num]);
@@ -135,10 +144,15 @@ export default function Sprint() {
       setScore(score + bonus);
       playCorrect();
       addCheckbox(true);
+      setRightAnswers([...rightAnswers, currentWord]);
+      setTrueanswer(trueAnswer + 1);
     } else {
       playWrong();
       addCheckbox(false);
+      setWrongAnswers([...wrongAnswers, currentWord]);
+      setFalseAnswer(falseAnswer + 1);
     }
+    console.log(rightAnswers, wrongAnswers);
   }
 
   if (begin) {
@@ -166,10 +180,10 @@ export default function Sprint() {
   if (finish) {
     return (
       <ResetGame
-        rightAnswersCounter={1}
-        wrongAnswersCounter={1}
-        rightAnswers={[]}
-        wrongAnswers={[]}
+        rightAnswersCounter={trueAnswer}
+        wrongAnswersCounter={falseAnswer}
+        rightAnswers={rightAnswers}
+        wrongAnswers={wrongAnswers}
         resetgame={beginNow}
       />
     );
@@ -182,10 +196,10 @@ export default function Sprint() {
       <Points bonus={bonus} checkbox={checkbox} key={Date.now()} />
       <div className="sprint__words-container">
         <h3 className="sprint__words">
-          {currentWord.mainWord}
+          {currentWord.word}
         </h3>
         <h4 className="sprint__translate">
-          {currentWord.translateWord}
+          {currentWord.wordTranslate}
         </h4>
       </div>
       <div className="sprint__button">
