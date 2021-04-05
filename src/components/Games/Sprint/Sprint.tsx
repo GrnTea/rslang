@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import AspectRatioIcon from "@material-ui/icons/AspectRatio";
 import { connect } from "react-redux";
-import ResetGame from "../AudioCall/ResetGame";
+import ResetGame from "../ResetGame/ResetGame";
 import "./sprint.scss";
 import Points from "./Points";
 import SprintHeader from "./SprinInterface";
@@ -16,6 +16,7 @@ import wrong from "../../../assets/sound/error.wav";
 import {
   ERROR, URL, ERROR_WORD, RIGHT_ARROW, RIGHT,
 } from "./sprintconstants";
+import { RootState } from "../../../redux/reducer";
 
 const random = (max: number): number => {
   const min = 0;
@@ -30,9 +31,43 @@ interface ICurrentWord {
   id: string,
 }
 
-function Sprint(props: any) {
-  console.log(props);
-  const params: { num: string | undefined } = useParams();
+function updateListOfUserWords(data: any, metod: string, url: string, authorizationToken: string): void {
+  fetch(url, {
+    method: metod,
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authorizationToken}`,
+    },
+    redirect: "follow",
+    referrerPolicy: "no-referrer",
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+      return response;
+    })
+    .catch((error) => { alert(error); });
+}
+
+const handleSetAsDifficult = (url, userId, cardInfo, authorizationToken) => {
+  const data = {
+    optional: {
+      studing: "true",
+    },
+  };
+  const urlRequest = `${url}users/${userId}/words/${cardInfo.id}`;
+  updateListOfUserWords(data, "POST", urlRequest, authorizationToken);
+};
+
+function Sprint({ game, userId, userToken }: { game: string, userId: any, userToken: any }) {
+  // console.log(`userId:${userId}`);
+  // console.log(`userToken:${userToken}`);
+  const {difficulty, page} : {difficulty: string, page:string} = useParams();
   const sprintEl = useRef(null);
   const [words, setWords] = useState<Promise<{}[]>>();
   const [errorFetch, setError] = useState(null);
@@ -48,7 +83,8 @@ function Sprint(props: any) {
   const [falseAnswer, setFalseAnswer] = useState(0);
   const [rightAnswers, setRightAnswers] = useState<ICurrentWord[]>([]);
   const [wrongAnswers, setWrongAnswers] = useState<ICurrentWord[]>([]);
-  const { num } = params;
+  const [playWords, setPlayWords] = useState<ICurrentWord[]>([]);
+
   const isVolume = true;
   const [currentWord, setCurrentWord] = useState<ICurrentWord>({
     word: "",
@@ -57,10 +93,9 @@ function Sprint(props: any) {
     id: "",
   });
 
-  const url = `${URL}/words?group=${Number(num) - 1}&page=1`;
+  const url = `${URL}/words?group=${Number(difficulty) - 1}&page=${Number(page)}`;
 
-  useEffect(() => {
-    setIsLoaded(false);
+  function fetchingData() {
     fetch(url)
       .then((res) => res.json())
       .then(
@@ -76,40 +111,49 @@ function Sprint(props: any) {
     return function cleanup() {
       setWords([]);
     };
-  }, [num]);
+  }
 
-  const playGame = useCallback((words: any) => {
+  useEffect(() => {
+    setIsLoaded(false);
+    fetchingData();
+  }, [difficulty]);
+
+  const playGame = useCallback((playWords: []) => {
     const wordData = {
       word: "",
       wordTranslate: ERROR_WORD,
       id: "",
       isTrueTranslate: false,
     };
-    const playWords = JSON.parse(JSON.stringify(words));
+    // const playWords = JSON.parse(JSON.stringify(words));
     wordData.isTrueTranslate = Boolean(Math.round(Math.random()));
-    const numOfWord = random(words.length - 1);
-    const numFakeWord = words.length < 19 ? numOfWord + 1 : numOfWord - 1;
-    wordData.id = playWords.id;
+    const numOfWord = random(playWords.length - 1);
+    const numFakeWord = numOfWord < playWords.length ? numOfWord + 1 : numOfWord - 1;
     wordData.word = playWords ? playWords[numOfWord].word : playWords;
+    wordData.id = playWords ? playWords[numOfWord].id : playWords;
     try {
       wordData.wordTranslate = wordData.isTrueTranslate
         ? playWords[numOfWord].wordTranslate : playWords[numFakeWord].wordTranslate;
     } catch (e) {
       console.log(ERROR + e);
     }
-    console.log(wordData);
+    if (false) {
+      setPlayWords(playWords.filter((item, index) => numOfWord !== index));
+    }
+
     setCurrentWord(wordData);
     return wordData;
-  }, [num]);
+  }, [difficulty]);
 
   useEffect(() => {
     if (isLoaded && words) {
-      playGame(words);
+      playGame(playWords);
     }
   }, [checkbox.length]);
 
   useEffect(() => {
     if (isLoaded && words) {
+      setPlayWords(JSON.parse(JSON.stringify(words)));
       playGame(words);
     }
   }, [isLoaded]);
@@ -154,7 +198,14 @@ function Sprint(props: any) {
       setWrongAnswers([...wrongAnswers, currentWord]);
       setFalseAnswer(falseAnswer + 1);
     }
-    console.log(rightAnswers, wrongAnswers);
+  }
+
+  function beginNow() {
+    setScore(0);
+    setCheckbox([]);
+    setBonus(10);
+    setFinish(false);
+    setBegin(true);
   }
 
   if (begin) {
@@ -169,14 +220,6 @@ function Sprint(props: any) {
 
   if (!isLoaded) {
     return <div>Загрузка...</div>;
-  }
-
-  function beginNow() {
-    setScore(0);
-    setCheckbox([]);
-    setBonus(10);
-    setFinish(false);
-    setBegin(true);
   }
 
   if (finish) {
@@ -219,8 +262,10 @@ function Sprint(props: any) {
   );
 }
 
-const mapStateToProps = (state: any) => ({
-  game: state.game,
-});
+// const mapStateToProps = (state: RootState) => ({
+//   game: state.game,
+//   userId: state.user.id,
+//   userToken: state.user.token,
+// });
 
-export default connect(mapStateToProps, null)(Sprint);
+export default Sprint;
