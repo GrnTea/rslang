@@ -1,17 +1,17 @@
-import React, {useState, useEffect, useRef} from 'react';
-import ResetGame from './ResetGame';
+import React, { useState, useEffect, useRef } from "react";
 import {
   useParams,
 } from "react-router-dom";
-import './gameSavannah.css';
+import ResetGame from "./ResetGame";
+import "./gameSavannah.css";
 import useSound from "use-sound";
-import succes from '../../../assets/sound/succes.mp3';
-import error from '../../../assets/sound/error.mp3';
-import FavoriteTwoToneIcon from '@material-ui/icons/FavoriteTwoTone';
+import succes from "../../../assets/sound/succes.mp3";
+import error from "../../../assets/sound/error.mp3";
+import FavoriteTwoToneIcon from "@material-ui/icons/FavoriteTwoTone";
 
 import FullScreenButton from "./FullScreenButton";
 
-const URL = 'https://rslernwords.herokuapp.com/';
+const URL = "https://rslernwords.herokuapp.com/";
 
 export default function GameSavannah() {
   const { num } = useParams();
@@ -20,90 +20,83 @@ export default function GameSavannah() {
   const [word, setWord] = useState({});
   const [displayWords, setDisplayWords] = useState([]);
   let [gravityCounter, setGravityCounter] = useState(0);
-  let [lifeCounter, setLifeCounter] = useState(2);
-  
-  let [rightAnswersCounter, setRightAnswersCounter] = useState(0);
-  let [wrongAnswersCounter, setWrongAnswersCounter] = useState(0);
+  const [lifeCounter, setLifeCounter] = useState(2);
 
-  let [rightAnswers, setRightAnswers] = useState([]);
-  let [wrongAnswers, setWrongAnswers] = useState([]);
+  const [rightAnswersCounter, setRightAnswersCounter] = useState(0);
+  const [wrongAnswersCounter, setWrongAnswersCounter] = useState(0);
 
-  let [endGame, setEndGame] = useState(false);
-  let [wordsDisplayedOnTheScreen, setWordsDisplayedOnTheScreen] = useState('');
+  const [rightAnswers, setRightAnswers] = useState([]);
+  const [wrongAnswers, setWrongAnswers] = useState([]);
+
+  const [endGame, setEndGame] = useState(false);
+  const [wordsDisplayedOnTheScreen, setWordsDisplayedOnTheScreen] = useState("");
 
   const [playError] = useSound(error);
 
   function initGame() {
     fetch(`${URL}words?group=${num - 1}&page=1`)
-    .then((response) => {
-      return response.json();
-    })
-    .then((jsonData) => {
-      const dataShuffle = shuffle(jsonData);
-      
-      setWord(dataShuffle.pop());
-      setData(dataShuffle);
-     })
+      .then((response) => response.json())
+      .then((jsonData) => {
+        const dataShuffle = shuffle(jsonData);
+
+        setWord(dataShuffle.pop());
+        setData(dataShuffle);
+      });
   }
 
   useEffect(() => {
     initGame();
   }, []);
 
-
   useEffect(() => {
-    if(counter === 0) return;
+    if (counter === 0) return;
 
     setWord(data.pop());
     setData(data);
   }, [counter]);
 
-
   // запушить новую пачку слов в стейт для отображения на экране
   useEffect(() => {
     let res = data.filter((elem, index) => {
-      if(index > 2) return;
+      if (index > 2) return;
       return elem;
-    })
-    
-    res.push(word)
+    });
+
+    res.push(word);
     res = shuffle(res);
     setDisplayWords(res);
-
-  }, [data, word])
-
+  }, [data, word]);
 
   // запрос следующей партии слов и слова при бездействии пользователя
   useEffect(() => {
-    if(gravityCounter < 170) return;
+    if (gravityCounter < 170) return;
 
     setGravityCounter(0);
-    setCounter(prev => prev + 1);
-    setLifeCounter(prev => prev - 1);
-    setWrongAnswersCounter(prev => prev + 1);
+    setCounter((prev) => prev + 1);
+    setLifeCounter((prev) => prev - 1);
+    setWrongAnswersCounter((prev) => prev + 1);
     addAnswers(word, setWrongAnswers, wrongAnswers);
     playError();
   }, [gravityCounter]);
 
-
-//  проверка ответа
+  //  проверка ответа
   function checkWord(e: any) {
-    let selectElemValue = e.target.dataset.value;
-    let selectElem = e.target;
-    let currentElem = document.querySelector(`[data-value="${word.word}"]`);
+    const selectElemValue = e.target.dataset.value;
+    const selectElem = e.target;
+    const currentElem = document.querySelector(`[data-value="${word.word}"]`);
 
     const resetWorld = (time: number) => {
       setTimeout(() => {
         setGravityCounter(0);
-        setCounter(prev => prev + 1);
+        setCounter((prev) => prev + 1);
       }, time);
-    }
+    };
 
-    if(selectElemValue === word.word){
+    if (selectElemValue === word.word) {
       selectElem.classList.add("guess");
       audioPlay(succes);
       resetWorld(500);
-      setRightAnswersCounter(prev => prev + 1);
+      setRightAnswersCounter((prev) => prev + 1);
       // передаём слово, стейт правильных или не правильных ответов, состояние
       addAnswers(word, setRightAnswers, rightAnswers);
     } else {
@@ -111,54 +104,51 @@ export default function GameSavannah() {
       currentElem.classList.add("guess");
       audioPlay(error);
       resetWorld(1500);
-      setLifeCounter(prev => prev - 1);
-      setWrongAnswersCounter(prev => prev + 1);
+      setLifeCounter((prev) => prev - 1);
+      setWrongAnswersCounter((prev) => prev + 1);
       addAnswers(word, setWrongAnswers, wrongAnswers);
     }
   }
 
   function addAnswers(word, state, elems) {
-    if(elems.length === 0) {
-      state([word])
+    if (elems.length === 0) {
+      state([word]);
     } else {
-      let copy = elems;
+      const copy = elems;
       copy.push(word);
       state(copy);
     }
   }
-
 
   function audioPlay(src) {
     const audio = new Audio(src);
     audio.play();
   }
 
-
-// сброс стилей угадал / не угадал
+  // сброс стилей угадал / не угадал
   useEffect(() => {
-    if(counter === 0) return;
+    if (counter === 0) return;
     document.querySelectorAll(".word-display").forEach((elem, index) => {
       elem.classList.remove("guess");
       elem.classList.remove("not-guess");
-    })
-  }, [counter])
-
+    });
+  }, [counter]);
 
   // движение слова вниз
   useEffect(() => {
-    if(endGame === true) return;
-    
-    let elem = document.querySelector(".word-absolute");
+    if (endGame === true) return;
 
-    let intervalId = setInterval(() => {
+    const elem = document.querySelector(".word-absolute");
+
+    const intervalId = setInterval(() => {
       gravityCounter++;
       setGravityCounter(gravityCounter);
 
-      elem.style.top = gravityCounter + "px";
+      elem.style.top = `${gravityCounter}px`;
     }, 50);
 
     return () => clearInterval(intervalId);
-  }, [gravityCounter, endGame])
+  }, [gravityCounter, endGame]);
 
   function shuffle(array: any) {
     return array.sort(() => Math.random() - 0.5);
@@ -166,28 +156,25 @@ export default function GameSavannah() {
 
   // конец игры
   useEffect(() => {
-    if(counter === 10 || lifeCounter <= 0){
+    if (counter === 10 || lifeCounter <= 0) {
       setEndGame(true);
     }
   }, [counter, lifeCounter]);
 
-
   useEffect(() => {
-    let res = displayWords.map((elem, index) => {
-      return(
-        <div 
-        data-value={elem.word} 
-        className="word-display" 
+    const res = displayWords.map((elem, index) => (
+        <div
+        data-value={elem.word}
+        className="word-display"
         key={index}
-        onClick={e => checkWord(e)}
+        onClick={(e) => checkWord(e)}
         >
           {elem.wordTranslate}
         </div>
-      )
-    })
+    ));
 
     setWordsDisplayedOnTheScreen(res);
-  }, [displayWords])
+  }, [displayWords]);
 
   function resetgame() {
     initGame();
@@ -203,32 +190,31 @@ export default function GameSavannah() {
 
   return (
     <>
-      {endGame === false ?
-        <div className="words-container">
+      {endGame === false
+        ? <div className="words-container">
           <div className="words-display">
             <div className="life-container">
               <div className="life-counter">{lifeCounter}</div>
               <FavoriteTwoToneIcon className="life-icon" />
             </div>
-            
+
             <div className="word-absolute">{word.word}</div>
               {wordsDisplayedOnTheScreen}
-          </div> 
+          </div>
           <div className="fullscreen-button">
             <FullScreenButton />
           </div>
-          <input className="input-hidden" type="hidden" onClick={() => audioPlay(error)}/>   
-        </div>   
-        
-      : 
-        <ResetGame 
-          rightAnswersCounter={rightAnswersCounter} 
-          wrongAnswersCounter={wrongAnswersCounter} 
+          <input className="input-hidden" type="hidden" onClick={() => audioPlay(error)}/>
+        </div>
+
+        : <ResetGame
+          rightAnswersCounter={rightAnswersCounter}
+          wrongAnswersCounter={wrongAnswersCounter}
           rightAnswers={rightAnswers}
           wrongAnswers={wrongAnswers}
           resetgame={resetgame}
-        />  
+        />
       }
     </>
-  )
+  );
 }

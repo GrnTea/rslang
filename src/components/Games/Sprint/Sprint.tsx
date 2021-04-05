@@ -1,17 +1,19 @@
 import React, {
-  useEffect, useState, useCallback, useRef
+  useEffect, useState, useCallback, useRef,
 } from "react";
 import useSound from "use-sound";
 import { useParams } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import AspectRatioIcon from '@material-ui/icons/AspectRatio';
+import AspectRatioIcon from "@material-ui/icons/AspectRatio";
 import "./sprint.scss";
 import Points from "./Points";
 import SprintHeader from "./SprinInterface";
 import Begin from "./Begin";
 import correct from "../../../assets/sound/correct-choice.wav";
 import wrong from "../../../assets/sound/error.wav";
-import { ERROR, URL, ERROR_WORD, RIGHT_ARROW, RIGHT } from "./sprintconstants";
+import {
+  ERROR, URL, ERROR_WORD, RIGHT_ARROW, RIGHT,
+} from "./sprintconstants";
 
 const random = (max: number): number => {
   const min = 0;
@@ -24,7 +26,6 @@ interface ICurrentWord {
   translateWord: string,
   isTrueTranslate: boolean,
 }
-
 
 export default function Sprint() {
   const params: { num: string | undefined } = useParams();
@@ -105,11 +106,11 @@ export default function Sprint() {
     }
   }, [checkbox.length]);
 
-  function fullscreen () {
+  function fullscreen() {
     const x = sprintEl.current;
     x.webkitRequestFullScreen();
-    if (document.fullscreenEnabled){
-      console.log('full')
+    if (document.fullscreenEnabled) {
+      console.log("full");
       document.webkitCancelFullScreen();
     }
     // requestFullScreen()
@@ -199,4 +200,3 @@ export default function Sprint() {
     </div>
   );
 }
-

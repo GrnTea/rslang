@@ -74,23 +74,22 @@ export default function SignUpForm() {
     const rawResponse = await fetch("https://rslernwords.herokuapp.com/users", {
       method: "POST",
       headers: {
-        "Accept": "application/json",
+        Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
     if (rawResponse.ok) {
       history.push("/");
-    }
-    else {
+    } else {
       setSignUpResult({
         error: "This email is already registered",
       });
       setLoading(false);
     }
-    //setLoading(false);
-    //const content = await rawResponse.json();
-    //console.log(content);
+    // setLoading(false);
+    // const content = await rawResponse.json();
+    // console.log(content);
   };
 
   return (
