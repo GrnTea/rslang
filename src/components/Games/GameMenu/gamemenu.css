@@ -37,13 +37,19 @@
   border-left: none;
 }
 
-.link-navigation:nth-child(1){
+.link-navigation:first-child{
   border-left: 1px solid silver;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
 }
 
-.link-navigation:nth-child(6){
+.link-navigation:last-child{
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
+}
+
+.game-links{
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }

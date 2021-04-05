@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import BookToGame from "./BookToGame";
 
 import Pagination from "../../Pagination/Pagination";
 //import Pagination from "@material-ui/lab/Pagination";
@@ -42,7 +43,7 @@ const TextbookPage: React.FC = () => {
     fetch(wordsUrl)
       .then((response) => response.json())
       .then((jsonData) => {
-        console.log(jsonData);
+        // console.log(jsonData);
         setPageWords(jsonData);
       });
   }
@@ -51,14 +52,14 @@ const TextbookPage: React.FC = () => {
     getWords();
   }, [wordsUrl]);
 
-  console.log("pageWords", pageWords);
+  // console.log("pageWords", pageWords);
 
   return (
-
     <div>
       <h3>Textbook</h3>
+      <BookToGame />
       {pageWords.map((card: IWord) => <CardForWords key={card.id} cardInfo={card} />)}
-
+      <BookToGame />
       <Pagination page={page} section={sectionId} onChange={handleChange}/>
     </div>
 

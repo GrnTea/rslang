@@ -27,7 +27,8 @@ interface ICurrentWord {
 
 
 export default function Sprint() {
-  const params: { num: string | undefined } = useParams();
+  // const params: { num: string | undefined } = useParams();
+  const {difficulty, page} = useParams();
   const sprintEl = useRef(null);
   const [words, setWords] = useState<Promise<any>>();
   const [errorFetch, setError] = useState(null);
@@ -39,7 +40,7 @@ export default function Sprint() {
   const [begin, setBegin] = useState(true);
   const [playCorrect] = useSound(correct);
   const [playWrong] = useSound(wrong);
-  const { num } = params;
+  // const { difficulty, page } = params;
   const isVolume = true;
   let currentWord: ICurrentWord = {
     mainWord: "",
@@ -47,7 +48,7 @@ export default function Sprint() {
     isTrueTranslate: false,
   };
 
-  const url = `${URL}/words?group=${Number(num) - 1}&page=1`;
+  const url = `${URL}/words?group=${Number(difficulty) - 1}&page=${Number(page)}`;
 
   useEffect(() => {
     setIsLoaded(false);
@@ -66,7 +67,7 @@ export default function Sprint() {
     return function cleanup() {
       setWords([]);
     };
-  }, [num]);
+  }, [difficulty]);
 
   const playGame = useCallback((words: any) => {
     const wordData = {
@@ -86,7 +87,7 @@ export default function Sprint() {
       console.log(ERROR + e);
     }
     return wordData;
-  }, [num]);
+  }, [difficulty]);
 
   if (isLoaded && words) {
     currentWord = playGame(words);
