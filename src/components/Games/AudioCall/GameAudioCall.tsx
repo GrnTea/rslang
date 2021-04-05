@@ -15,7 +15,7 @@ import {
 const URL = "https://rslernwords.herokuapp.com/";
 
 export default function GameAudioCall() {
-  const { num } = useParams();
+  const { difficulty, page } = useParams();
   
   const [counter, setCounter] = useState(0);
   const [data, setData] = useState([]);
@@ -33,7 +33,7 @@ export default function GameAudioCall() {
 
   const [maxSerie, setMaxSerie] = useState(0);
 
-  const url = `https://react-learnwords-example.herokuapp.com/words?group=${num - 1}&page=1`;
+  const url = `https://react-learnwords-example.herokuapp.com/words?group=${difficulty - 1}&page=${page}`;
 
   function initGame() {
     fetch(url)

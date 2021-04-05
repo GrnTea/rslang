@@ -9,7 +9,10 @@ import { signOut } from "../../../redux/user_reducer";
 import { RootState } from "../../../redux/reducer";
 import { connect } from "react-redux";
 
-const ResetGame = (props: any) => {
+
+function ResetGame({user, maxSerie, rightAnswers, wrongAnswers, resetgame}) {
+
+  // console.log(user)
 
   let buttonStyles = {
     backgroundColor: '#3498db', 
@@ -25,15 +28,12 @@ const ResetGame = (props: any) => {
 
   const [gameStatistics, setGameStatistics] = useState(0);
 
-  useEffect(() => {
-    console.log(RootState)
-  }, []);
 
   useEffect(() => {
-    let res = props.rightAnswers.map((elem: any, index: number) => {
+    let res = rightAnswers.map((elem: any, index: number) => {
       return (
         <div key={index} className="true-words">
-          <div className="play-sound" onClick={() => playAudio(index, props.rightAnswers)}>
+          <div className="play-sound" onClick={() => playAudio(index, rightAnswers)}>
             <VolumeUpIcon />
           </div>
           
@@ -48,10 +48,10 @@ const ResetGame = (props: any) => {
   }, []);
   
   useEffect(() => {
-    let res = props.wrongAnswers.map((elem: any, index: number) => {
+    let res = wrongAnswers.map((elem: any, index: number) => {
       return (
         <div key={index} className="false-words">
-          <div className="play-sound" onClick={() => playAudio(index, props.wrongAnswers)}>
+          <div className="play-sound" onClick={() => playAudio(index, wrongAnswers)}>
             <VolumeUpIcon />
           </div>
           
@@ -83,38 +83,35 @@ const ResetGame = (props: any) => {
 
   useEffect(() => {
     let res = {
-      "learnedWords": props.rightAnswersCounter,
+      "learnedWords": rightAnswers.length,
       "date": Date.now(), //(current time in UTCmiliseconds)
-      "gameId": "1",
-      "rightAnswers": props.rightAnswersCounter,
-      "wrongAnswers": props.wrongAnswersCounter,
-      "maxSerie": props.maxSerie
+      "gameId": "2",
+      "rightAnswers": rightAnswers.length,
+      "wrongAnswers": wrongAnswers.length,
+      "maxSerie": maxSerie
     }
     setGameStatistics(res);
   }, []);
 
   useEffect(() => {
     if(gameStatistics === 0) return;
-    // let userId = "42";
-    
-    // const sendStat = async (gameStatistics: StatType, userId: String) => {
-    //   fetch(`https://rslernwords.herokuapp.com/users/${userId}/statistics`, {
-    //     method: "POST",
-    //     headers: {
-    //       "Accept": "application/json",
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(gameStatistics),
-    //   })
-    //   .then(response => response.json())
-    //   .then(data => console.log(data))
-    //   .catch(error => {
-    //     console.log(error);
-    //   })
+   
+    fetch(`https://rslernwords.herokuapp.com/users/${user.id}/statistics`, {
+      method: "POST",
+      withCredentials: true,
+      headers: {
+        "Authorization": `Bearer ${user.token}`,
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(gameStatistics)
+    })
+    // .then(response => response.json())
+    // .then(data => console.log(data))
+    .catch(error => {
+      console.log(error);
+    })
 
-    // };
-
-    // sendStat(gameStatistics, userId);
   }, [gameStatistics]);
  
 
@@ -123,7 +120,7 @@ const ResetGame = (props: any) => {
       <div className="end-game-emotion">это конец <EmojiEmotionsTwoToneIcon color="primary"/></div> 
       <div className="right-answers-counter">
         <div className="answers">Знаю: </div>
-        <div className="right-counter">{props.rightAnswers.length}</div>
+        <div className="right-counter">{rightAnswers.length}</div>
       </div>
       <div className="right-answers">
         {trueWords}
@@ -131,16 +128,20 @@ const ResetGame = (props: any) => {
       <div className="answers-separator"></div>
       <div className="wrong-answers-counter">
         <div className="answers">Ошибок: </div>
-        <div className="wrong-counter">{props.wrongAnswers.length}</div>
+        <div className="wrong-counter">{wrongAnswers.length}</div>
       </div>
       <div className="wrong-answers">
         {falseWords}
       </div>
-      <Button style={{...buttonStyles}} variant="contained" onClick={props.resetgame}>
+      <Button style={{...buttonStyles}} variant="contained" onClick={resetgame}>
         попробовать ещё раз
       </Button>
     </div>
   )
 }
 
-export default ResetGame;
+const mapStateToProps = (state: RootState) => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps)(ResetGame);
