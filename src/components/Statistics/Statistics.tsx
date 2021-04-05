@@ -1,5 +1,8 @@
+import { Link } from "@material-ui/core";
 import React, { Fragment, useState, useEffect } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { connect } from "react-redux";
+import Typography from '@material-ui/core/Typography';
 import { RootState } from "../../redux/reducer";
 import DailyStat from "./DailyStat";
 
@@ -61,10 +64,12 @@ type StatType = {
   maxSerie: Number
 }
 
-const sendStat = async (stat: StatType, userId: String) => {
-  await fetch(`https://rslernwords.herokuapp.com/users/${userId}/statistics`, {
+const sendStat = async (stat: StatType, user) => {
+  await fetch(`https://rslernwords.herokuapp.com/users/${user.id}/statistics`, {
     method: "POST",
+    withCredentials: true,
     headers: {
+      "Authorization": `Bearer ${user.token}`,
       "Accept": "application/json",
       "Content-Type": "application/json",
     },
@@ -116,6 +121,16 @@ const getDailyStat = async (user) => {
 };
 
 const Statistics = ({ user }) => {
+  if (!user.id || !user.token) {
+    return <Fragment>
+      <Typography variant="subtitle1">
+        Statistics is available only after authorization
+      </Typography>
+      <Link component={RouterLink} to={"/signin"}>Sign In</Link>
+      <br></br>
+      <Link component={RouterLink} to={"/signup"}>Sign Up</Link>
+    </Fragment>;
+  }
   const [stat, setStat] = useState([]);
   useEffect(() => {
     console.log('getDailyStat');

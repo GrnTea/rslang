@@ -29,15 +29,19 @@ const App = () => (
           <Games />
         </Route>
         <Route path="/signin">
+          <Header />
           <SignIn />
         </Route>
         <Route path="/signup">
+          <Header />
           <SignUp />
         </Route>
         <Route path="/profile">
+          <Header />
           <UserProfile />
         </Route>
         <Route path="/stat">
+          <Header />
           <Stat />
         </Route>
       </Switch>
