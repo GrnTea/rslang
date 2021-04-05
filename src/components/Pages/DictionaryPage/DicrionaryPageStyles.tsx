@@ -1,7 +1,19 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 const dictionaryStyles = makeStyles({
+  dictionaryContainer: {
+    maxWidth: "1200px",
+    margin: "0 auto",
+    padding: "10px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "space-between",
+    rowGap: "1em",
+  },
+
   dictionaryMenu: {
+    width: "100%",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",

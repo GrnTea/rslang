@@ -19,8 +19,8 @@ export default function Games() {
   const sprint = () => (<Sprint />);
   const savannah = () => (<GameSavannah />);
   return (
-    <div className="games">
-      <h2>games</h2>
+    <div className="games-container">
+      <h1>Мини-игры</h1>
 
       <div className="routes">
         <Link className="links" to="/games/audiocall">audiocall</Link>

@@ -151,7 +151,7 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
                 <div className={useStyles.cardImg} style={{backgroundImage: `url(${url}${cardInfo.image})`}} /> 
             : null}
             <div className={useStyles.cardDescription}>
-                <div className={useStyles.mainWordContsiner}>
+                <div className={useStyles.mainWordContainer}>
                     <div className={isDifficult === "true" ? useStyles.mainDifficultWord : useStyles.mainWord}>
                         {cardInfo.word}
                     </div>

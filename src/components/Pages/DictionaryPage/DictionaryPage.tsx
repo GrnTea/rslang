@@ -49,7 +49,7 @@ const DictionaryPage: React.FC<Props> = ({ lang, user }: IDictionaryProps) => {
   };
 
   return (
-      <div>
+    <div className={useStyles.dictionaryContainer}>
           <h1>{`${TEXTS[lang].mainTitle} ->  ${TEXTS[lang].section} ${sectionId}`}</h1>
           <div className={useStyles.dictionaryMenu}>
               <button className={useStyles.dictionaryMenuItem} onClick={() => { setCategory("studiedWords"); }}>
@@ -66,7 +66,7 @@ const DictionaryPage: React.FC<Props> = ({ lang, user }: IDictionaryProps) => {
             ? <WordsCategory user={user} section={sectionId} filter={filters.studing}/>
             : category === "difficultWords" ? <WordsCategory user={user} section={sectionId} filter={filters.difficult}/>
               : <WordsCategory user={user} section={sectionId} filter={filters.deleted} />}
-      </div>
+    </div>
   );
 };
 

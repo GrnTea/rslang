@@ -66,7 +66,7 @@ const buttonsData = [
   },
   {
     label: "Exit",
-    href: "/Exit",
+    href: "/",
     icon: exitIcon,
 
   },

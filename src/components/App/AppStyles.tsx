@@ -1,14 +1,13 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 const appStyles = makeStyles({
-  content: {
-    display: "flex",
-    flexDirection: "column",
-    // alignItems: "center",
-    // justifyContent: "center",
-    flexGrow: 1,
-    padding: "70px 10px 0",
-  },
+    mainContent: {
+      display: "flex",
+      flexDirection: "column",
+      flexGrow: 1,
+      padding: "60px 0 0",
+      minHeight: "calc(100% - 44px)",
+    },
 });
 
 export default appStyles;

@@ -19,6 +19,7 @@ import TextbookPage from "../Pages/TextbookPage/TextbookPage";
 import appStyles from "./AppStyles";
 import DictionaryPage from "../Pages/DictionaryPage/DictionaryPage";
 import SectionComponent from "../SectionComponent/SectionComponent";
+import MainPage from "../MainPage";
 
 /* const App = () => {
   const useStyles = appStyles();
@@ -60,11 +61,11 @@ const App = () => {
 
     <HashRouter>
     <Header />
-      <main className={useStyles.content}>
+      <main className={useStyles.mainContent}>
         <Switch>
           <Route exact path="/">
-            <Header />
-            <Link className="link-navigation" to='/games'>games</Link>
+            <MainPage />
+            {/*<Link className="link-navigation" to='/games'>games</Link>*/}
           </Route>
           <Route path="/games">
             <Games />
@@ -87,10 +88,12 @@ const App = () => {
           <Route path="/settings">
             <SettingsPage />
           </Route>
+
         </Switch>
       </main>
 
       <Footer />
+
     </HashRouter>
 
   </React.Fragment>
