@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import BookToGame from "./BookToGame";
 
 import Pagination from "../../Pagination/Pagination";
 //import Pagination from "@material-ui/lab/Pagination";
@@ -36,7 +37,7 @@ const TextbookPage: React.FC = () => {
     fetch(wordsUrl)
       .then((response) => response.json())
       .then((jsonData) => {
-        console.log(jsonData);
+        // console.log(jsonData);
         setPageWords(jsonData);
       });
   }
@@ -51,8 +52,9 @@ const TextbookPage: React.FC = () => {
       <div className={useStyles.textbookSectionTitle} style={{backgroundColor: setColor(sectionId)}}>
         <h3>Раздел: {sectionId} Страница: {pageId}</h3>
       </div>
+      <BookToGame difficulty={sectionId} page={pageId} />
       {pageWords.map((card: IWord) => <CardForWords key={card.id} cardInfo={card} />)}
-
+      <BookToGame difficulty={sectionId} page={pageId} />
       <Pagination page={pageId} sectionId={sectionId} />
     </div>
 

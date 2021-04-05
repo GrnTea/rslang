@@ -10,10 +10,10 @@ import {
 export default function GameMenu(props: any) {
   const arrLinks = [];
   for (let i = 1; i < 7; i++) {
-    arrLinks.push(<Link key={i} className="link-navigation" to={`/games/${props.gameSelected}/level/${i}`}>{i}</Link>);
+    arrLinks.push(<Link key={i} className="link-navigation" to={`/games/${props.gameSelected}/level/${i}/1`}>{i}</Link>);
   }
 
-  const gamePath = `/games/${props.gameSelected}/level/:num`;
+  const gamePath = `/games/${props.gameSelected}/level/:difficulty/:page`;
   const location = useLocation();
   let [hide, setHide] = useState(false);
 

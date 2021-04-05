@@ -4,7 +4,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 import useSound from "use-sound";
 import DisplayWordsComponent from "./DisplayWordsComponent";
-import ResetGame from "./ResetGame";
+import ResetGame from "../ResetGame/ResetGame";
 import FullScreenButton from "./FullScreenButton";
 
 import "./game.css";
@@ -15,7 +15,7 @@ import {
 const URL = "https://rslernwords.herokuapp.com/";
 
 export default function GameAudioCall() {
-  const { num } = useParams();
+  const { difficulty, page } = useParams();
   
   const [counter, setCounter] = useState(0);
   const [data, setData] = useState([]);
@@ -30,12 +30,11 @@ export default function GameAudioCall() {
 
   const [rightAnswers, setRightAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
-  
 
-  const url = `https://react-learnwords-example.herokuapp.com/words?group=${num - 1}&page=1`;
+  const [maxSerie, setMaxSerie] = useState(0);
 
   function initGame() {
-    fetch(url)
+    fetch(`${URL}words?group=${difficulty - 1}&page=${page}`)
     .then((response) => {
       return response.json();
     })
@@ -99,6 +98,7 @@ export default function GameAudioCall() {
       setShowImage(true)
       setTrueanswer(prev => prev + 1);
       addAnswers(word, setRightAnswers, rightAnswers);
+      setMaxSerie(prev => prev + 1);
 
       targetElem.classList.add("guessed");
       setTimeout(() => {
@@ -113,6 +113,7 @@ export default function GameAudioCall() {
       setShowImage(true)
       setFalseAnswer(prev => prev + 1);
       addAnswers(word, setWrongAnswers, wrongAnswers);
+      setMaxSerie(0);
      
       setTimeout(() => {
         targetElem.classList.remove("no-guessed");
@@ -199,6 +200,7 @@ export default function GameAudioCall() {
           rightAnswers={rightAnswers}
           wrongAnswers={wrongAnswers}
           resetgame={rebootGame}
+          maxSerie={maxSerie}
         />  
       }
     </>
