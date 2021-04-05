@@ -34,7 +34,7 @@ export default function GameMenu(props: any) {
 
       <div className={hide ? "game-menu hide" : "game-menu"}>
         <div className="game-name">{props.gameName}</div>
-        <div className="game-desription">{props.description}</div>
+        <div className="game-description">{props.description}</div>
         <div className="game-level">выберите уровень</div>
         <div className="button-group">
           {arrLinks}

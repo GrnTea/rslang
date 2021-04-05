@@ -21,6 +21,7 @@ import { signIn, UserType } from "../../../redux/user_reducer";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    // height: "72vh",
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",

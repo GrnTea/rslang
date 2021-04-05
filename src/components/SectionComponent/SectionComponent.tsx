@@ -14,13 +14,14 @@ export default function SectionComponent() {
   console.log('path url', path, url, typeof sectionId);
 
   return (
-    <div>
-        <h1 className={useStyles.sectionTitle} style={{backgroundColor: setColor(sectionId)}}>Раздел {sectionId}</h1>
-        <div className={useStyles.section}>
-        {Array(30).fill(1).map((_, pageId) => (
-          <Link className={useStyles.sectionLink} key={`k${pageId}`} to={`${url}/${pageId + 1}`}>Страница {`${pageId + 1}`}</Link>
-          )
-        )}
-        </div>
+    <div className={useStyles.sectionContainer}>
+
+      <h1 className={useStyles.sectionTitle} style={{backgroundColor: setColor(sectionId)}}>Раздел {sectionId}</h1>
+      <div className={useStyles.sectionContent}>
+      {Array(30).fill(1).map((_, pageId) => (
+        <Link className={useStyles.sectionLink} key={`k${pageId}`} to={`${url}/${pageId + 1}`}>Страница {`${pageId + 1}`}</Link>
+        )
+      )}
+      </div>
     </div>
 )};

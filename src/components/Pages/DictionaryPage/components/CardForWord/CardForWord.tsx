@@ -109,7 +109,7 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
             { cardSettings[4].state ? 
             <div className={useStyles.cardImg} style={{backgroundImage: `url(${url}${cardInfo.image})`}} /> : null}
             <div className={useStyles.cardDescription}>
-                <div className={useStyles.mainWordContsiner}>
+                <div className={useStyles.mainWordContainer}>
                     <div className={useStyles.mainWord}>
                         {cardInfo.word}
                     </div>

@@ -45,7 +45,7 @@ const DictionaryPage: React.FC<Props> = ({ lang }) => {
   }, []);
 
   return (
-      <div>
+      <div className={useStyles.dictionaryContainer}>
           <h1>{TEXTS[lang].mainTitle}</h1>
           <div className={useStyles.dictionaryMenu}>
               <button className={useStyles.dictionaryMenuItem} onClick={() => { setCategory("studiedWords"); }}>
