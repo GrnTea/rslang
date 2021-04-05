@@ -64,7 +64,7 @@ const DictionaryPage: React.FC<Props> = ({ lang, user }: IDictionaryProps) => {
           </div>
           { category === "studiedWords"
             ? <WordsCategory user={user} section={sectionId} filter={filters.studing}/>
-            : category === "difficultWords" ? <WordsCategory user={user} section={sectionId} filtegitr={filters.difficult}/>
+            : category === "difficultWords" ? <WordsCategory user={user} section={sectionId} filter={filters.difficult}/>
               : <WordsCategory user={user} section={sectionId} filter={filters.deleted} />}
       </div>
   );

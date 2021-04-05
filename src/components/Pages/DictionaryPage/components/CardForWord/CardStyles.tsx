@@ -6,6 +6,7 @@ const cardStyles = makeStyles({
     flexDirection: "row",
     alignItems: "center",
     columnGap: "3em",
+    margin: "20px 10px 50px",
   },
 
   cardImg: {

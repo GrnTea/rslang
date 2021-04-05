@@ -14,7 +14,7 @@ import FullScreenButton from "./FullScreenButton";
 const URL = "https://rslernwords.herokuapp.com/";
 
 export default function GameSavannah() {
-  const { num } = useParams();
+  const { difficulty, page } = useParams();
   const [counter, setCounter] = useState(0);
   const [data, setData] = useState([]);
   const [word, setWord] = useState({});
@@ -34,14 +34,16 @@ export default function GameSavannah() {
   const [playError] = useSound(error);
 
   function initGame() {
-    fetch(`${URL}words?group=${num - 1}&page=1`)
-      .then((response) => response.json())
-      .then((jsonData) => {
-        const dataShuffle = shuffle(jsonData);
-
-        setWord(dataShuffle.pop());
-        setData(dataShuffle);
-      });
+    fetch(`${URL}words?group=${difficulty - 1}&page=${page}`)
+    .then((response) => {
+      return response.json();
+    })
+    .then((jsonData) => {
+      const dataShuffle = shuffle(jsonData);
+      
+      setWord(dataShuffle.pop());
+      setData(dataShuffle);
+     })
   }
 
   useEffect(() => {
