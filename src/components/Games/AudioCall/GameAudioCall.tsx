@@ -2,6 +2,10 @@ import React, {useState, useEffect} from 'react';
 import SpeakerIcon from '@material-ui/icons/Speaker';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
+import WordUpdate from "../WordUpdate/WordUpdate";
+import { RootState } from "../../../redux/reducer";
+import { connect } from "react-redux";
+
 import useSound from "use-sound";
 import DisplayWordsComponent from "./DisplayWordsComponent";
 import ResetGame from "../ResetGame/ResetGame";
@@ -14,7 +18,7 @@ import {
 
 const URL = "https://rslernwords.herokuapp.com/";
 
-export default function GameAudioCall() {
+function GameAudioCall({user}) {
   const { difficulty, page } = useParams();
   
   const [counter, setCounter] = useState(0);
@@ -66,7 +70,7 @@ export default function GameAudioCall() {
   }, [word]);
 
   useEffect(() => {
-    if(counter === 10){
+    if(counter === 3){
       setStartGame(false);
     }
   }, [counter]);
@@ -94,6 +98,7 @@ export default function GameAudioCall() {
   function checkWord(e) {
     const targetElem = e.target;
     let currentElem: any;
+    WordUpdate(user, word.id);
     if(e.target.dataset.value === word.word){
       setShowImage(true)
       setTrueanswer(prev => prev + 1);
@@ -206,3 +211,9 @@ export default function GameAudioCall() {
     </>
   )
 }
+
+const mapStateToProps = (state: RootState) => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps)(GameAudioCall);
