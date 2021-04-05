@@ -6,44 +6,52 @@ function WordUpdate(user, word) {
   // console.log(word)
   // console.log(`${URL}users/${user.id}/words/${word}`)
 
-   fetch(`${URL}users/${user.id}/words/${word}`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${user.token}`,
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      }
-    })
+  fetch(`${URL}users/${user.id}/words/${word}`, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${user.token}`,
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    }
+  })
     // .then(response => response.status)
     .then(response => response.json())
     .then(data => {
-      console.log("слово есть", data)
+      if(!data.studing){
+        const wordData = {
+          "difficulty": data.difficulty,
+        optional: {
+          studing: "true",
+          delited: "false",
+        },
+      } 
+      testUpdate("PUT", wordData);
     })
     .catch(error => {
       console.log("слова нету", error);
 
       const data = {
         "difficulty": "true",
-        "optional": {
-          "deleted": "false",
-        }
-      }
-      testUpdate("POST", data)
-    })
-
-    function testUpdate(method: any, data: any) {
-    
-      fetch(`${URL}users/${user.id}/words/${word}`, {
-        method: method,
-        headers: {
-          "Authorization": `Bearer ${user.token}`,
-          "Accept": "application/json",
-          "Content-Type": "application/json",
+        optional: {
+          studing: "true",
+          delited: "false",
         },
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer',
-        body: JSON.stringify(data)
-      })
+      };
+      testUpdate("POST", data);
+    });
+
+  function testUpdate(method: any, data: any) {
+    fetch(`${URL}users/${user.id}/words/${word}`, {
+      method: method,
+      headers: {
+        "Authorization": `Bearer ${user.token}`,
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data)
+    })
       .then(response => response.json())
       .then(data => {
         console.log("запись", data)
@@ -51,8 +59,8 @@ function WordUpdate(user, word) {
       .catch(error => {
         console.log("Error124", error);
       })
-    }
-  
+  }
+
 }
 
 export default WordUpdate;

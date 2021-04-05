@@ -64,7 +64,7 @@ const handleSetAsDifficult = (url, userId, cardInfo, authorizationToken) => {
   updateListOfUserWords(data, "POST", urlRequest, authorizationToken);
 };
 
-function Sprint({ game, userId, userToken }: { game: string, userId: any, userToken: any }) {
+function Sprint({ game, user }: { game: string, userId: any, userToken: any }) {
   // console.log(`userId:${userId}`);
   // console.log(`userToken:${userToken}`);
   const {difficulty, page} : {difficulty: string, page:string} = useParams();
@@ -226,11 +226,10 @@ function Sprint({ game, userId, userToken }: { game: string, userId: any, userTo
   if (finish) {
     return (
       <ResetGame
-        rightAnswersCounter={trueAnswer}
-        wrongAnswersCounter={falseAnswer}
-        rightAnswers={rightAnswers}
-        wrongAnswers={wrongAnswers}
-        resetgame={beginNow}
+      maxSerie={trueAnswer}
+      rightAnswers={rightAnswers}
+      wrongAnswers={wrongAnswers}
+      resetgame={beginNow}
       />
     );
   }
@@ -265,8 +264,7 @@ function Sprint({ game, userId, userToken }: { game: string, userId: any, userTo
 
 const mapStateToProps = (state: RootState) => ({
   game: state.game,
-  userId: state.user.id,
-  userToken: state.user.token,
+  user: state.user,
 });
 
 export default connect(mapStateToProps, null)(Sprint);

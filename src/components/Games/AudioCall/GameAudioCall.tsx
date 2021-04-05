@@ -1,26 +1,26 @@
-import React, {useState, useEffect} from 'react';
-import SpeakerIcon from '@material-ui/icons/Speaker';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import React, { useState, useEffect } from "react";
+import SpeakerIcon from "@material-ui/icons/Speaker";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
+import { connect } from "react-redux";
+import useSound from "use-sound";
+import {
+  useParams,
+} from "react-router-dom";
 import WordUpdate from "../WordUpdate/WordUpdate";
 import { RootState } from "../../../redux/reducer";
-import { connect } from "react-redux";
 
-import useSound from "use-sound";
 import DisplayWordsComponent from "./DisplayWordsComponent";
 import ResetGame from "../ResetGame/ResetGame";
 import FullScreenButton from "./FullScreenButton";
 
 import "./game.css";
-import {
-  useParams,
-} from "react-router-dom";
 
 const URL = "https://rslernwords.herokuapp.com/";
 
-function GameAudioCall({user}) {
+function GameAudioCall({ user }) {
   const { difficulty, page } = useParams();
-  
+
   const [counter, setCounter] = useState(0);
   const [data, setData] = useState([]);
   const [word, setWord] = useState({});
@@ -39,15 +39,13 @@ function GameAudioCall({user}) {
 
   function initGame() {
     fetch(`${URL}words?group=${difficulty - 1}&page=${page}`)
-    .then((response) => {
-      return response.json();
-    })
-    .then((jsonData) => {
-      const dataShuffle = shuffle(jsonData);
+      .then((response) => response.json())
+      .then((jsonData) => {
+        const dataShuffle = shuffle(jsonData);
 
-      setWord(dataShuffle.pop())
-      setData(dataShuffle)
-     })
+        setWord(dataShuffle.pop());
+        setData(dataShuffle);
+      });
   }
 
   useEffect(() => {
@@ -56,30 +54,30 @@ function GameAudioCall({user}) {
 
   // -------
   useEffect(() => {
-    if(counter === 0) return;
+    if (counter === 0) return;
 
     setWord(data.pop());
     setData(data);
   }, [counter]);
 
   useEffect(() => {
-    if(startGame !== true) return; 
-    if(counter === 0) return;
+    if (startGame !== true) return;
+    if (counter === 0) return;
 
     playWord();
   }, [word]);
 
   useEffect(() => {
-    if(counter === 3){
+    if (counter === 3) {
       setStartGame(false);
     }
   }, [counter]);
 
   useEffect(() => {
-    let res = data.filter((elem, index) => { 
-      if(elem.word === word.word) return;
-      if(index > 3) return;
-      
+    let res = data.filter((elem, index) => {
+      if (elem.word === word.word) return;
+      if (index > 3) return;
+
       return elem.word;
     });
 
@@ -87,23 +85,31 @@ function GameAudioCall({user}) {
     res = shuffle(res);
 
     setDisplayWords(res);
-  }, [data, word])
-
+  }, [data, word]);
 
   function playWord() {
     const audio = new Audio(URL + word.audio);
     audio.play();
   }
 
+  function addAnswers(word: any, state: any, elems: any) {
+    if (elems.length === 0) {
+      state([word]);
+    } else {
+      const copy = elems;
+      copy.push(word);
+      state(copy);
+    }
+  }
+
   function checkWord(e) {
     const targetElem = e.target;
     let currentElem: any;
-    WordUpdate(user, word.id);
-    if(e.target.dataset.value === word.word){
-      setShowImage(true)
-      setTrueanswer(prev => prev + 1);
+    if (e.target.dataset.value === word.word) {
+      setShowImage(true);
+      setTrueanswer((prev) => prev + 1);
       addAnswers(word, setRightAnswers, rightAnswers);
-      setMaxSerie(prev => prev + 1);
+      setMaxSerie((prev) => prev + 1);
 
       targetElem.classList.add("guessed");
       setTimeout(() => {
@@ -113,29 +119,19 @@ function GameAudioCall({user}) {
       }, 2000);
     } else {
       currentElem = document.querySelector(`[data-value="${word.word}"]`);
-      targetElem.classList.add('no-guessed')
-      currentElem.classList.add('guessed')
-      setShowImage(true)
-      setFalseAnswer(prev => prev + 1);
+      targetElem.classList.add("no-guessed");
+      currentElem.classList.add("guessed");
+      setShowImage(true);
+      setFalseAnswer((prev) => prev + 1);
       addAnswers(word, setWrongAnswers, wrongAnswers);
       setMaxSerie(0);
-     
+
       setTimeout(() => {
         targetElem.classList.remove("no-guessed");
         currentElem.classList.remove("guessed");
         setShowImage(false);
         setCounter((prev) => prev + 1);
       }, 2000);
-    }
-  }
-
-  function addAnswers(word, state, elems) {
-    if(elems.length === 0) {
-      state([word])
-    } else {
-      let copy = elems;
-      copy.push(word);
-      state(copy);
     }
   }
 
@@ -157,35 +153,35 @@ function GameAudioCall({user}) {
     initGame();
   }
 
-  let LinearProgressStyles = {
+  const LinearProgressStyles = {
     color: "primary",
     marginTop: "10px",
     width: "600px",
     height: "5px",
-    margin: '0 auto',
-    marginBottom: "20px"
-  }
+    margin: "0 auto",
+    marginBottom: "20px",
+  };
 
-  let SpeakerIconStyles = {
-    fontSize: 100, 
-    color: '#3498db', 
-    cursor: 'pointer',
-    margin: '0 auto'
-  }
+  const SpeakerIconStyles = {
+    fontSize: 100,
+    color: "#3498db",
+    cursor: "pointer",
+    margin: "0 auto",
+  };
 
   return (
     <>
-      {startGame ? 
-        <div className="game-body-container">
-        
+      {startGame
+        ? <div className="game-body-container">
+
           <div className="content-conteiner">
-            <LinearProgress style={{...LinearProgressStyles}} variant="determinate" value={counter * 10 } />
-            
+            <LinearProgress style={{ ...LinearProgressStyles }} variant="determinate" value={counter * 10} />
+
             <div className="content">
               <DisplayWordsComponent displayWords={displayWords} checkWord={checkWord} />
 
               <div className="word-image">
-                {showImage ? <img className="game-image" src={URL + word.image} alt=""/> : ""}
+                {showImage ? <img className="game-image" src={URL + word.image} alt="" /> : ""}
               </div>
 
               <div className="speaker-icon">
@@ -196,20 +192,17 @@ function GameAudioCall({user}) {
             <div className="fullscreen-button">
               <FullScreenButton />
             </div>
-          </div>    
-        </div> 
-      :
-        <ResetGame 
-          rightAnswersCounter={trueAnswer} 
-          wrongAnswersCounter={falseAnswer} 
+          </div>
+        </div>
+        : <ResetGame
           rightAnswers={rightAnswers}
           wrongAnswers={wrongAnswers}
           resetgame={rebootGame}
           maxSerie={maxSerie}
-        />  
+        />
       }
     </>
-  )
+  );
 }
 
 const mapStateToProps = (state: RootState) => ({
