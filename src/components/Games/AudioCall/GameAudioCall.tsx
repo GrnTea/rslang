@@ -33,10 +33,8 @@ export default function GameAudioCall() {
 
   const [maxSerie, setMaxSerie] = useState(0);
 
-  const url = `https://react-learnwords-example.herokuapp.com/words?group=${difficulty - 1}&page=${page}`;
-
   function initGame() {
-    fetch(url)
+    fetch(`${URL}words?group=${difficulty - 1}&page=${page}`)
     .then((response) => {
       return response.json();
     })
