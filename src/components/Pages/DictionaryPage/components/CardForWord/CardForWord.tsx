@@ -21,7 +21,8 @@ type Props = {
     lang: string,
     buttonsSettings: any,
     cardSettings: any,
-    user: any
+    user: any,
+    isMain: boolean
 }
 
 function updateListOfUserWords(data:any, metod:string, url:string, authorizationToken:string):void {
@@ -63,7 +64,8 @@ function checkWords(url:string, authorizationToken:string, setCheckedWord):any {
       });
 }
 
-const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSettings, user}) => {
+const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSettings, user, isMain}) => {
+    console.log(isMain)
     const authorizationToken = user.token;
     const userId = user.id;
     const url = "https://rslernwords.herokuapp.com/";
@@ -145,76 +147,80 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
         setIsDeleted(checkedWord ? checkedWord.optional.deleted : "false");
     }
     
-    return (
-        <div className={useStyles.cardContainer}>
-            { cardSettings[4].state ? 
-                <div className={useStyles.cardImg} style={{backgroundImage: `url(${url}${cardInfo.image})`}} /> 
-            : null}
-            <div className={useStyles.cardDescription}>
-                <div className={useStyles.mainWordContainer}>
-                    <div className={isDifficult === "true" ? useStyles.mainDifficultWord : useStyles.mainWord}>
-                        {cardInfo.word}
+    if (isMain && isDeleted === "false" || !isMain) {
+        return (
+            <div className={useStyles.cardContainer}>
+                { cardSettings[4].state ? 
+                    <div className={useStyles.cardImg} style={{backgroundImage: `url(${url}${cardInfo.image})`}} /> 
+                : null}
+                <div className={useStyles.cardDescription}>
+                    <div className={useStyles.mainWordContainer}>
+                        <div className={isDifficult === "true" ? useStyles.mainDifficultWord : useStyles.mainWord}>
+                            {cardInfo.word}
+                        </div>
+                        { cardSettings[3].state ? 
+                        <div className={useStyles.wordTranscription}>
+                            {cardInfo.transcription}
+                        </div> 
+                        : null }
+                        {
+                            cardSettings[0].state ?
+                            <div className={useStyles.wordTranslate}>
+                                {` - ${cardInfo.wordTranslate}`}
+                            </div> : null
+                        }
+                        <div className={useStyles.wordVoiceActing} onClick={handlePlay}>
+                            <img src={voiceImg} alt="Voice acting for word"/>
+                            <audio id={`${cardInfo.word}_audio`}>
+                                <source src={`${url}${cardInfo.audio}`} type="audio/mpeg" />
+                            </audio>
+                            <audio id={`${cardInfo.word}_audioExample`}>
+                                <source src={`${url}${cardInfo.audioExample}`} type="audio/mpeg" />
+                            </audio>
+                            <audio id={`${cardInfo.word}_audioMeaning`}>
+                                <source src={`${url}${cardInfo.audioMeaning}`} type="audio/mpeg" />
+                            </audio>
+                        </div>
                     </div>
-                    { cardSettings[3].state ? 
-                    <div className={useStyles.wordTranscription}>
-                        {cardInfo.transcription}
-                    </div> 
-                    : null }
                     {
-                        cardSettings[0].state ?
-                        <div className={useStyles.wordTranslate}>
-                            {` - ${cardInfo.wordTranslate}`}
+                        cardSettings[2].state ? 
+                        <div className={useStyles.exampleContainer}>
+                            <div className={useStyles.example} dangerouslySetInnerHTML={{__html: `${cardInfo.textExample}`}}></div>
+                            <div className={useStyles.exampleTranslate} >
+                                {cardInfo.textExampleTranslate}
+                            </div>
                         </div> : null
                     }
-                    <div className={useStyles.wordVoiceActing} onClick={handlePlay}>
-                        <img src={voiceImg} alt="Voice acting for word"/>
-                        <audio id={`${cardInfo.word}_audio`}>
-                            <source src={`${url}${cardInfo.audio}`} type="audio/mpeg" />
-                        </audio>
-                        <audio id={`${cardInfo.word}_audioExample`}>
-                            <source src={`${url}${cardInfo.audioExample}`} type="audio/mpeg" />
-                        </audio>
-                        <audio id={`${cardInfo.word}_audioMeaning`}>
-                            <source src={`${url}${cardInfo.audioMeaning}`} type="audio/mpeg" />
-                        </audio>
-                    </div>
+                    {
+                        cardSettings[1].state ? 
+                        <div className={useStyles.exampleContainer}>
+                            <div className={useStyles.example} dangerouslySetInnerHTML={{__html: `${cardInfo.textMeaning}`}}></div>
+                            <div className={useStyles.exampleTranslate} >
+                                {cardInfo.textMeaningTranslate}
+                            </div>
+                        </div> : null
+                    }
+                    {
+                        user.id ?  isDeleted === "true" ? null :
+                        <div className={useStyles.cardButtons}>
+                        {
+                            buttonsSettings[1].state ? isDifficult === "true" ? null : 
+                            <Button className={useStyles.cardBtn} onClick={handleSetAsDifficult}>{BUTTONS[lang].difficultBtn}</Button>
+                            : null
+                        }
+                        {
+                            buttonsSettings[4].state ? 
+                            <Button className={useStyles.cardBtn} onClick={handleRemoveWord}>{BUTTONS[lang].removeBtn}</Button>
+                            : null
+                        }
+                    </div> : null
+                    }
                 </div>
-                {
-                    cardSettings[2].state ? 
-                    <div className={useStyles.exampleContainer}>
-                        <div className={useStyles.example} dangerouslySetInnerHTML={{__html: `${cardInfo.textExample}`}}></div>
-                        <div className={useStyles.exampleTranslate} >
-                            {cardInfo.textExampleTranslate}
-                        </div>
-                    </div> : null
-                }
-                {
-                    cardSettings[1].state ? 
-                    <div className={useStyles.exampleContainer}>
-                        <div className={useStyles.example} dangerouslySetInnerHTML={{__html: `${cardInfo.textMeaning}`}}></div>
-                        <div className={useStyles.exampleTranslate} >
-                            {cardInfo.textMeaningTranslate}
-                        </div>
-                    </div> : null
-                }
-                {
-                    user.id ?  isDeleted === "true" ? null :
-                    <div className={useStyles.cardButtons}>
-                    {
-                        buttonsSettings[1].state ? isDifficult === "true" ? null : 
-                        <Button className={useStyles.cardBtn} onClick={handleSetAsDifficult}>{BUTTONS[lang].difficultBtn}</Button>
-                        : null
-                    }
-                    {
-                        buttonsSettings[4].state ? 
-                        <Button className={useStyles.cardBtn} onClick={handleRemoveWord}>{BUTTONS[lang].removeBtn}</Button>
-                        : null
-                    }
-                </div> : null
-                }
             </div>
-        </div>
-    )
+        )
+    } else {
+        return (<></>)
+    }
 }
 
 const mapStateToProps = (state:RootState) => ({

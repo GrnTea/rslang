@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { RootState } from "../../../redux/reducer";
 import DictionaryStyles from "./DicrionaryPageStyles";
 import WordsCategory from "./WordsCategory";
+import BookToGame from "../../Pages/TextbookPage/BookToGame";
 
 type Props = {
     lang: string,
@@ -49,8 +50,10 @@ const DictionaryPage: React.FC<Props> = ({ lang, user }: IDictionaryProps) => {
   };
 
   return (
+    <>
     <div className={useStyles.dictionaryContainer}>
           <h1>{`${TEXTS[lang].mainTitle} ->  ${TEXTS[lang].section} ${sectionId}`}</h1>
+          <BookToGame difficulty={sectionId} page={0} />
           <div className={useStyles.dictionaryMenu}>
               <button className={useStyles.dictionaryMenuItem} onClick={() => { setCategory("studiedWords"); }}>
                   {TEXTS[lang].studiedWords}
@@ -67,6 +70,7 @@ const DictionaryPage: React.FC<Props> = ({ lang, user }: IDictionaryProps) => {
             : category === "difficultWords" ? <WordsCategory user={user} section={sectionId} filter={filters.difficult}/>
               : <WordsCategory user={user} section={sectionId} filter={filters.deleted} />}
     </div>
+    </>
   );
 };
 

@@ -57,7 +57,9 @@ const TextbookPage: React.FC = () => {
         </Link>
       </div>
       <BookToGame difficulty={sectionId} page={pageId} />
-      {pageWords.map((card: IWord) => <CardForWords key={card.id} cardInfo={card} />)}
+      {pageWords.map((card: IWord) => {
+      return <CardForWords key={card.id} cardInfo={card} isMain={true} />}
+      )}
       <BookToGame difficulty={sectionId} page={pageId} />
       <Pagination page={pageId} sectionId={sectionId} />
     </div>

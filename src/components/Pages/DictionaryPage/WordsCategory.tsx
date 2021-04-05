@@ -32,6 +32,7 @@ const DifficultWords: React.FC<Props> = ({ user, section, filter }: ICategory) =
       )
       .then((jsonData) => {
         setListOfWords(jsonData);
+        console.log(listOfWords);
       });
   }, [section, filter]);
 
@@ -42,7 +43,7 @@ const DifficultWords: React.FC<Props> = ({ user, section, filter }: ICategory) =
           <div className={useStyles.cards}>
               {
                   listOfCard && listOfCard.length !== 0
-                    ? listOfCard.map((card:any) => <CardOfWord key={card.id} cardInfo={card} />)
+                    ? listOfCard.map((card:any) => <CardOfWord key={card.id} cardInfo={card} isMain={false} />)
                     : <div>No items yet.</div>
               }
           </div>
