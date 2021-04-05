@@ -29,7 +29,7 @@ const cardStyles = makeStyles({
     flexWrap: "wrap",
   },
 
-  mainWordContsiner: {
+  mainWordContainer: {
     display: "flex",
     flexWrap: "wrap",
     flexDirection: "row",

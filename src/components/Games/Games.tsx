@@ -19,7 +19,7 @@ export default function Games() {
   const sprint = () => (<Sprint />);
   const savannah = () => (<GameSavannah />);
   return (
-    <div className="games">
+    <div className="games-container">
       <h1>Мини-игры</h1>
 
       <div className="routes">

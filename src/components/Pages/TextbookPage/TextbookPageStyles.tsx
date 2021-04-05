@@ -3,6 +3,7 @@ import {makeStyles} from "@material-ui/core";
 const textbookStyles = makeStyles({
   textbookTitle : {
     margin: "10px 0",
+    textAlign: "center",
   },
   settingsIcon: {
     width: "32px",
@@ -15,7 +16,7 @@ const textbookStyles = makeStyles({
     justifyContent: "space-between",
     alignItems: "center",
     height: "50px",
-    padding: "0 10px",
+    padding: "0 15px",
   },
 });
 
