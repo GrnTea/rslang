@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import UserInfo from "./UserInfo/UserInfo";
 import SignInButton from "../../Authorization/SignInButton/SignInButton";
 import { connect } from "react-redux";
@@ -13,7 +13,7 @@ function UserProfile({ user }) {
         : <SignInButton/>
       }
     </div>
-  )
+  );
 }
 
 const mapStateToProps = (state: RootState) => ({

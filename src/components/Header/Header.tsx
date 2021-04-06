@@ -1,18 +1,20 @@
-import React, { useState} from "react";
-import { AppBar, Toolbar, Typography, ListItemProps } from "@material-ui/core";
+import React, { useState } from "react";
+import {
+  AppBar, Toolbar, Typography, ListItemProps,
+} from "@material-ui/core";
 import { Link } from "react-router-dom";
-import headerStyles from "./HeaderStyles";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Collapse from "@material-ui/core/Collapse";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Drawer from "@material-ui/core/Drawer";
 import MenuItem from "@material-ui/core/MenuItem";
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from "@material-ui/icons/Close";
+import headerStyles from "./HeaderStyles";
 import UserProfile from "./UserProfile/UserProfile";
 import GlobalCss from "../../assets/stylesheets/GlobalCSS";
 import homeIcon from "../../assets/icons/main.svg";
@@ -24,17 +26,15 @@ import statIcon from "../../assets/icons/trend.svg";
 import teamIcon from "../../assets/icons/group.svg";
 import exitIcon from "../../assets/icons/logout.svg";
 
-
-
 const buttonsData = [
- /* {
+  /* {
     label: "Главная",
     href: "/main",
-  },*/
-/*  {
+  }, */
+  /*  {
     label: "Изучение",
     href: "/learning",
-  },*/
+  }, */
   {
     label: "Словарь",
     href: "/dictionary",
@@ -66,18 +66,18 @@ const buttonsData = [
   },
   {
     label: "Exit",
-    href: "/Exit",
+    href: "/",
     icon: exitIcon,
 
   },
 ];
 
-
 function Header() {
-
-  const { appBar, toolbar, logo, list, listLinkItemSection, listLinkItemLearn,
-          listItemContainer, collapsedList, listLinkItem, closeButton,
-          closeButtonContainer, menuIcon } = headerStyles();
+  const {
+    appBar, toolbar, logo, list, listLinkItemSection, listLinkItemLearn,
+    listItemContainer, collapsedList, listLinkItem, closeButton,
+    closeButtonContainer, menuIcon,
+  } = headerStyles();
   const [open, setOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -86,30 +86,23 @@ function Header() {
   };
 
   const displayMenu = () => {
+    const handleDrawerOpen = () => setDrawerOpen(true);
 
-    const handleDrawerOpen = () =>
-      setDrawerOpen(true);
-
-    const handleDrawerClose = () =>
-      setDrawerOpen(false);
+    const handleDrawerClose = () => setDrawerOpen(false);
 
     const getListItems = () => {
       function ListItemLink(props: ListItemProps<'a', { button?: true }>) {
         return <ListItem button component="a" {...props} />;
       }
 
-      return [1,2,3,4,5,6].map((listItem) => {
-        return (
-          <ListItemLink key={`k${listItem}`} href={`#textbook/section/${listItem}`}>
-            <ListItemText className={listLinkItemSection}  primary={`Раздел ${listItem}`}/>
+      return [1, 2, 3, 4, 5, 6].map((listItem) => (
+          <ListItemLink key={`k${listItem}`} href={`#section/${listItem}`}>
+            <ListItemText className={listLinkItemSection} primary={`Раздел ${listItem}`}/>
           </ListItemLink>
-        );
-      });
+      ));
     };
 
-    const getDrawerChoices = () => {
-      return buttonsData.map(({ label, href, icon }) => {
-        return (
+    const getDrawerChoices = () => buttonsData.map(({ label, href, icon }) => (
           <Link
             className={listLinkItem}
             to={href}
@@ -120,9 +113,7 @@ function Header() {
               <MenuItem className={listLinkItem}>{label}</MenuItem>
             </div>
           </Link>
-        );
-      });
-    };
+    ));
 
     return (
       <div >
