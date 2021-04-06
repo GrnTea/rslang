@@ -14,7 +14,7 @@ const Main = () => {
   const classes = styles();
   return <div className={classes.container}>
     <Statistics />
-  </div>
+  </div>;
 };
 
 export default Main;

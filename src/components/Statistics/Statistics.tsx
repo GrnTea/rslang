@@ -79,20 +79,21 @@ const sendStat = async (stat: StatType, user) => {
 
 
 const getDailyStat = async (user) => {
-  /*   const rawData = await fetch(`https://rslernwords.herokuapp.com/users/${user.id}/statistics`, {
-      method: "GET",
-      withCredentials: true,
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    if (!rawData) {
-      return null;
-    }
-    const stat = await rawData.toJSON(); */
-  const stat = testStat;
+  const res = await fetch(`https://rslernwords.herokuapp.com/users/${user.id}/statistics`, {
+    method: "GET",
+    withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  });
+  console.log(res);
+  if (!res.ok) {
+    return [];
+  }
+  const stat = await res.json();
+  //const stat = testStat;
   const cDate = new Date();
   const timeStart = cDate
     .setHours(0, 0, 0, 0);
