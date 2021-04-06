@@ -1,10 +1,11 @@
-import { Link } from "@material-ui/core";
+import { Link, CircularProgress } from "@material-ui/core";
 import React, { Fragment, useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { connect } from "react-redux";
 import Typography from '@material-ui/core/Typography';
 import { RootState } from "../../redux/reducer";
 import DailyStat from "./DailyStat";
+import "./styles.scss";
 
 const testStat = [
   {
@@ -131,14 +132,18 @@ const Statistics = ({ user }) => {
     </Fragment>;
   }
   const [stat, setStat] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     getDailyStat(user).then((stat) => {
+      setLoading(false);
       setStat(stat);
     });
   }, []);
-  return <Fragment >
-    <DailyStat stat={stat} user={user} />
-  </Fragment>;
+  return loading
+    ? <CircularProgress size={128} className="progress"/>
+    : <Fragment >
+      <DailyStat stat={stat} user={user} />
+    </Fragment>;
 };
 
 const mapStateToProps = (state: RootState) => ({
