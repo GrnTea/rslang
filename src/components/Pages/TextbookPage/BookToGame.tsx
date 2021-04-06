@@ -4,10 +4,14 @@ import {
   Link,
 } from "react-router-dom";
 
-function BookToGame({ difficulty, page }) {
+function BookToGame({ difficulty, page, from }) {
   const disputch = useDispatch();
   const handleGame = useCallback(() => {
-    disputch({ type: "GAME_SET_TEXTBOOK" });
+    if (from === 'TEXTBOOK') {
+      disputch({ type: "GAME_SET_TEXTBOOK" });
+    } else if (from === 'DICTIONARY'){
+      disputch({ type: "GAME_SET_DICTIONARY" });
+    }
   }, []);
   handleGame();
   return (

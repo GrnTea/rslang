@@ -22,9 +22,9 @@ function WordUpdate(user, word) {
       if(!data.studing){
         const wordData = {
           "difficulty": data.difficulty,
-        optional: {
-          studying: "true",
-          delited: "false",
+        "optional": {
+          "deleted": "false",
+          "studying": "true",
         },
       } 
       testUpdate("PUT", wordData);
@@ -34,9 +34,9 @@ function WordUpdate(user, word) {
 
       const data = {
         "difficulty": "true",
-        optional: {
-          studying: "true",
-          delited: "false",
+        "optional": {
+          "studying": "true",
+          "deleted": "false",
         },
       };
       testUpdate("POST", data);

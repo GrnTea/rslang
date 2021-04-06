@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router";
 import { RootState } from "../../../redux/reducer";
+import BookToGame from "../TextbookPage/BookToGame";
 import DictionaryStyles from "./DicrionaryPageStyles";
 import WordsCategory from "./WordsCategory";
 
@@ -43,7 +44,7 @@ const DictionaryPage: React.FC<Props> = ({ lang, user }: IDictionaryProps) => {
   const useStyles = DictionaryStyles();
   const [category, setCategory] = useState("studying");
   const filters = {
-    studing: "{\"$and\":[{\"userWord.studying\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
+    studing: "{\"$and\":[{\"userWord.optional.studying\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
     difficult: "{\"$and\":[{\"userWord.difficulty\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
     deleted: "{\"userWord.optional.deleted\":\"true\"}",
   };
@@ -51,6 +52,7 @@ const DictionaryPage: React.FC<Props> = ({ lang, user }: IDictionaryProps) => {
   return (
     <div className={useStyles.dictionaryContainer}>
           <h1>{`${TEXTS[lang].mainTitle} ->  ${TEXTS[lang].section} ${sectionId}`}</h1>
+          <BookToGame difficulty={sectionId} page={'1'} from={'DICTIONARY'}/>
           <div className={useStyles.dictionaryMenu}>
               <button className={useStyles.dictionaryMenuItem} onClick={() => { setCategory("studiedWords"); }}>
                   {TEXTS[lang].studiedWords}

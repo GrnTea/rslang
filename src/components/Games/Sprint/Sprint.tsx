@@ -61,14 +61,13 @@ const handleSetAsDifficult = (url, userId, cardInfo, authorizationToken) => {
       studing: "true",
     },
   };
+
   const urlRequest = `${url}users/${userId}/words/${cardInfo.id}`;
   updateListOfUserWords(data, "POST", urlRequest, authorizationToken);
 };
 
 function Sprint({ game, user }: { game: string, userId: any, userToken: any }) {
-  // console.log(`userId:${userId}`);
-  // console.log(`userToken:${userToken}`);
-  const {difficulty, page} : {difficulty: string, page:string} = useParams();
+  const { difficulty, page }: { difficulty: string, page: string } = useParams();
   const sprintEl = useRef(null);
   const [words, setWords] = useState<Promise<{}[]>>();
   const [errorFetch, setError] = useState(null);
@@ -94,20 +93,40 @@ function Sprint({ game, user }: { game: string, userId: any, userToken: any }) {
     id: "",
   });
 
-  const url = `${API_URL}words?group=${Number(difficulty) - 1}&page=${Number(page)}`;
+  const filters = {
+    studing: "{\"$and\":[{\"userWord.optional.studying\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
+    difficult: "{\"$and\":[{\"userWord.difficulty\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
+    deleted: "{\"userWord.optional.deleted\":\"true\"}",
+    not_deleted: "{\"userWord.optional.deleted\":\"false\"}",
+  };
 
-  function fetchingData() {
-    fetch(url)
+  const urlAll = `${API_URL}words?group=${Number(difficulty) - 1}&page=${Number(page)}`;
+  const urlUserAll = `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=${Number(page)}&filter=${filters.not_deleted}&wordsPerPage=20`;
+  const urlUserDiff = `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=0&filter=${filters.difficult}&wordsPerPage=20`;
+  const urlUserStuding = `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=0&filter=${filters.studing}&wordsPerPage=20`;
+
+  function fetchingData(url) {
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
       .then((res) => res.json())
       .then(
         (result) => {
-          setWords(result);
-          console.log(result);
+          if (game.gameFrom === "DICTIONARY") {
+            setWords(result[0].paginatedResults);
+          } else {
+            setWords(result);
+          }
           setIsLoaded(true);
         },
         (error) => {
           setIsLoaded(true);
           setError(error);
+          console.log(error);
         },
       );
     return function cleanup() {
@@ -116,8 +135,12 @@ function Sprint({ game, user }: { game: string, userId: any, userToken: any }) {
   }
 
   useEffect(() => {
+    if (game.gameFrom === "DICTIONARY") {
+      fetchingData(urlUserDiff);
+    } else {
+      fetchingData(urlAll);
+    }
     setIsLoaded(false);
-    fetchingData();
   }, [difficulty]);
 
   const playGame = useCallback((playWords: []) => {
@@ -132,15 +155,17 @@ function Sprint({ game, user }: { game: string, userId: any, userToken: any }) {
     const numOfWord = random(playWords.length - 1);
     const numFakeWord = numOfWord < playWords.length ? numOfWord + 1 : numOfWord - 1;
     wordData.word = playWords ? playWords[numOfWord].word : playWords;
-    wordData.id = playWords ? playWords[numOfWord].id : playWords;
+    const idC = game.gameFrom === "DICTIONARY" ? "_id" : "id";
+    wordData.id = playWords ? playWords[numOfWord][idC] : playWords;
     try {
       wordData.wordTranslate = wordData.isTrueTranslate
         ? playWords[numOfWord].wordTranslate : playWords[numFakeWord].wordTranslate;
     } catch (e) {
       console.log(ERROR + e);
     }
-    if (false) {
-      setPlayWords(playWords.filter((item, index) => numOfWord !== index));
+    setPlayWords(playWords.filter((item, index) => numOfWord !== index));
+    if (playWords.length === 1) {
+      setFinish(true);
     }
 
     setCurrentWord(wordData);
@@ -227,10 +252,10 @@ function Sprint({ game, user }: { game: string, userId: any, userToken: any }) {
   if (finish) {
     return (
       <ResetGame
-      maxSerie={trueAnswer}
-      rightAnswers={rightAnswers}
-      wrongAnswers={wrongAnswers}
-      resetgame={beginNow}
+        maxSerie={trueAnswer}
+        rightAnswers={rightAnswers}
+        wrongAnswers={wrongAnswers}
+        resetgame={beginNow}
       />
     );
   }

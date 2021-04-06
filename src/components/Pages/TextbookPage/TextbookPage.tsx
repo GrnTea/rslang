@@ -57,7 +57,7 @@ const TextbookPage: React.FC = () => {
           <img className={useStyles.settingsIcon} src={settingsIcon} alt="settings"/>
         </Link>
       </div>
-      <BookToGame difficulty={sectionId} page={pageId} />
+      <BookToGame difficulty={sectionId} page={pageId} from={'TEXTBOOK'}/>
       {pageWords.map((card: IWord) => <CardForWords key={card.id} cardInfo={card} />)}
       <BookToGame difficulty={sectionId} page={pageId} />
       <Pagination page={pageId} sectionId={sectionId} />
