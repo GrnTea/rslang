@@ -14,9 +14,10 @@ import Begin from "./Begin";
 import correct from "../../../assets/sound/correct-choice.wav";
 import wrong from "../../../assets/sound/error.wav";
 import {
-  ERROR, URL, ERROR_WORD, RIGHT_ARROW, RIGHT,
+  ERROR, ERROR_WORD, RIGHT_ARROW, RIGHT,
 } from "./sprintconstants";
 import { RootState } from "../../../redux/reducer";
+import API_URL from "../../Constants/constants";
 
 const random = (max: number): number => {
   const min = 0;
@@ -93,7 +94,7 @@ function Sprint({ game, user }: { game: string, userId: any, userToken: any }) {
     id: "",
   });
 
-  const url = `${URL}/words?group=${Number(difficulty) - 1}&page=${Number(page)}`;
+  const url = `${API_URL}words?group=${Number(difficulty) - 1}&page=${Number(page)}`;
 
   function fetchingData() {
     fetch(url)

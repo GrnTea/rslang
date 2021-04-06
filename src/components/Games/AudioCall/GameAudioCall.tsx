@@ -15,8 +15,9 @@ import ResetGame from "../ResetGame/ResetGame";
 import FullScreenButton from "./FullScreenButton";
 
 import "./game.css";
+import API_URL from "../../Constants/constants";
 
-const URL = "https://rslernwords.herokuapp.com/";
+const URL = API_URL;
 
 function GameAudioCall({ user }) {
   const { difficulty, page } = useParams();

@@ -10,8 +10,9 @@ import error from "../../../assets/sound/error.mp3";
 import FavoriteTwoToneIcon from "@material-ui/icons/FavoriteTwoTone";
 
 import FullScreenButton from "./FullScreenButton";
+import API_URL from "../../Constants/constants";
 
-const URL = "https://rslernwords.herokuapp.com/";
+const URL = API_URL;
 
 export default function GameSavannah() {
   const { difficulty, page } = useParams();

@@ -1,4 +1,6 @@
-const URL = "https://rslernwords.herokuapp.com/";
+import API_URL from "../../Constants/constants";
+
+const URL = API_URL;
 
 function WordUpdate(user, word) {
   // let words = [...props[0]]

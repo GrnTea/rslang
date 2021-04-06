@@ -17,6 +17,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { RootState } from "../../../redux/reducer";
 import { signIn, UserType } from "../../../redux/user_reducer";
+import API_URL from "../../Constants/constants";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -47,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const getUser = async (userId, token) => {
-  const rawResponse = await fetch(`https://rslernwords.herokuapp.com/users/${userId}`, {
+  const rawResponse = await fetch(`${API_URL}users/${userId}`, {
     method: "GET",
     withCredentials: true,
     headers: {
@@ -78,7 +79,7 @@ function SignIn({ signIn }) {
   const onSubmit = async (data, e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    const rawResponse = await fetch("https://rslernwords.herokuapp.com/signin", {
+    const rawResponse = await fetch(`${API_URL}signin`, {
       method: "POST",
       headers: {
         Accept: "application/json",

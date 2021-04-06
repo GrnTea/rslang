@@ -9,6 +9,7 @@ import WordUpdate from "../WordUpdate/WordUpdate";
 import { signOut } from "../../../redux/user_reducer";
 import { RootState } from "../../../redux/reducer";
 import { connect } from "react-redux";
+import API_URL from '../../Constants/constants';
 
 
 function ResetGame({user, maxSerie, rightAnswers, wrongAnswers, resetgame}) {
@@ -22,7 +23,7 @@ function ResetGame({user, maxSerie, rightAnswers, wrongAnswers, resetgame}) {
     margin: '0 auto'
   }
 
-  const herokuUrl = 'https://rslernwords.herokuapp.com/';
+  const herokuUrl = API_URL;
 
   let [trueWords, setTrueWords] = useState([]);
   let [falseWords, setFalseWords] = useState([]);
@@ -97,7 +98,7 @@ function ResetGame({user, maxSerie, rightAnswers, wrongAnswers, resetgame}) {
   useEffect(() => {
     if(gameStatistics === 0) return;
    
-    fetch(`https://rslernwords.herokuapp.com/users/${user.id}/statistics`, {
+    fetch(`${API_URL}users/${user.id}/statistics`, {
       method: "POST",
       withCredentials: true,
       headers: {
