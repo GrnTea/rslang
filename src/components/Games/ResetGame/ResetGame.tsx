@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import EmojiEmotionsTwoToneIcon from '@material-ui/icons/EmojiEmotionsTwoTone';
 import "./resetGame.css";
+import WordUpdate from "../WordUpdate/WordUpdate";
 
 import { signOut } from "../../../redux/user_reducer";
 import { RootState } from "../../../redux/reducer";
@@ -113,6 +114,15 @@ function ResetGame({user, maxSerie, rightAnswers, wrongAnswers, resetgame}) {
     })
 
   }, [gameStatistics]);
+
+  useEffect(() => {
+    rightAnswers.forEach(element => {
+      WordUpdate(user, element.id);
+    });
+    wrongAnswers.forEach(element => {
+      WordUpdate(user, element.id);
+    });
+  }[]);
  
 
   return (
