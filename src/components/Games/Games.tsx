@@ -11,7 +11,7 @@ import "./games.css";
 import GameDescription from "./GameDescription";
 import {
   GAME_NAME_AUDIOCALL_RU, DESCRIPTION_AUDIOCALL_RU, DESCRIPTION_SPRINT_RU,
-  GAME_NAME_SPRINT_RU, SELECT_AUDIOCALL, SELECT_SPRINT, DESCRIPTION_SAVANNA_RU, GAME_NAME_SAVANNA_RU, SELECT_SAVANNAH
+  GAME_NAME_SPRINT_RU, SELECT_AUDIOCALL, SELECT_SPRINT, DESCRIPTION_SAVANNA_RU, GAME_NAME_SAVANNA_RU, SELECT_SAVANNAH,
 } from "./gameSettings";
 
 export default function Games() {
@@ -19,8 +19,8 @@ export default function Games() {
   const sprint = () => (<Sprint />);
   const savannah = () => (<GameSavannah />);
   return (
-    <div className="games">
-      <h2>games</h2>
+    <div className="games-container">
+      <h1>Мини-игры</h1>
 
       <div className="routes">
         <Link className="links" to="/games/audiocall">audiocall</Link>

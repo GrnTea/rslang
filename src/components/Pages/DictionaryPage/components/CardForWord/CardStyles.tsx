@@ -13,6 +13,7 @@ const cardStyles = makeStyles({
     width: "170px",
     height: "170px",
     display: "flex",
+    flexShrink: 0,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: "50%",
@@ -28,8 +29,9 @@ const cardStyles = makeStyles({
     flexWrap: "wrap",
   },
 
-  mainWordContsiner: {
+  mainWordContainer: {
     display: "flex",
+    flexWrap: "wrap",
     flexDirection: "row",
     columnGap: "0.5em",
     fontSize: "23px",
@@ -37,6 +39,11 @@ const cardStyles = makeStyles({
 
   mainWord: {
     color: "#1665B4",
+    fontWeight: "bold",
+  },
+
+  mainDifficultWord: {
+    color: "red",
     fontWeight: "bold",
   },
 

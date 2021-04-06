@@ -1,6 +1,5 @@
+import React, { useState } from "react";
 
-import React from "react";
-import { useState } from "react";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { useForm } from "react-hook-form";
@@ -21,6 +20,7 @@ import { signIn, UserType } from "../../../redux/user_reducer";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    // height: "72vh",
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
@@ -51,9 +51,9 @@ const getUser = async (userId, token) => {
     method: "GET",
     withCredentials: true,
     headers: {
-      "Authorization": `Bearer ${token}`,
-      "Accept": "application/json",
-      "Content-Type": "application/json"
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+      "Content-Type": "application/json",
     },
   });
   if (rawResponse.ok) {
@@ -81,8 +81,8 @@ function SignIn({ signIn }) {
     const rawResponse = await fetch("https://rslernwords.herokuapp.com/signin", {
       method: "POST",
       headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });

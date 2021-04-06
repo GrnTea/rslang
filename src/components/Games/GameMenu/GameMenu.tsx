@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 
 import "./gamemenu.css";
 import {
   Link,
   Route,
-  useLocation
+  useLocation,
 } from "react-router-dom";
 
 export default function GameMenu(props: any) {
@@ -15,17 +15,17 @@ export default function GameMenu(props: any) {
 
   const gamePath = `/games/${props.gameSelected}/level/:difficulty/:page`;
   const location = useLocation();
-  let [hide, setHide] = useState(false);
+  const [hide, setHide] = useState(false);
 
   useEffect(() => {
-    let currentLocatin = location.pathname;
-    let chunckL = currentLocatin.split("/").pop();
-    let num = Number(chunckL);
+    const currentLocatin = location.pathname;
+    const chunckL = currentLocatin.split("/").pop();
+    const num = Number(chunckL);
 
-    if(typeof num === "number" && !isNaN(num)){
-      setHide(true)
+    if (typeof num === "number" && !isNaN(num)) {
+      setHide(true);
     } else {
-      setHide(false)
+      setHide(false);
     }
   }, [location]);
 
@@ -34,7 +34,7 @@ export default function GameMenu(props: any) {
 
       <div className={hide ? "game-menu hide" : "game-menu"}>
         <div className="game-name">{props.gameName}</div>
-        <div className="game-desription">{props.description}</div>
+        <div className="game-description">{props.description}</div>
         <div className="game-level">выберите уровень</div>
         <div className="button-group">
           {arrLinks}
@@ -47,6 +47,6 @@ export default function GameMenu(props: any) {
       </Route>
     </div>
     </div>
-    
+
   );
 }

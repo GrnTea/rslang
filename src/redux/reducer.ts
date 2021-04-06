@@ -16,7 +16,7 @@ const settingsReducer = combineReducers({
 });
 
 const rootReducer = combineReducers({
-  settingsReducer: settingsReducer,
+  settingsReducer,
   user: userReducer,
   game: gameReducer,
 });

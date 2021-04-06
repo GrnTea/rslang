@@ -19,10 +19,9 @@ import TextbookPage from "../Pages/TextbookPage/TextbookPage";
 import appStyles from "./AppStyles";
 import DictionaryPage from "../Pages/DictionaryPage/DictionaryPage";
 import SectionComponent from "../SectionComponent/SectionComponent";
+import MainPage from "../MainPage";
 
-
-
-/*const App = () => {
+/* const App = () => {
   const useStyles = appStyles();
   return (
     <React.Fragment>
@@ -52,7 +51,7 @@ import SectionComponent from "../SectionComponent/SectionComponent";
           </Route> *!/}
         </Switch>
       </HashRouter>
-    </React.Fragment>*/
+    </React.Fragment> */
 
 const App = () => {
   const useStyles = appStyles();
@@ -62,11 +61,11 @@ const App = () => {
 
     <HashRouter>
     <Header />
-      <main className={useStyles.content}>
+      <main className={useStyles.mainContent}>
         <Switch>
           <Route exact path="/">
-            <Header />
-            <Link className="link-navigation" to='/games'>games</Link>
+            <MainPage />
+            {/*<Link className="link-navigation" to='/games'>games</Link>*/}
           </Route>
           <Route path="/games">
             <Games />
@@ -80,21 +79,21 @@ const App = () => {
           <Route path="/profile">
             <UserProfile />
           </Route>
-          <Route path="/section/:sectionId/:pageId" render={props => <TextbookPage {...props.match.params}/>} />
-          <Route path="/section/:sectionId" render={props => <SectionComponent {...props.match.params}/>} />
-          <Route path="/dictionary">
-            <DictionaryPage />
-          </Route>
+          <Route path="/section/:sectionId/:pageId" render={(props) => <TextbookPage {...props.match.params}/>} />
+          <Route path="/section/:sectionId" render={(props) => <SectionComponent {...props.match.params}/>} />
+          <Route path="/dictionary/:sectionId/" render={(props) => <DictionaryPage {...props.match.params}/>} />
           <Route path="/team">
             <TeamPage />
           </Route>
           <Route path="/settings">
             <SettingsPage />
           </Route>
+
         </Switch>
       </main>
 
       <Footer />
+
     </HashRouter>
 
   </React.Fragment>
@@ -104,14 +103,13 @@ const App = () => {
 
 export default App;
 
-
-{/*// render={props =>*/}
-{/*// <SectionComponent {...props.match.params}/>*/}
+{ /* // render={props => */ }
+{ /* // <SectionComponent {...props.match.params}/> */ }
 //   {/*<Switch>
-{/*<Route path={`${path}/:pageId`} component={TextbookPage} />*/}
+{ /* <Route path={`${path}/:pageId`} component={TextbookPage} /> */ }
 // </Switch>*!/}
 // </SectionComponent>*/
 // {/*<Route path="/:pageId"><TextbookPage/>}<Route/>*/}
 
-{/*<Route path="/section/:sectionId/:pageId" render={props => <TextbookPage {...props.match.params}/>} />*/}
+{ /* <Route path="/section/:sectionId/:pageId" render={props => <TextbookPage {...props.match.params}/>} /> */ }
 /**/

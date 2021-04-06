@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import {
   AccessAlarm, Score, VolumeUp, VolumeOff,
 } from "@material-ui/icons";
-import tada from "../../../assets/sound/tada.mp3";
 import useSound from "use-sound";
+import tada from "../../../assets/sound/tada.mp3";
 
 let int = null;
 
