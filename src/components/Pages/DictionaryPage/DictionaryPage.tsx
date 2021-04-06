@@ -41,9 +41,9 @@ const TEXTS = {
 const DictionaryPage: React.FC<Props> = ({ lang, user }: IDictionaryProps) => {
   const { sectionId } = useParams();
   const useStyles = DictionaryStyles();
-  const [category, setCategory] = useState("studiedWords");
+  const [category, setCategory] = useState("studying");
   const filters = {
-    studing: "{\"$and\":[{\"userWord.studing\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
+    studing: "{\"$and\":[{\"userWord.studying\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
     difficult: "{\"$and\":[{\"userWord.difficulty\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
     deleted: "{\"userWord.optional.deleted\":\"true\"}",
   };
