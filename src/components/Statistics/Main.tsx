@@ -4,8 +4,10 @@ import Statistics from "./Statistics";
 
 const styles = makeStyles({
   container: {
+    width: "100%",
     maxWidth: "1024px",
-    margin: "132px auto 64px auto",
+    margin: "12px auto",
+    padding: "0 12px"
     fontSize: "22px",
   },
 });

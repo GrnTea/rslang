@@ -14,12 +14,18 @@ const DailyStat = ({ user, stat }) => {
   if (stat.length) {
     return <div>
       <h1>{"Today"}</h1>
-      <div>
-        <i className={"icon icon__study"}></i>
+      <div className="iconed-block">
+        <i className={"icon icon--study"}></i>
         <span>{`Words learned: ${stat.reduce((acc, itm) => acc + itm.learnedWords, 0)}`}</span>
       </div>
-      <div>{`Correct answers: ${getOverallPercent(stat)}%`}</div>
-      <div>{"Games activity:"}</div>
+      <div className="iconed-block">
+        <i className={"icon icon--pie"}></i>
+        <span>{`Correct answers: ${getOverallPercent(stat)}%`}</span>
+      </div>
+      <h3 className="iconed-block">
+        <i className={"icon icon--game icon--large"}></i>
+        <span>{"Games activity:"}</span>
+      </h3>
       {stat.map((itm, idx) => <GameStatCard
         key={idx}
         stat={itm}

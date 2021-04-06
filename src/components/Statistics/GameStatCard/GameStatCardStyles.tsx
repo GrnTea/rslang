@@ -4,11 +4,11 @@ const styles = makeStyles(
   {
     container: {
       maxWidth: 1200,
-      margin: "0 auto",
+      margin: "12px auto",
     },
     img: {
       width: "100%",
-      maxHeight: "150px",
+      height: "150px",
       objectFit: "cover",
       position: "absolute",
       top: "0",

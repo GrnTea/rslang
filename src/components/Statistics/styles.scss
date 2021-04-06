@@ -1,9 +1,26 @@
-.icon{
+.iconed-block {
+  display: flex;
+  align-items: center;
+}
+.icon {
   display: inline-block;
-  width:20px;
+  margin: 0 5px;
+  width: 20px;
   height: 20px;
-  &__study{
-    background: url('../../assets/icons/reading-book.svg');
+  &--study {
+    background: url("../../assets/icons/reading-book.svg");
     background-size: contain;
+  }
+  &--pie {
+    background: url("../../assets/icons/pie-chart.svg");
+    background-size: contain;
+  }
+  &--game {
+    background: url("../../assets/icons/games-black.svg");
+    background-size: contain;
+  }
+  &--large {
+    width: 28px;
+    height: 28px;
   }
 }

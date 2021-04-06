@@ -10,11 +10,9 @@ import Games from "../../../assets/staticData/gamesData.js";
 const getPercent = (stat) => Math.round((stat.rightAnswers / (stat.rightAnswers + stat.wrongAnswers)) * 100);
 
 const GameStatCard = ({ stat }) => {
-  console.log(stat);
   const game = Games.find((itm) => itm.id === stat.gameId);
-  console.log(game);
   const classes = styles();
-  return <Grid container spacing={3} className={classes.container}>
+  return <Grid container className={classes.container}>
     <Grid item xs={12}>
       <Paper>
         <Grid container>

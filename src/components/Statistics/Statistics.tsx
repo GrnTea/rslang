@@ -88,7 +88,6 @@ const getDailyStat = async (user) => {
       "Content-Type": "application/json",
     },
   });
-  console.log(res);
   if (!res.ok) {
     return [];
   }
@@ -98,7 +97,6 @@ const getDailyStat = async (user) => {
   const timeStart = cDate
     .setHours(0, 0, 0, 0);
   const timeEnd = cDate.setDate(cDate.getDate() + 1);
-  console.log(timeStart, timeEnd);
   return stat.filter((itm) => (itm.date >= timeStart)
     && (itm.date < timeEnd))
     .reduce((acc, itm) => {
@@ -134,15 +132,10 @@ const Statistics = ({ user }) => {
   }
   const [stat, setStat] = useState([]);
   useEffect(() => {
-    console.log('getDailyStat');
-    getDailyStat(user).then((res) => {
-      console.log(res);
-      setStat(res);
+    getDailyStat(user).then((stat) => {
+      setStat(stat);
     });
   }, []);
-  useEffect(() => {
-    console.log(stat.map((itm) => console.log(itm)));
-  }, [stat]);
   return <Fragment >
     <DailyStat stat={stat} user={user} />
   </Fragment>;
