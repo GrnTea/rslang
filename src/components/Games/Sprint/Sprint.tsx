@@ -102,6 +102,7 @@ function Sprint({ game, user }: { game: string, userId: any, userToken: any }) {
       .then(
         (result) => {
           setWords(result);
+          console.log(result);
           setIsLoaded(true);
         },
         (error) => {
@@ -267,4 +268,4 @@ const mapStateToProps = (state: RootState) => ({
   user: state.user,
 });
 
-export default Sprint;
+export default connect(mapStateToProps, null)(Sprint);
