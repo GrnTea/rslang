@@ -1,0 +1,167 @@
+*:fullscreen{
+  background-color: white;
+}
+
+.words-container{
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+}
+
+.words-display{
+  margin: 50px auto;
+  padding-left: 5px;
+  font-family: sans-serif;
+  font-size: 20px;
+  position: relative;
+  min-height: 200px;
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-left: 5px solid #2980b9;
+}
+
+.word-display{
+  height: 20px;
+  cursor: pointer;
+}
+
+.word-absolute{
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  font-size: 20px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #fd79a8;
+}
+
+.guess{
+  color: green;
+}
+
+.not-guess{
+  color: red;
+}
+
+.life-container{
+  position: absolute;
+  right: 0;
+}
+
+.life-icon{
+  position: absolute;
+  right: 0;
+}
+
+.life-counter{
+  position: absolute;
+  right: 40px;
+}
+
+
+/* reset game */
+
+.reset-game{
+  margin-top: 20px;
+}
+
+.right-answers{
+  margin-top: 20px;
+}
+
+.wrong-answers{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.true-words,
+.false-words{
+  display: flex;
+  margin-top: 10px;
+  /* align-items: center; */
+}
+
+.play-sound{
+  cursor: pointer;
+}
+
+.end-game-emotion{
+  margin: 0 auto;
+  width: 100px;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fullscreen-button{
+  text-align: center;
+}
+
+.fullscreen-button-cursor{
+  cursor: pointer;
+}
+
+.wrong-answers-counter,
+.right-answers-counter{
+  display: flex;
+}
+
+.answers-separator{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  height: 2px;
+  background-color: #3498db;
+}
+
+.right-counter,
+.wrong-counter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  border-radius: 10px;
+  padding: 0 10px 0 10px;
+  color: white;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+.answers{
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: silver;
+  font-size: 18px;
+}
+
+.right-counter{
+  background-color: #2ecc71;
+}
+
+.wrong-counter{
+  background-color: #e74c3c;
+}
+
+.word-answer{
+  margin-left: 10px;
+  text-transform: capitalize;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.separator{
+  margin-top: 12px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 20px;
+  width: 15px;
+  height: 2px;
+  background-color: silver;
+}
+
+.ru{
+  margin-left: 0px;
+  color: silver;
+  font-weight: 500;
+}
