@@ -4,14 +4,12 @@ import {Link} from "react-router-dom";
 import sectionStyles from "./SectionComponentStyles";
 import setColor from "../../utils";
 
-
-
 export default function SectionComponent() {
   const useStyles = sectionStyles();
   const { sectionId } = useParams();
 
-  let { path, url } = useRouteMatch();
-  console.log('path url', path, url, typeof sectionId);
+  const { path, url } = useRouteMatch();
+  console.log("path url", path, url, typeof sectionId);
 
   return (
     <div className={useStyles.sectionContainer}>

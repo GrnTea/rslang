@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CardStyles from "./CardStyles";
 import voiceImg from "../../../../../assets/icons/voiceIcon.svg";
 import { RootState } from "../../../../../redux/reducer";
@@ -47,11 +47,42 @@ function updateListOfUserWords(data:any, metod:string, url:string, authorization
       .catch((error)=> {alert(error)});
 }
 
+function checkWords(url:string, authorizationToken:string, setCheckedWord):any {
+    fetch(url , {
+        method: 'GET',
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authorizationToken}`
+        }
+    })
+      .then(
+        (response) => response.json(),
+      )
+      .then((jsonData) => {
+        setCheckedWord(jsonData);
+      });
+}
+
 const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSettings, user}) => {
     const authorizationToken = user.token;
     const userId = user.id;
     const url = "https://rslernwords.herokuapp.com/";
     const useStyles = CardStyles();
+    const cardId = cardInfo.id || cardInfo._id;
+    const [checkedWord, setCheckedWord] = useState("");
+    const [isDeleted, setIsDeleted] = useState(checkedWord ? checkedWord.optional.deleted : "false");
+    const [isDifficult, setIsDifficult] = useState(checkedWord ? checkedWord.difficulty : "false");
+
+    useEffect(() => {
+        const checkURL = `${url}users/${userId}/words/${cardId}`;
+        checkWords(checkURL, authorizationToken, setCheckedWord);
+    }, [isDeleted]);
+
+    useEffect(() => {
+        setIsDeleted(checkedWord ? checkedWord.optional.deleted : "false");
+        setIsDifficult(checkedWord ? checkedWord.difficulty : "false");
+    }, [checkedWord]);
+
     const handlePlay = () => {
         const allAudio = document.getElementsByTagName("audio");
 
@@ -79,6 +110,7 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
     }
 
     const handleSetAsDifficult = () => {
+
         const data = {
             "difficulty": "true",
             "optional": {
@@ -86,31 +118,41 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
             }
         }
 
-        const urlRequest = `${url}users/${userId}/words/${cardInfo.id}`;
+        const urlRequest = `${url}users/${userId}/words/${cardId}`;
+        
+        updateListOfUserWords(data, "POST", urlRequest, authorizationToken); 
 
-        updateListOfUserWords(data, "POST", urlRequest, authorizationToken);
+        checkWords(urlRequest, authorizationToken, setCheckedWord); 
     }
 
     const handleRemoveWord = () => {
         const data = {
-            "difficulty": "true",
+            "difficulty": checkedWord ? checkedWord.difficulty : "false",
             "optional": {
                 "deleted": "true"
             }
         }
 
-        const urlRequest = `${url}users/${userId}/words/${cardInfo.id}`;
+        const urlRequest = `${url}users/${userId}/words/${cardId}`;
 
-        updateListOfUserWords(data, "PUT", urlRequest, authorizationToken);
+        if (checkedWord) {
+            updateListOfUserWords(data, "PUT", urlRequest, authorizationToken);
+        } else {
+            updateListOfUserWords(data, "POST", urlRequest, authorizationToken);
+        }
+
+        checkWords(urlRequest, authorizationToken, setCheckedWord);
+        setIsDeleted(checkedWord ? checkedWord.optional.deleted : "false");
     }
-
+    
     return (
         <div className={useStyles.cardContainer}>
             { cardSettings[4].state ? 
-            <div className={useStyles.cardImg} style={{backgroundImage: `url(${url}${cardInfo.image})`}} /> : null}
+                <div className={useStyles.cardImg} style={{backgroundImage: `url(${url}${cardInfo.image})`}} /> 
+            : null}
             <div className={useStyles.cardDescription}>
                 <div className={useStyles.mainWordContainer}>
-                    <div className={useStyles.mainWord}>
+                    <div className={isDifficult === "true" ? useStyles.mainDifficultWord : useStyles.mainWord}>
                         {cardInfo.word}
                     </div>
                     { cardSettings[3].state ? 
@@ -155,9 +197,11 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
                         </div>
                     </div> : null
                 }
-                <div className={useStyles.cardButtons}>
+                {
+                    user.id ?  isDeleted === "true" ? null :
+                    <div className={useStyles.cardButtons}>
                     {
-                        buttonsSettings[1].state ? 
+                        buttonsSettings[1].state ? isDifficult === "true" ? null : 
                         <Button className={useStyles.cardBtn} onClick={handleSetAsDifficult}>{BUTTONS[lang].difficultBtn}</Button>
                         : null
                     }
@@ -166,7 +210,8 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
                         <Button className={useStyles.cardBtn} onClick={handleRemoveWord}>{BUTTONS[lang].removeBtn}</Button>
                         : null
                     }
-                </div>
+                </div> : null
+                }
             </div>
         </div>
     )

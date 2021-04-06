@@ -21,9 +21,7 @@ import DictionaryPage from "../Pages/DictionaryPage/DictionaryPage";
 import SectionComponent from "../SectionComponent/SectionComponent";
 import MainPage from "../MainPage";
 
-
-
-/*const App = () => {
+/* const App = () => {
   const useStyles = appStyles();
   return (
     <React.Fragment>
@@ -53,7 +51,7 @@ import MainPage from "../MainPage";
           </Route> *!/}
         </Switch>
       </HashRouter>
-    </React.Fragment>*/
+    </React.Fragment> */
 
 const App = () => {
   const useStyles = appStyles();
@@ -81,11 +79,9 @@ const App = () => {
           <Route path="/profile">
             <UserProfile />
           </Route>
-          <Route path="/section/:sectionId/:pageId" render={props => <TextbookPage {...props.match.params}/>} />
-          <Route path="/section/:sectionId" render={props => <SectionComponent {...props.match.params}/>} />
-          <Route path="/dictionary">
-            <DictionaryPage />
-          </Route>
+          <Route path="/section/:sectionId/:pageId" render={(props) => <TextbookPage {...props.match.params}/>} />
+          <Route path="/section/:sectionId" render={(props) => <SectionComponent {...props.match.params}/>} />
+          <Route path="/dictionary/:sectionId/" render={(props) => <DictionaryPage {...props.match.params}/>} />
           <Route path="/team">
             <TeamPage />
           </Route>
@@ -107,14 +103,13 @@ const App = () => {
 
 export default App;
 
-
-{/*// render={props =>*/}
-{/*// <SectionComponent {...props.match.params}/>*/}
+{ /* // render={props => */ }
+{ /* // <SectionComponent {...props.match.params}/> */ }
 //   {/*<Switch>
-{/*<Route path={`${path}/:pageId`} component={TextbookPage} />*/}
+{ /* <Route path={`${path}/:pageId`} component={TextbookPage} /> */ }
 // </Switch>*!/}
 // </SectionComponent>*/
 // {/*<Route path="/:pageId"><TextbookPage/>}<Route/>*/}
 
-{/*<Route path="/section/:sectionId/:pageId" render={props => <TextbookPage {...props.match.params}/>} />*/}
+{ /* <Route path="/section/:sectionId/:pageId" render={props => <TextbookPage {...props.match.params}/>} /> */ }
 /**/

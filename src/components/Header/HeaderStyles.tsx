@@ -42,6 +42,7 @@ const headerStyles = makeStyles(
     },
 
     listLinkItem: {
+      width: "auto",
       textDecoration: "none",
       color: "#FFFFFF",
       padding: "10px 0",
