@@ -7,7 +7,8 @@ import { connect } from "react-redux";
 import Sprint from "./Sprint/Sprint";
 import GameAudioCall from "./AudioCall/GameAudioCall";
 import GameSavannah from "./Savannah/GameSavannah";
-import "./games.scss";
+import GameHangman from "./Hangman/GameHangman";
+import "./games.css";
 
 import GameDescription from "./GameDescription";
 import {
@@ -21,6 +22,7 @@ function Games({ lang }: {lang:string}) {
   const audioCall = () => (<GameAudioCall />);
   const sprint = () => (<Sprint />);
   const savannah = () => (<GameSavannah />);
+  const hangman = () => (<GameHangman />);
 
   const [hideMenu, setHideMenu] = useState(false);
   const location = useLocation();
@@ -59,6 +61,10 @@ function Games({ lang }: {lang:string}) {
       <Route path="/games/savannah">
         <GameDescription gameName={GAME[lang].SAVANNA.NAME} description={GAME[lang].SAVANNA.DESCRIPTION()}
         game={savannah} gameSelected ={SELECT_SAVANNAH} />
+      </Route>
+      <Route path="/games/hangman">
+        <GameDescription gameName={GAME_NAME_HANGMAN_RU} description={DESCRIPTION_HANGMAN_RU}
+         game={hangman} gameSelected ={SELECT_HANGMAN} />
       </Route>
     </div>
   );
