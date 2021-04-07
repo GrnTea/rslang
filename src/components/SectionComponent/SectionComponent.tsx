@@ -8,8 +8,7 @@ export default function SectionComponent() {
   const useStyles = sectionStyles();
   const { sectionId } = useParams();
 
-  const { path, url } = useRouteMatch();
-  console.log("path url", path, url, typeof sectionId);
+  const { url } = useRouteMatch();
 
   return (
     <div className={useStyles.sectionContainer}>

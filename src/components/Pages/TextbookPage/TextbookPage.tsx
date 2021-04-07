@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import BookToGame from "./BookToGame";
 
 import Pagination from "../../Pagination/Pagination";
-import {useParams, useRouteMatch} from "react-router";
+import {useParams} from "react-router";
 import CardForWords from "../DictionaryPage/components/CardForWord/CardForWord";
 import textbookStyles from "./TextbookPageStyles";
 import setColor from "../../../utils";
@@ -51,11 +51,16 @@ const TextbookPage: React.FC = () => {
   return (
     <div className={useStyles.textbookSectionContainer}>
       <div className={useStyles.textbookSectionTitle} style={{backgroundColor: setColor(sectionId)}}>
-        <h3>Раздел: {sectionId} Страница: {pageId}</h3>
+        <div className={useStyles.textbookSectionBlock}>
+          <h3 className={useStyles.textbookSectionTitlePage}>Раздел: {sectionId} Страница: {pageId}</h3>
+        </div>
         <h1 className={useStyles.textbookTitle}>Изучение </h1>
-        <Link to="/settings">
-          <img className={useStyles.settingsIcon} src={settingsIcon} alt="settings"/>
-        </Link>
+        <div className={useStyles.textbookSectionBlock}>
+          <Link to="/settings">
+            <img className={useStyles.settingsIcon} src={settingsIcon} alt="settings"/>
+          </Link>
+        </div>
+
       </div>
       <BookToGame difficulty={sectionId} page={pageId} from={'TEXTBOOK'}/>
       {pageWords.map((card: IWord) => <CardForWords key={card.id} cardInfo={card} />)}

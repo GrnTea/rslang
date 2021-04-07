@@ -34,6 +34,11 @@
   padding: 5px 20px;
 }
 
+.link-navigation:hover{
+  background-color: #1639B4;
+  color: #fff;
+}
+
 .link-navigation{
   border-left: none;
 }

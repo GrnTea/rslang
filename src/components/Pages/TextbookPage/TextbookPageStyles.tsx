@@ -13,10 +13,17 @@ const textbookStyles = makeStyles({
     height: "60px",
     padding: "0 15px",
   },
+  textbookSectionBlock: {
+    width: "200px",
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  textbookSectionTitlePage: {
+    display: "flex",
+    flexWrap: "wrap",
+  },
   textbookTitle : {
-    position: "absolute",
-    left: "calc(50% - 75px)",
-    margin: "10px 0",
+    margin: "10px 5px",
     textAlign: "center",
   },
   settingsIcon: {
