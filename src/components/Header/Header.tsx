@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {
   AppBar, Toolbar, Typography, ListItemProps,
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -35,11 +35,11 @@ const buttonsData = [
     label: "Изучение",
     href: "/learning",
   }, */
-  {
-    label: "Словарь",
-    href: "/dictionary",
-    icon: dictionaryIcon,
-  },
+  // {
+  //   label: "Словарь",
+  //   href: "/dictionary",
+  //   icon: dictionaryIcon,
+  // },
   {
     label: "Мини-игры",
     href: "/games",
@@ -79,10 +79,15 @@ function Header() {
     closeButtonContainer, menuIcon,
   } = headerStyles();
   const [open, setOpen] = useState(false);
+  const [openDictionary, setOpenDictionary] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const handleClick = () => {
+  const handleClickOpenLearning = () => {
     setOpen(!open);
+  };
+
+  const handleClickOpenDictionary = () => {
+    setOpenDictionary(!openDictionary);
   };
 
   const displayMenu = () => {
@@ -90,29 +95,30 @@ function Header() {
 
     const handleDrawerClose = () => setDrawerOpen(false);
 
-    const getListItems = () => {
-      function ListItemLink(props: ListItemProps<'a', { button?: true }>) {
-        return <ListItem button component="a" {...props} />;
+    const getListItems = (path:string) => {
+      function ListItemLink(props: ListItemProps<NavLink, { button?: true }>) {
+        return <ListItem button component={NavLink} {...props} />;
       }
 
       return [1, 2, 3, 4, 5, 6].map((listItem) => (
-          <ListItemLink key={`k${listItem}`} href={`#section/${listItem}`}>
+          <ListItemLink key={`k${listItem}`} to={`/${path}/${listItem}`} activeClassName="Mui-selected">
             <ListItemText className={listLinkItemSection} primary={`Раздел ${listItem}`}/>
           </ListItemLink>
       ));
     };
 
     const getDrawerChoices = () => buttonsData.map(({ label, href, icon }) => (
-          <Link
+          <NavLink
             className={listLinkItem}
             to={href}
             key={label}
+            activeClassName="Mui-selected"
           >
             <div className={listItemContainer}>
               <img className={menuIcon} src={`${icon}`} alt={`${icon}`}/>
               <MenuItem className={listLinkItem}>{label}</MenuItem>
             </div>
-          </Link>
+          </NavLink>
     ));
 
     return (
@@ -156,7 +162,7 @@ function Header() {
               </div>
             </Link>
 
-            <ListItem className={collapsedList} button onClick={handleClick}>
+            <ListItem className={collapsedList} button onClick={handleClickOpenLearning}>
               <div className={listItemContainer}>
                 <img className={menuIcon} src={bookIcon} alt="textbook"/>
                 <ListItemText className={listLinkItemLearn} primary="Изучение" />
@@ -165,7 +171,22 @@ function Header() {
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                {getListItems()}
+                {getListItems("section")}
+              </List>
+            </Collapse>
+          </List>
+
+          <List className={list}>
+            <ListItem className={collapsedList} button onClick={handleClickOpenDictionary}>
+              <div className={listItemContainer}>
+                <img className={menuIcon} src={dictionaryIcon} alt="dictionary"/>
+                <ListItemText className={listLinkItemLearn} primary="Словарь" />
+                {openDictionary ? <ExpandLess /> : <ExpandMore />}
+              </div>
+            </ListItem>
+            <Collapse in={openDictionary} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                {getListItems("dictionary")}
               </List>
             </Collapse>
           </List>

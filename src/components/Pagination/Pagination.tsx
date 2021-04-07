@@ -1,3 +1,4 @@
+
 import React, {useState} from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { MemoryRouter, Route } from 'react-router';
@@ -14,9 +15,8 @@ const useStyles = makeStyles((theme) =>
         marginTop: theme.spacing(2),
       },
     },
-  }),
-);
-
+  },
+}));
 
 export default function PaginationLink({page, sectionId}) {
   const classes = useStyles();
