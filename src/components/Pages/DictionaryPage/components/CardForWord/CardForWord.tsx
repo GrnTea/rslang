@@ -4,6 +4,7 @@ import voiceImg from "../../../../../assets/icons/voiceIcon.svg";
 import { RootState } from "../../../../../redux/reducer";
 import { connect } from "react-redux";
 import { Button } from "@material-ui/core";
+import API_URL from "../../../../Constants/constants";
 
 const BUTTONS = {
     en: {
@@ -78,7 +79,7 @@ function checkWords(url:string, authorizationToken:string, setCheckedWord, setIs
 const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSettings, user, isMain}) => {
     const authorizationToken = user.token;
     const userId = user.id;
-    const url = "https://rslernwords.herokuapp.com/";
+    const url = API_URL;
     const useStyles = CardStyles();
     const cardId = cardInfo.id || cardInfo._id;
     const urlRequest = `${url}users/${userId}/words/${cardId}`;

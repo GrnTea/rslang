@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DictionaryStyles from "./DicrionaryPageStyles";
 import CardOfWord from "./components/CardForWord/CardForWord";
+import API_URL from "../../Constants/constants";
 
 type Props = {
     user: any,
@@ -17,7 +18,7 @@ interface ICategory {
 const DifficultWords: React.FC<Props> = ({ user, section, filter }: ICategory) => {
   const useStyles = DictionaryStyles();
   const [listOfWords, setListOfWords] = useState([]);
-  const url = `https://rslernwords.herokuapp.com/users/${user.id}/aggregatedWords?group=${section - 1}&page=0&filter=${filter}&wordsPerPage=20`;
+  const url = `${API_URL}users/${user.id}/aggregatedWords?group=${section - 1}&page=0&filter=${filter}&wordsPerPage=20`;
 
   useEffect(() => {
     fetch(url, {

@@ -19,13 +19,12 @@ function HomeIcon(props: SvgIconProps) {
   );
 }
 
-const Points = ({ bonus, checkbox }: { bonus: number, checkbox: [] }) => {
+const Points = ({ bonus, checkbox }: { bonus: number, checkbox: boolean[] }) => {
   const classes = useStyles();
   const x = bonus;
   const right = { color: green[500] };
   const wrong = "secondary";
   const disabled = "disabled";
-  console.log(Date.now());
   return (
     <div className="sprint__point">
       <div className={classes.root}>

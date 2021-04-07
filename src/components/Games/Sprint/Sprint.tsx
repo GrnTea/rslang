@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import AspectRatioIcon from "@material-ui/icons/AspectRatio";
 import { connect } from "react-redux";
+import { Key } from "readline";
 import ResetGame from "../ResetGame/ResetGame";
 import "./sprint.scss";
 import Points from "./Points";
@@ -14,9 +15,11 @@ import Begin from "./Begin";
 import correct from "../../../assets/sound/correct-choice.wav";
 import wrong from "../../../assets/sound/error.wav";
 import {
-  ERROR, URL, ERROR_WORD, RIGHT_ARROW, RIGHT,
+  ERROR, ERROR_WORD, RIGHT_ARROW, RIGHT, DICTIONARY, Buttons,
+  IButtons, GAME_ID
 } from "./sprintconstants";
 import { RootState } from "../../../redux/reducer";
+import API_URL from "../../Constants/constants";
 
 const random = (max: number): number => {
   const min = 0;
@@ -28,46 +31,20 @@ interface ICurrentWord {
   word: string,
   wordTranslate: string,
   isTrueTranslate: boolean,
-  id: string,
+  id?: string,
+  _id?: string,
 }
 
-function updateListOfUserWords(data: any, metod: string, url: string, authorizationToken: string): void {
-  fetch(url, {
-    method: metod,
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${authorizationToken}`,
-    },
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-    body: JSON.stringify(data),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
-      return response;
-    })
-    .catch((error) => { alert(error); });
+interface IWordData {
+  word: string,
+  wordTranslate: string,
+  id: string | undefined,
+  isTrueTranslate: boolean,
 }
 
-const handleSetAsDifficult = (url, userId, cardInfo, authorizationToken) => {
-  const data = {
-    optional: {
-      studing: "true",
-    },
-  };
-  const urlRequest = `${url}users/${userId}/words/${cardInfo.id}`;
-  updateListOfUserWords(data, "POST", urlRequest, authorizationToken);
-};
-
-function Sprint({ game, userId, userToken }: { game: string, userId: any, userToken: any }) {
-  // console.log(`userId:${userId}`);
-  // console.log(`userToken:${userToken}`);
-  const {difficulty, page} : {difficulty: string, page:string} = useParams();
+function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: any, token: any }, lang: any }) {
+  const { difficulty, page }: { difficulty: string, page: string } = useParams();
+  let pageCounter: number = Number(page);
   const sprintEl = useRef(null);
   const [words, setWords] = useState<Promise<{}[]>>();
   const [errorFetch, setError] = useState(null);
@@ -84,7 +61,6 @@ function Sprint({ game, userId, userToken }: { game: string, userId: any, userTo
   const [rightAnswers, setRightAnswers] = useState<ICurrentWord[]>([]);
   const [wrongAnswers, setWrongAnswers] = useState<ICurrentWord[]>([]);
   const [playWords, setPlayWords] = useState<ICurrentWord[]>([]);
-  // const { num } = params;
   const isVolume = true;
   const [currentWord, setCurrentWord] = useState<ICurrentWord>({
     word: "",
@@ -93,19 +69,50 @@ function Sprint({ game, userId, userToken }: { game: string, userId: any, userTo
     id: "",
   });
 
-  const url = `${URL}/words?group=${Number(difficulty) - 1}&page=${Number(page)}`;
+  const filters = {
+    studying: "{\"$and\":[{\"userWord.optional.studying\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
+    difficult: "{\"$and\":[{\"userWord.difficulty\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
+    deleted: "{\"userWord.optional.deleted\":\"true\"}",
+    not_deleted: "{\"userWord.optional.deleted\":\"false\"}",
+  };
 
-  function fetchingData() {
-    fetch(url)
+  interface IGetURL {
+    [key: string]: string;
+  }
+
+  function getUrl(numOfPage: number, urlKey: string) {
+    const url:IGetURL = {
+      All: `${API_URL}words?group=${Number(difficulty) - 1}&page=${numOfPage}`,
+      UserAll: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=${numOfPage}&filter=${filters.not_deleted}&wordsPerPage=20`,
+      UserDiff: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=0&filter=${filters.difficult}&wordsPerPage=20`,
+      UserStudying: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=0&filter=${filters.studying}&wordsPerPage=20`,
+    };
+    return url[urlKey];
+  }
+
+  function fetchingData(url: string) {
+    console.log(url);
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
       .then((res) => res.json())
       .then(
         (result) => {
-          setWords(result);
+          if (game.gameFrom === DICTIONARY) {
+            setWords(result[0].paginatedResults);
+          } else {
+            setWords(result);
+          }
           setIsLoaded(true);
         },
         (error) => {
           setIsLoaded(true);
           setError(error);
+          console.log(error);
         },
       );
     return function cleanup() {
@@ -114,31 +121,43 @@ function Sprint({ game, userId, userToken }: { game: string, userId: any, userTo
   }
 
   useEffect(() => {
+    if (game.gameFrom === DICTIONARY) {
+      fetchingData(getUrl(pageCounter, "UserDiff"));
+    } else {
+      fetchingData(getUrl(pageCounter, "All"));
+    }
     setIsLoaded(false);
-    fetchingData();
   }, [difficulty]);
 
-  const playGame = useCallback((playWords: []) => {
-    const wordData = {
+  const playGame = useCallback((wordArr: ICurrentWord[]) => {
+    const wordData: IWordData = {
       word: "",
       wordTranslate: ERROR_WORD,
       id: "",
       isTrueTranslate: false,
     };
-    // const playWords = JSON.parse(JSON.stringify(words));
+
     wordData.isTrueTranslate = Boolean(Math.round(Math.random()));
-    const numOfWord = random(playWords.length - 1);
-    const numFakeWord = numOfWord < playWords.length ? numOfWord + 1 : numOfWord - 1;
-    wordData.word = playWords ? playWords[numOfWord].word : playWords;
-    wordData.id = playWords ? playWords[numOfWord].id : playWords;
+    const numOfWord = random(wordArr.length - 1);
+    const numFakeWord = numOfWord < wordArr.length ? numOfWord + 1 : numOfWord - 1;
+    wordData.word = wordArr ? wordArr[numOfWord].word : wordArr;
+    const idCheck = game.gameFrom === DICTIONARY ? "_id" : "id";
+    wordData.id = wordArr ? wordArr[numOfWord][idCheck] : wordArr;
     try {
       wordData.wordTranslate = wordData.isTrueTranslate
-        ? playWords[numOfWord].wordTranslate : playWords[numFakeWord].wordTranslate;
+        ? wordArr[numOfWord].wordTranslate : wordArr[numFakeWord].wordTranslate;
     } catch (e) {
       console.log(ERROR + e);
     }
-    if (false) {
-      setPlayWords(playWords.filter((item, index) => numOfWord !== index));
+    setPlayWords(wordArr.filter((item, index) => numOfWord !== index));
+    if (wordArr.length === 1) {
+      if (game.gameFrom === DICTIONARY) {
+        setFinish(true);
+      }
+      pageCounter += 1;
+      if (pageCounter === 31) setFinish(true);
+      fetchingData(getUrl(pageCounter, "All"));
+      setIsLoaded(false);
     }
 
     setCurrentWord(wordData);
@@ -170,7 +189,7 @@ function Sprint({ game, userId, userToken }: { game: string, userId: any, userTo
   }, [checkbox.length]);
 
   function fullscreen() {
-    const x = sprintEl.current;
+    const x: any = sprintEl.current;
     x.webkitRequestFullScreen();
     if (document.fullscreenEnabled) {
       document.webkitCancelFullScreen();
@@ -198,10 +217,9 @@ function Sprint({ game, userId, userToken }: { game: string, userId: any, userTo
       setWrongAnswers([...wrongAnswers, currentWord]);
       setFalseAnswer(falseAnswer + 1);
     }
-    // console.log(rightAnswers, wrongAnswers);
   }
 
-  function beginNow() {
+  function restart() {
     setScore(0);
     setCheckbox([]);
     setBonus(10);
@@ -226,11 +244,11 @@ function Sprint({ game, userId, userToken }: { game: string, userId: any, userTo
   if (finish) {
     return (
       <ResetGame
-        rightAnswersCounter={trueAnswer}
-        wrongAnswersCounter={falseAnswer}
+        maxSerie={trueAnswer}
         rightAnswers={rightAnswers}
         wrongAnswers={wrongAnswers}
-        resetgame={beginNow}
+        resetgame={restart}
+        gameId={GAME_ID}
       />
     );
   }
@@ -250,10 +268,10 @@ function Sprint({ game, userId, userToken }: { game: string, userId: any, userTo
       </div>
       <div className="sprint__button">
         <Button variant="contained" color="secondary" onClick={handleClick} >
-          Неверно
+          {Buttons[lang].rightButton}
         </Button>
         <Button variant="contained" color="primary" onClick={handleClick} onKeyDown={handleClick}>
-          Верно
+          {Buttons[lang].wrongButton}
         </Button>
       </div>
       <Button variant="contained" onClick={fullscreen}>
@@ -265,8 +283,8 @@ function Sprint({ game, userId, userToken }: { game: string, userId: any, userTo
 
 const mapStateToProps = (state: RootState) => ({
   game: state.game,
-  userId: state.user.id,
-  userToken: state.user.token,
+  user: state.user,
+  lang: state.settingsReducer.lang.lang,
 });
 
 export default connect(mapStateToProps, null)(Sprint);
