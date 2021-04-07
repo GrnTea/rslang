@@ -60,6 +60,28 @@ const getDailyStat = (stat) => {
     }, []);
 };
 
+const getLearnedWordsByDate = (stat) => {
+  const dateStart = new Date(Math.min(...stat.map((itm) => itm.date))).setHours(0, 0, 0, 0); //midnigh of minimal date from stat
+  const dateEnd = (new Date()).setHours(24, 0, 0, 0); //tomorrow midnight
+  const dataSet = [];
+  let cDate = dateStart;
+  while (cDate < dateEnd) {
+    const learnedWords = stat.reduce((acc, itm) => {
+      const midNight = (new Date(itm.date)).setHours(0, 0, 0, 0);
+      if (midNight === cDate) {
+        acc += itm.learnedWords;
+      }
+      return acc;
+    }, 0);
+    dataSet.push({
+      x: cDate,
+      y: learnedWords,
+    });
+    cDate += 86400000; // ms per day
+  }
+  return dataSet;
+};
+
 const Statistics = ({ user }) => {
   if (!user.id || !user.token) {
     return <Fragment>
@@ -71,19 +93,19 @@ const Statistics = ({ user }) => {
       <Link component={RouterLink} to={"/signup"}>Sign Up</Link>
     </Fragment>;
   }
-  const [stat, setStat] = useState([]);
+  const [dailyStat, setDailyStat] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     getStat(user).then((stat) => {
-      const dailyStat = getDailyStat(stat);
       setLoading(false);
-      setStat(dailyStat);
+      setDailyStat(getDailyStat(stat));
+      console.log(getLearnedWordsByDate(stat));
     });
   }, []);
   return loading
     ? <CircularProgress size={128} className="progress" />
     : <Fragment >
-      <DailyStat stat={stat} user={user} />
+      <DailyStat stat={dailyStat} user={user} />
     </Fragment>;
 };
 
