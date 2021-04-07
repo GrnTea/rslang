@@ -93,7 +93,7 @@ const App = () => {
             <Route path="/settings">
               <SettingsPage />
             </Route>
-            <Route path="/stat">
+            <Route path="/statistics">
               <Header />
               <Stat />
             </Route>
