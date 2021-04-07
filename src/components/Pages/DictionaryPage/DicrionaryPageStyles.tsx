@@ -38,6 +38,14 @@ const dictionaryStyles = makeStyles({
     flexDirection: "column",
     rowGap: "3em",
   },
+
+  emptyTab: {
+    height: "80vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontWeight: "bold",
+  }
 });
 
 export default dictionaryStyles;

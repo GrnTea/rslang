@@ -38,7 +38,6 @@ const TextbookPage: React.FC = () => {
     fetch(wordsUrl)
       .then((response) => response.json())
       .then((jsonData) => {
-        // console.log(jsonData);
         setPageWords(jsonData);
       });
   }
