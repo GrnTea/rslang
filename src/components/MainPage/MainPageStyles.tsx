@@ -3,8 +3,11 @@ import bgImage from "../../assets/images/bgimage.jpg";
 
 const mainStyles = makeStyles({
     wrapper: {
+      height: "100%",
+      width: "100%",
       background: `no-repeat url(${bgImage}) fixed`,
       backgroundPosition: "center",
+      backgroundSize: "cover",
       overflow: "hidden",
     },
     container: {

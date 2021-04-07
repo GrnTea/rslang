@@ -3,7 +3,11 @@ import {makeStyles} from "@material-ui/core";
 const sectionStyles = makeStyles({
   sectionContainer: {
     maxWidth: "1200px",
-    // margin: "0 auto",
+    width: "100%",
+    margin: "0 auto",
+
+  },
+  sectionWrapper: {
     padding: "10 0px",
     display: "flex",
     alignItems: "center",
@@ -13,10 +17,14 @@ const sectionStyles = makeStyles({
     rowGap: "1em",
   },
   sectionTitle: {
-    width: "100vw",
-    margin: "10px 0",
-    padding: "10px",
+    width: "100%",
+    // margin: "10px 0",
+    // padding: "10px",
     textAlign: "center",
+  },
+  sectionTitleText: {
+    margin: 0,
+    padding: "10px",
   },
   sectionContent: {
     display: "flex",
