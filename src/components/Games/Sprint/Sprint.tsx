@@ -16,7 +16,7 @@ import correct from "../../../assets/sound/correct-choice.wav";
 import wrong from "../../../assets/sound/error.wav";
 import {
   ERROR, ERROR_WORD, RIGHT_ARROW, RIGHT, DICTIONARY, Buttons,
-  IButtons,
+  IButtons, GAME_ID
 } from "./sprintconstants";
 import { RootState } from "../../../redux/reducer";
 import API_URL from "../../Constants/constants";
@@ -61,7 +61,6 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
   const [rightAnswers, setRightAnswers] = useState<ICurrentWord[]>([]);
   const [wrongAnswers, setWrongAnswers] = useState<ICurrentWord[]>([]);
   const [playWords, setPlayWords] = useState<ICurrentWord[]>([]);
-
   const isVolume = true;
   const [currentWord, setCurrentWord] = useState<ICurrentWord>({
     word: "",
@@ -249,6 +248,7 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
         rightAnswers={rightAnswers}
         wrongAnswers={wrongAnswers}
         resetgame={restart}
+        gameId={GAME_ID}
       />
     );
   }

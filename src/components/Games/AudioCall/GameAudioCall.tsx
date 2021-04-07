@@ -200,6 +200,7 @@ function GameAudioCall({ user }) {
           wrongAnswers={wrongAnswers}
           resetgame={rebootGame}
           maxSerie={maxSerie}
+          gameId={"2"}
         />
       }
     </>

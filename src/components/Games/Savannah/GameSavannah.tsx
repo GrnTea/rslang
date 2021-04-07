@@ -213,6 +213,7 @@ export default function GameSavannah() {
           rightAnswers={rightAnswers}
           wrongAnswers={wrongAnswers}
           resetgame={resetgame}
+          gameId={"1"}
         />
       }
     </>

@@ -12,7 +12,7 @@ import { RootState } from "../../../redux/reducer";
 import API_URL from "../../Constants/constants";
 
 function ResetGame({
-  user, game, maxSerie, rightAnswers, wrongAnswers, resetgame,
+  user, game, maxSerie, rightAnswers, wrongAnswers, resetgame, gameId
 }) {
   // console.log(user);
 
@@ -81,7 +81,7 @@ function ResetGame({
     const res = {
       learnedWords: rightAnswers.length,
       date: Date.now(), // (current time in UTCmiliseconds)
-      gameId: "2",
+      gameId,
       rightAnswers: rightAnswers.length,
       wrongAnswers: wrongAnswers.length,
       maxSerie,
