@@ -5,6 +5,9 @@ import { RootState } from "../../../redux/reducer";
 import BookToGame from "../TextbookPage/BookToGame";
 import DictionaryStyles from "./DicrionaryPageStyles";
 import WordsCategory from "./WordsCategory";
+import setColor from "../../../utils";
+import settingsIcon from "../../../assets/icons/settingsBlack.svg";
+import { Link } from "react-router-dom";
 
 type Props = {
     lang: string,
@@ -50,16 +53,20 @@ const DictionaryPage: React.FC<Props> = ({ lang, user }: IDictionaryProps) => {
     deleted: "{\"userWord.optional.deleted\":\"true\"}",
   };
 
-  const higlightCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const typeBtn = e.target.parentElement;
-    
-
-  }
-
   return (
     user.id ?
     <div className={useStyles.dictionaryContainer}>
-      <h1>{`${TEXTS[lang].mainTitle} ->  ${TEXTS[lang].section} ${sectionId}`}</h1>
+      <div className={useStyles.textbookSectionTitle} style={{backgroundColor: setColor(sectionId)}}>
+        
+      <h3>{`${TEXTS[lang].section} ${sectionId}`}</h3>
+        <h1 >{`${TEXTS[lang].mainTitle}`}</h1>
+        <div className={useStyles.textbookSectionBlock}>
+          <Link to="/settings">
+            <img className={useStyles.settingsIcon} src={settingsIcon} alt="settings"/>
+          </Link>
+        </div>
+      </div>
+
       <BookToGame difficulty={sectionId} page={'1'} from={'DICTIONARY'} />
       <div className={useStyles.dictionaryMenu}>
           <button className={category === "studying" ? activeCategory :  useStyles.dictionaryMenuItem} onClick={() => { setCategory("studying") }}>

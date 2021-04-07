@@ -41,6 +41,11 @@ const dictionaryStyles = makeStyles({
   dictionaryMenuItemActive: {
     color: "rgb(255, 184, 3)",
     borderBottom: "3px solid rgb(255, 184, 3)",
+
+    "&:hover": {
+      color: "rgb(255, 184, 3)",
+      borderBottom: "3px solid rgb(255, 184, 3)",
+    }
   },
 
   cards: {
@@ -55,7 +60,31 @@ const dictionaryStyles = makeStyles({
     justifyContent: "center",
     alignItems: "center",
     fontWeight: "bold",
-  }
+  },
+
+  textbookSectionTitle: {
+    width: "100%",
+    textAlign: "center",
+    alignContent: "center",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: "60px",
+    padding: "0 15px",
+    margin: 0,
+  },
+
+  textbookSectionBlock: {
+    width: "200px",
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+
+  settingsIcon: {
+    width: "32px",
+    height: "32px",
+    marginTop: "3px",
+  },
 });
 
 export default dictionaryStyles;
