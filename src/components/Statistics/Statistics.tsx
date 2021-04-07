@@ -7,55 +7,6 @@ import { RootState } from "../../redux/reducer";
 import DailyStat from "./DailyStat";
 import "./styles.scss";
 
-const testStat = [
-  {
-    _id: "6065f28180cb9659000dbf4a",
-    userId: "6065e5e773774f14d0af1833",
-    learnedWords: 10,
-    date: 1617310804000,
-    gameId: "1",
-    rightAnswers: 5,
-    wrongAnswers: 7,
-    maxSerie: 3,
-    __v: 0
-  },
-  {
-    _id: "6067334ab95b261038625b10",
-    userId: "6065e5e773774f14d0af1833",
-    learnedWords: 15,
-    date: 1617310806000,
-    gameId: "1",
-    rightAnswers: 8,
-    wrongAnswers: 10,
-    maxSerie: 5,
-    __v: 0
-  },
-  {
-    _id: "6067334ab95b261038625b11",
-    userId: "6065e5e773774f14d0af1833",
-    learnedWords: 12,
-    date: 1617310800500,
-    gameId: "1",
-    rightAnswers: 9,
-    wrongAnswers: 10,
-    maxSerie: 5,
-    __v: 0
-  },
-  {
-    _id: "6067334ab95b261038625b12",
-    userId: "6065e5e773774f14d0af1833",
-    learnedWords: 9,
-    date: 1617310800000,
-    gameId: "2",
-    rightAnswers: 2,
-    wrongAnswers: 10,
-    maxSerie: 5,
-    __v: 0
-  }
-];
-
-testStat.forEach((itm) => { itm.date = (new Date()).getTime() });
-
 type StatType = {
   learnedWords: Number,
   date: Number, //  (current time in UTCmiliseconds)
@@ -65,21 +16,7 @@ type StatType = {
   maxSerie: Number
 }
 
-const sendStat = async (stat: StatType, user) => {
-  await fetch(`https://rslernwords.herokuapp.com/users/${user.id}/statistics`, {
-    method: "POST",
-    withCredentials: true,
-    headers: {
-      "Authorization": `Bearer ${user.token}`,
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(stat),
-  });
-};
-
-
-const getDailyStat = async (user) => {
+const getStat = async (user) => {
   const res = await fetch(`https://rslernwords.herokuapp.com/users/${user.id}/statistics`, {
     method: "GET",
     withCredentials: true,
@@ -93,7 +30,10 @@ const getDailyStat = async (user) => {
     return [];
   }
   const stat = await res.json();
-  //const stat = testStat;
+  return stat;
+};
+
+const getDailyStat = (stat) => {
   const cDate = new Date();
   const timeStart = cDate
     .setHours(0, 0, 0, 0);
@@ -134,13 +74,14 @@ const Statistics = ({ user }) => {
   const [stat, setStat] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getDailyStat(user).then((stat) => {
+    getStat(user).then((stat) => {
+      const dailyStat = getDailyStat(stat);
       setLoading(false);
-      setStat(stat);
+      setStat(dailyStat);
     });
   }, []);
   return loading
-    ? <CircularProgress size={128} className="progress"/>
+    ? <CircularProgress size={128} className="progress" />
     : <Fragment >
       <DailyStat stat={stat} user={user} />
     </Fragment>;
