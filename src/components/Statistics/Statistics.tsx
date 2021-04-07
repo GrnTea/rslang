@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import Typography from '@material-ui/core/Typography';
 import { RootState } from "../../redux/reducer";
 import DailyStat from "./DailyStat";
+import DayChart from "./DayChart";
 import "./styles.scss";
 
 type StatType = {
@@ -74,7 +75,7 @@ const getLearnedWordsByDate = (stat) => {
       return acc;
     }, 0);
     dataSet.push({
-      x: cDate,
+      x: new Date(cDate),
       y: learnedWords,
     });
     cDate += 86400000; // ms per day
@@ -94,18 +95,30 @@ const Statistics = ({ user }) => {
     </Fragment>;
   }
   const [dailyStat, setDailyStat] = useState([]);
+  const [learnedByDay, setLearnedByDay] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     getStat(user).then((stat) => {
       setLoading(false);
       setDailyStat(getDailyStat(stat));
       console.log(getLearnedWordsByDate(stat));
+      setLearnedByDay(getLearnedWordsByDate(stat));
     });
   }, []);
   return loading
     ? <CircularProgress size={128} className="progress" />
     : <Fragment >
       <DailyStat stat={dailyStat} user={user} />
+      <h1>{"All time"}</h1>
+      <DayChart dataSet={learnedByDay} />
+      <DayChart dataSet={learnedByDay.reduce((acc, itm, idx) => {
+        if (idx > 0) {
+          acc.push({ x: itm.x, y: acc[idx - 1].y + itm.y });
+        } else {
+          acc.push({ x: itm.x, y: itm.y });
+        }
+        return acc;
+      }, [])} />
     </Fragment>;
 };
 
