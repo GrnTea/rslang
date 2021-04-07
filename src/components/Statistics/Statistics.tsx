@@ -110,8 +110,8 @@ const Statistics = ({ user }) => {
     : <Fragment >
       <DailyStat stat={dailyStat} user={user} />
       <h1>{"All time"}</h1>
-      <DayChart dataSet={learnedByDay} />
-      <DayChart dataSet={learnedByDay.reduce((acc, itm, idx) => {
+      <DayChart title={"Learned words per day"} dataSet={learnedByDay} />
+      <DayChart title={"Learned words cumulative"} dataSet={learnedByDay.reduce((acc, itm, idx) => {
         if (idx > 0) {
           acc.push({ x: itm.x, y: acc[idx - 1].y + itm.y });
         } else {

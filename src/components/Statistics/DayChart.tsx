@@ -38,7 +38,7 @@ class DayChart extends Component {
           },
           title: {
             display: true,
-            text: 'Learned words per day',
+            text: this.props.title,
             font: {
               size: 24,
             },
