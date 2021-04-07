@@ -2,12 +2,7 @@ import API_URL from "../../Constants/constants";
 
 const URL = API_URL;
 
-function WordUpdate(user, word) {
-  // let words = [...props[0]]
-  // console.log(user)
-  // console.log(word)
-  // console.log(`${URL}users/${user.id}/words/${word}`)
-
+function WordUpdate(user: {id: string, token: string}, word: string, answer: boolean) {
   fetch(`${URL}users/${user.id}/words/${word}`, {
     method: "GET",
     headers: {
@@ -16,24 +11,21 @@ function WordUpdate(user, word) {
       "Content-Type": "application/json",
     }
   })
-    // .then(response => response.status)
     .then(response => response.json())
     .then(data => {
-      if(!data.studying){
+      if(!data.optional.studying){
         const wordData = {
-          "difficulty": data.difficulty,
+          "difficulty": "false",
         "optional": {
-          "deleted": "false",
           "studying": "true",
+          "deleted": "false",
         },
       } 
       testUpdate("PUT", wordData);
     })
     .catch(error => {
-      console.log("слова нету", error);
-
       const data = {
-        "difficulty": "true",
+        "difficulty": "false",
         "optional": {
           "studying": "true",
           "deleted": "false",
@@ -62,7 +54,5 @@ function WordUpdate(user, word) {
         console.log("Error124", error);
       })
   }
-
 }
-
 export default WordUpdate;

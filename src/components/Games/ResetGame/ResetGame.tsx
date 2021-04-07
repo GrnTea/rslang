@@ -112,10 +112,10 @@ function ResetGame({
   useEffect(() => {
     if (game && user.id) {
       rightAnswers.forEach((element) => {
-        WordUpdate(user, element.id);
+        WordUpdate(user, element.id, true);
       });
       wrongAnswers.forEach((element) => {
-        WordUpdate(user, element.id);
+        WordUpdate(user, element.id, false);
       });
     }
   }, []);
