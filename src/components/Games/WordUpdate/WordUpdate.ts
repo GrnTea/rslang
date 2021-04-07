@@ -13,7 +13,7 @@ function WordUpdate(user: {id: string, token: string}, word: string, answer: boo
   })
     .then(response => response.json())
     .then(data => {
-      if(!data.optional.studying){
+      if(data.difficulty){
         const wordData = {
           "difficulty": "false",
         "optional": {
