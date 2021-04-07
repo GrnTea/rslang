@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   AppBar, Toolbar, Typography, ListItemProps,
 } from "@material-ui/core";
@@ -81,7 +82,7 @@ function Header() {
   const [open, setOpen] = useState(false);
   const [openDictionary, setOpenDictionary] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-
+  const dispatch = useDispatch();
   const handleClickOpenLearning = () => {
     setOpen(!open);
   };
@@ -113,6 +114,11 @@ function Header() {
             to={href}
             key={label}
             activeClassName="Mui-selected"
+            onClick={() => {
+              if (label === "Мини-игры") {
+                dispatch({ type: "GAME_SET_DEFAULT" });
+              }
+            }}
           >
             <div className={listItemContainer}>
               <img className={menuIcon} src={`${icon}`} alt={`${icon}`}/>

@@ -3,9 +3,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import VolumeUpIcon from "@material-ui/icons/VolumeUp";
 import EmojiEmotionsTwoToneIcon from "@material-ui/icons/EmojiEmotionsTwoTone";
+import API_URL from "../../Constants/constants";
 
 const ResetGame = (props: any) => {
-  const herokuUrl = "https://rslernwords.herokuapp.com/";
+  const herokuUrl = API_URL;
 
   const [trueWords, setTrueWords] = useState([]);
   const [falseWords, setFalseWords] = useState([]);

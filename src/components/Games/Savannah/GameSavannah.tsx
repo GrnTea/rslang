@@ -10,8 +10,9 @@ import error from "../../../assets/sound/error.mp3";
 import FavoriteTwoToneIcon from "@material-ui/icons/FavoriteTwoTone";
 
 import FullScreenButton from "./FullScreenButton";
+import API_URL from "../../Constants/constants";
 
-const URL = "https://rslernwords.herokuapp.com/";
+const URL = API_URL;
 
 export default function GameSavannah() {
   const { difficulty, page } = useParams();
@@ -35,15 +36,13 @@ export default function GameSavannah() {
 
   function initGame() {
     fetch(`${URL}words?group=${difficulty - 1}&page=${page}`)
-    .then((response) => {
-      return response.json();
-    })
-    .then((jsonData) => {
-      const dataShuffle = shuffle(jsonData);
-      
-      setWord(dataShuffle.pop());
-      setData(dataShuffle);
-     })
+      .then((response) => response.json())
+      .then((jsonData) => {
+        const dataShuffle = shuffle(jsonData);
+
+        setWord(dataShuffle.pop());
+        setData(dataShuffle);
+      });
   }
 
   useEffect(() => {
@@ -165,14 +164,14 @@ export default function GameSavannah() {
 
   useEffect(() => {
     const res = displayWords.map((elem, index) => (
-        <div
+      <div
         data-value={elem.word}
         className="word-display"
         key={index}
         onClick={(e) => checkWord(e)}
-        >
-          {elem.wordTranslate}
-        </div>
+      >
+        {elem.wordTranslate}
+      </div>
     ));
 
     setWordsDisplayedOnTheScreen(res);
@@ -201,20 +200,20 @@ export default function GameSavannah() {
             </div>
 
             <div className="word-absolute">{word.word}</div>
-              {wordsDisplayedOnTheScreen}
+            {wordsDisplayedOnTheScreen}
           </div>
           <div className="fullscreen-button">
             <FullScreenButton />
           </div>
-          <input className="input-hidden" type="hidden" onClick={() => audioPlay(error)}/>
+          <input className="input-hidden" type="hidden" onClick={() => audioPlay(error)} />
         </div>
 
         : <ResetGame
-          rightAnswersCounter={rightAnswersCounter}
-          wrongAnswersCounter={wrongAnswersCounter}
+          maxSerie={rightAnswersCounter}
           rightAnswers={rightAnswers}
           wrongAnswers={wrongAnswers}
           resetgame={resetgame}
+          gameId={"1"}
         />
       }
     </>

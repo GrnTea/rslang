@@ -8,6 +8,7 @@ import textbookStyles from "./TextbookPageStyles";
 import setColor from "../../../utils";
 import settingsIcon from "../../../assets/icons/settingsBlack.svg";
 import {Link} from "react-router-dom";
+import API_URL from "../../Constants/constants";
 
 interface IWord {
   id: string
@@ -31,7 +32,7 @@ const TextbookPage: React.FC = () => {
 
   const { sectionId, pageId } = useParams();
 
-  let wordsUrl = `https://rslernwords.herokuapp.com/words?group=${sectionId - 1}&page=${pageId - 1}`;
+  let wordsUrl = `${API_URL}words?group=${sectionId - 1}&page=${pageId - 1}`;
   const [pageWords, setPageWords] = useState([]);
 
   function getWords() {
@@ -56,7 +57,7 @@ const TextbookPage: React.FC = () => {
           <img className={useStyles.settingsIcon} src={settingsIcon} alt="settings"/>
         </Link>
       </div>
-      <BookToGame difficulty={sectionId} page={pageId} />
+      <BookToGame difficulty={sectionId} page={pageId} from={'TEXTBOOK'}/>
       {pageWords.map((card: IWord) => <CardForWords key={card.id} cardInfo={card} />)}
       <BookToGame difficulty={sectionId} page={pageId} />
       <Pagination page={pageId} sectionId={sectionId} />
