@@ -44,7 +44,7 @@ const DictionaryPage: React.FC<Props> = ({ lang, user }: IDictionaryProps) => {
   const useStyles = DictionaryStyles();
   const [category, setCategory] = useState("studying");
   const filters = {
-    studing: "{\"$and\":[{\"userWord.optional.studying\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
+    studying: "{\"$and\":[{\"userWord.optional.studying\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
     difficult: "{\"$and\":[{\"userWord.difficulty\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
     deleted: "{\"userWord.optional.deleted\":\"true\"}",
   };
@@ -65,7 +65,7 @@ const DictionaryPage: React.FC<Props> = ({ lang, user }: IDictionaryProps) => {
               </button>
           </div>
           { category === "studiedWords"
-            ? <WordsCategory user={user} section={sectionId} filter={filters.studing}/>
+            ? <WordsCategory user={user} section={sectionId} filter={filters.studying}/>
             : category === "difficultWords" ? <WordsCategory user={user} section={sectionId} filter={filters.difficult}/>
               : <WordsCategory user={user} section={sectionId} filter={filters.deleted} />}
     </div>

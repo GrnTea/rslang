@@ -70,7 +70,7 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
   });
 
   const filters = {
-    studing: "{\"$and\":[{\"userWord.optional.studying\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
+    studying: "{\"$and\":[{\"userWord.optional.studying\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
     difficult: "{\"$and\":[{\"userWord.difficulty\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
     deleted: "{\"userWord.optional.deleted\":\"true\"}",
     not_deleted: "{\"userWord.optional.deleted\":\"false\"}",
@@ -85,7 +85,7 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
       All: `${API_URL}words?group=${Number(difficulty) - 1}&page=${numOfPage}`,
       UserAll: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=${numOfPage}&filter=${filters.not_deleted}&wordsPerPage=20`,
       UserDiff: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=0&filter=${filters.difficult}&wordsPerPage=20`,
-      UserStuding: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=0&filter=${filters.studing}&wordsPerPage=20`,
+      UserStudying: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=0&filter=${filters.studying}&wordsPerPage=20`,
     };
     return url[urlKey];
   }
@@ -288,37 +288,3 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 export default connect(mapStateToProps, null)(Sprint);
-
-// function updateListOfUserWords(data: any, metod: string, url: string, authorizationToken: string): void {
-//   fetch(url, {
-//     method: metod,
-//     mode: "cors",
-//     cache: "no-cache",
-//     credentials: "same-origin",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: `Bearer ${authorizationToken}`,
-//     },
-//     redirect: "follow",
-//     referrerPolicy: "no-referrer",
-//     body: JSON.stringify(data),
-//   })
-//     .then((response) => {
-//       if (!response.ok) {
-//         throw Error(response.statusText);
-//       }
-//       return response;
-//     })
-//     .catch((error) => { alert(error); });
-// }
-
-// const handleSetAsDifficult = (url, userId, cardInfo, authorizationToken) => {
-//   const data = {
-//     optional: {
-//       studing: "true",
-//     },
-//   };
-
-//   const urlRequest = `${url}users/${userId}/words/${cardInfo.id}`;
-//   updateListOfUserWords(data, "POST", urlRequest, authorizationToken);
-// };

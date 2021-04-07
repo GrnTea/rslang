@@ -82,7 +82,7 @@ function Header() {
   const [open, setOpen] = useState(false);
   const [openDictionary, setOpenDictionary] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const disputch = useDispatch();
+  const dispatch = useDispatch();
   const handleClickOpenLearning = () => {
     setOpen(!open);
   };
@@ -116,7 +116,7 @@ function Header() {
             activeClassName="Mui-selected"
             onClick={() => {
               if (label === "Мини-игры") {
-                disputch({ type: "GAME_SET_DEFAULT" });
+                dispatch({ type: "GAME_SET_DEFAULT" });
               }
             }}
           >

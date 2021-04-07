@@ -5,12 +5,12 @@ import {
 } from "react-router-dom";
 
 function BookToGame({ difficulty, page, from }) {
-  const disputch = useDispatch();
+  const dispatch = useDispatch();
   const handleGame = useCallback(() => {
     if (from === 'TEXTBOOK') {
-      disputch({ type: "GAME_SET_TEXTBOOK" });
+      dispatch({ type: "GAME_SET_TEXTBOOK" });
     } else if (from === 'DICTIONARY'){
-      disputch({ type: "GAME_SET_DICTIONARY" });
+      dispatch({ type: "GAME_SET_DICTIONARY" });
     }
   }, []);
   handleGame();

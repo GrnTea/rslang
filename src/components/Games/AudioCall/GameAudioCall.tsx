@@ -93,8 +93,8 @@ function GameAudioCall({ user }) {
     audio.play();
   }
 
-  function addAnswers(word: any, state: any, elems: any) {
-    if (elems.length === 0) {
+  function addAnswers(word: any, state: any, elems: []) {
+    if (elems.length) {
       state([word]);
     } else {
       const copy = elems;
@@ -175,7 +175,7 @@ function GameAudioCall({ user }) {
       {startGame
         ? <div className="game-body-container">
 
-          <div className="content-conteiner">
+          <div className="content-container">
             <LinearProgress style={{ ...LinearProgressStyles }} variant="determinate" value={counter * 10} />
 
             <div className="content">

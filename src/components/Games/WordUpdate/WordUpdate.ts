@@ -19,7 +19,7 @@ function WordUpdate(user, word) {
     // .then(response => response.status)
     .then(response => response.json())
     .then(data => {
-      if(!data.studing){
+      if(!data.studying){
         const wordData = {
           "difficulty": data.difficulty,
         "optional": {
