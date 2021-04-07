@@ -49,10 +49,10 @@ const TextbookPage: React.FC = () => {
   }, [wordsUrl]);
 
   return (
-    <div>
-      <h1 className={useStyles.textbookTitle}>Изучение </h1>
+    <div className={useStyles.textbookSectionContainer}>
       <div className={useStyles.textbookSectionTitle} style={{backgroundColor: setColor(sectionId)}}>
         <h3>Раздел: {sectionId} Страница: {pageId}</h3>
+        <h1 className={useStyles.textbookTitle}>Изучение </h1>
         <Link to="/settings">
           <img className={useStyles.settingsIcon} src={settingsIcon} alt="settings"/>
         </Link>

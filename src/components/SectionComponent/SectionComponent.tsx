@@ -13,13 +13,16 @@ export default function SectionComponent() {
 
   return (
     <div className={useStyles.sectionContainer}>
-
-      <h1 className={useStyles.sectionTitle} style={{backgroundColor: setColor(sectionId)}}>Раздел {sectionId}</h1>
-      <div className={useStyles.sectionContent}>
-      {Array(30).fill(1).map((_, pageId) => (
-        <Link className={useStyles.sectionLink} key={`k${pageId}`} to={`${url}/${pageId + 1}`}>Страница {`${pageId + 1}`}</Link>
-        )
-      )}
+      <div className={useStyles.sectionWrapper}>
+        <div className={useStyles.sectionTitle}>
+          <h1 className={useStyles.sectionTitleText} style={{backgroundColor: setColor(sectionId)}}>Раздел {sectionId}</h1>
+        </div>
+        <div className={useStyles.sectionContent}>
+          {Array(30).fill(1).map((_, pageId) => (
+              <Link className={useStyles.sectionLink} key={`k${pageId}`} to={`${url}/${pageId + 1}`}>Урок {`${pageId + 1}`}</Link>
+            )
+          )}
+        </div>
       </div>
     </div>
 )};
