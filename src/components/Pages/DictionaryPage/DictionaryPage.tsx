@@ -5,7 +5,6 @@ import { RootState } from "../../../redux/reducer";
 import BookToGame from "../TextbookPage/BookToGame";
 import DictionaryStyles from "./DicrionaryPageStyles";
 import WordsCategory from "./WordsCategory";
-import CardOfWord from "./components/CardForWord/CardForWord";
 
 type Props = {
     lang: string,
@@ -44,11 +43,18 @@ const DictionaryPage: React.FC<Props> = ({ lang, user }: IDictionaryProps) => {
   const { sectionId } = useParams();
   const useStyles = DictionaryStyles();
   const [category, setCategory] = useState("studying");
+  const activeCategory = `${useStyles.dictionaryMenuItem} ${ useStyles.dictionaryMenuItemActive}`;
   const filters = {
     studying: "{\"$and\":[{\"userWord.optional.studying\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
     difficult: "{\"$and\":[{\"userWord.difficulty\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
     deleted: "{\"userWord.optional.deleted\":\"true\"}",
   };
+
+  const higlightCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const typeBtn = e.target.parentElement;
+    
+
+  }
 
   return (
     user.id ?
@@ -56,13 +62,13 @@ const DictionaryPage: React.FC<Props> = ({ lang, user }: IDictionaryProps) => {
       <h1>{`${TEXTS[lang].mainTitle} ->  ${TEXTS[lang].section} ${sectionId}`}</h1>
       <BookToGame difficulty={sectionId} page={'1'} from={'DICTIONARY'} />
       <div className={useStyles.dictionaryMenu}>
-          <button className={useStyles.dictionaryMenuItem} onClick={() => { setCategory("studying") }}>
+          <button className={category === "studying" ? activeCategory :  useStyles.dictionaryMenuItem} onClick={() => { setCategory("studying") }}>
               {TEXTS[lang].studiedWords}
           </button>
-          <button className={useStyles.dictionaryMenuItem} onClick={() => { setCategory("difficult") }}>
+          <button className={category === "difficult" ? activeCategory : useStyles.dictionaryMenuItem} onClick={() => { setCategory("difficult") }}>
               {TEXTS[lang].difficultWords}
           </button>
-          <button className={useStyles.dictionaryMenuItem} onClick={() => { setCategory("deleted") }}>
+          <button className={category === "deleted" ? activeCategory :useStyles.dictionaryMenuItem} onClick={() => { setCategory("deleted") }}>
               {TEXTS[lang].removedWords}
           </button>
       </div>
