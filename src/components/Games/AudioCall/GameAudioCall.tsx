@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import SpeakerIcon from "@material-ui/icons/Speaker";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
+import {LinearProgressStyles, SpeakerIconStyles} from './stylesUI';
+
 import { connect } from "react-redux";
-import useSound from "use-sound";
 import {
   useParams,
 } from "react-router-dom";
-import WordUpdate from "../WordUpdate/WordUpdate";
 import { RootState } from "../../../redux/reducer";
 
 import DisplayWordsComponent from "./DisplayWordsComponent";
@@ -19,8 +19,9 @@ import API_URL from "../../Constants/constants";
 
 const URL = API_URL;
 
-function GameAudioCall({ user }) {
-  const { difficulty, page } = useParams();
+function GameAudioCall({ game, user, lang }) {
+  const { difficulty, page }: { difficulty: string, page: string } = useParams();
+  let pageCounter: number = Number(page);
 
   const [counter, setCounter] = useState(0);
   const [data, setData] = useState([]);
@@ -29,29 +30,111 @@ function GameAudioCall({ user }) {
 
   const [displayWords, setDisplayWords] = useState([]);
 
-  const [trueAnswer, setTrueanswer] = useState(0);
-  const [falseAnswer, setFalseAnswer] = useState(0);
-  const [startGame, setStartGame] = useState(true);
-
   const [rightAnswers, setRightAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
 
   const [maxSerie, setMaxSerie] = useState(0);
 
-  function initGame() {
-    fetch(`${URL}words?group=${difficulty - 1}&page=${page}`)
-      .then((response) => response.json())
-      .then((jsonData) => {
-        const dataShuffle = shuffle(jsonData);
+  const filters = {
+    studying: "{\"$and\":[{\"userWord.optional.studying\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
+    difficult: "{\"$and\":[{\"userWord.difficulty\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
+    deleted: "{\"userWord.optional.deleted\":\"true\"}",
+    not_deleted: "{\"userWord.optional.deleted\":\"false\"}",
+  };
 
-        setWord(dataShuffle.pop());
-        setData(dataShuffle);
-      });
+  interface IGetURL {
+    [key: string]: string;
+  }
+
+  function getUrl(numOfPage: number, urlKey: string) {
+    const url:IGetURL = {
+      All: `${API_URL}words?group=${Number(difficulty) - 1}&page=${Number(numOfPage) - 1}`,
+      UserAll: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=${numOfPage}&filter=${filters.not_deleted}&wordsPerPage=20`,
+      UserDiff: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=0&filter=${filters.difficult}&wordsPerPage=20`,
+      UserStudying: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=0&filter=${filters.studying}&wordsPerPage=20`,
+    };
+    return url[urlKey];
+  }
+
+  function fetchingData(url: string) {
+    // console.log(url);
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          if (game.gameFrom === "DICTIONARY") {
+            console.log("gameFrom = DICTIONARY")
+            initGame(result[0].paginatedResults);
+          } else {
+            console.log("gameFrom != DICTIONARY")
+            initGame(result);
+          }
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
   }
 
   useEffect(() => {
-    initGame();
-  }, []);
+    getData();
+  }, [difficulty]);
+
+  function getData() {
+    if (game.gameFrom === "DICTIONARY") {
+      fetchingData(getUrl(pageCounter, "UserDiff"));
+    } else {
+      fetchingData(getUrl(pageCounter, "All"));
+    }
+  }
+
+
+  function initGame(data) {
+    if(data.length < 20) {
+      addData(data);
+    }
+
+    const dataShuffle = shuffle(data);
+
+    setWord(dataShuffle.pop());
+    setData(dataShuffle);
+  }
+
+  function addData(data: any) {
+    let data3;
+    let currentDifficulty = data[0].group;
+    fetch(`${API_URL}words?group=${Number(currentDifficulty)}&page=${Number(page)}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then(res => res.json())
+    .then(test => {
+      let data2 = test.filter(elem => {
+        if(!data.includes(elem)){
+          return elem;
+        }
+        return;
+      })
+
+      data3 = [...data, ...data2];
+      data3 = data3.splice(0, 20);
+      data3 = shuffle(data3);
+
+      setWord(data3.pop());
+      setData(data3);
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
 
   // -------
   useEffect(() => {
@@ -62,17 +145,12 @@ function GameAudioCall({ user }) {
   }, [counter]);
 
   useEffect(() => {
-    if (startGame !== true) return;
     if (counter === 0) return;
+    if (counter >= 10) return;
 
     playWord();
   }, [word]);
 
-  useEffect(() => {
-    if (counter === 3) {
-      setStartGame(false);
-    }
-  }, [counter]);
 
   useEffect(() => {
     let res = data.filter((elem, index) => {
@@ -94,8 +172,8 @@ function GameAudioCall({ user }) {
   }
 
   function addAnswers(word: any, state: any, elems: []) {
-    if (elems.length) {
-      state([word]);
+    if (elems.length === 0) {
+       state([word]);
     } else {
       const copy = elems;
       copy.push(word);
@@ -108,7 +186,6 @@ function GameAudioCall({ user }) {
     let currentElem: any;
     if (e.target.dataset.value === word.word) {
       setShowImage(true);
-      setTrueanswer((prev) => prev + 1);
       addAnswers(word, setRightAnswers, rightAnswers);
       setMaxSerie((prev) => prev + 1);
 
@@ -123,7 +200,6 @@ function GameAudioCall({ user }) {
       targetElem.classList.add("no-guessed");
       currentElem.classList.add("guessed");
       setShowImage(true);
-      setFalseAnswer((prev) => prev + 1);
       addAnswers(word, setWrongAnswers, wrongAnswers);
       setMaxSerie(0);
 
@@ -142,73 +218,57 @@ function GameAudioCall({ user }) {
 
   function rebootGame() {
     setCounter(0);
-    setTrueanswer(0);
-    setFalseAnswer(0);
-    setCounter(0);
     setWord({});
     setData([]);
     setDisplayWords([]);
-    setStartGame(true);
     setRightAnswers([]);
     setWrongAnswers([]);
-    initGame();
+    getData();
   }
 
-  const LinearProgressStyles = {
-    color: "primary",
-    marginTop: "10px",
-    width: "600px",
-    height: "5px",
-    margin: "0 auto",
-    marginBottom: "20px",
-  };
-
-  const SpeakerIconStyles = {
-    fontSize: 100,
-    color: "#3498db",
-    cursor: "pointer",
-    margin: "0 auto",
-  };
+  if(counter === 10) {
+    return (
+      <ResetGame
+        rightAnswers={rightAnswers}
+        wrongAnswers={wrongAnswers}
+        resetgame={rebootGame}
+        maxSerie={maxSerie}
+        gameId={"2"}
+      />
+    )
+  }
 
   return (
-    <>
-      {startGame
-        ? <div className="game-body-container">
+    <div className="game-body-container">
 
-          <div className="content-container">
-            <LinearProgress style={{ ...LinearProgressStyles }} variant="determinate" value={counter * 10} />
+      <div className="content-container">
+        <LinearProgress style={{ ...LinearProgressStyles }} variant="determinate" value={counter * 10} />
 
-            <div className="content">
-              <DisplayWordsComponent displayWords={displayWords} checkWord={checkWord} />
+        <div className="content">
+          <DisplayWordsComponent displayWords={displayWords} checkWord={checkWord} />
 
-              <div className="word-image">
-                {showImage ? <img className="game-image" src={URL + word.image} alt="" /> : ""}
-              </div>
+          <div className="word-image">
+            {showImage ? <img className="game-image" src={URL + word.image} alt="" /> : ""}
+          </div>
 
-              <div className="speaker-icon">
-                <SpeakerIcon style={{ ...SpeakerIconStyles }} onClick={() => playWord()} />
-              </div>
-            </div>
-
-            <div className="fullscreen-button">
-              <FullScreenButton />
-            </div>
+          <div className="speaker-icon">
+            <SpeakerIcon style={{ ...SpeakerIconStyles }} onClick={() => playWord()} />
           </div>
         </div>
-        : <ResetGame
-          rightAnswers={rightAnswers}
-          wrongAnswers={wrongAnswers}
-          resetgame={rebootGame}
-          maxSerie={maxSerie}
-          gameId={"2"}
-        />
-      }
-    </>
-  );
+
+        <div className="fullscreen-button">
+          <FullScreenButton />
+        </div>
+      </div>
+    </div>
+  )
 }
 
+
 const mapStateToProps = (state: RootState) => ({
+  game: state.game,
   user: state.user,
+  lang: state.settingsReducer.lang.lang,
 });
 
 export default connect(mapStateToProps)(GameAudioCall);
