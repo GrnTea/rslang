@@ -20,8 +20,8 @@ function GameMenu(props: any) {
   const [hide, setHide] = useState(false);
 
   useEffect(() => {
-    const currentLocatin = location.pathname;
-    const chunckL = currentLocatin.split("/").pop();
+    const currentLocation = location.pathname;
+    const chunckL = currentLocation.split("/").pop();
     const num = Number(chunckL);
 
     if (typeof num === "number" && !isNaN(num)) {

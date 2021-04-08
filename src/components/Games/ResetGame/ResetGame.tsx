@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import VolumeUpIcon from "@material-ui/icons/VolumeUp";
 import EmojiEmotionsTwoToneIcon from "@material-ui/icons/EmojiEmotionsTwoTone";
@@ -7,7 +6,6 @@ import "./resetGame.css";
 import { connect } from "react-redux";
 import WordUpdate from "../WordUpdate/WordUpdate";
 
-import { signOut } from "../../../redux/user_reducer";
 import { RootState } from "../../../redux/reducer";
 import API_URL from "../../Constants/constants";
 
@@ -59,7 +57,7 @@ function ResetGame({
           </div>
 
           <div className="word-answer en">{elem.word}</div>
-          <span className="separator"></span>
+          <span className="separator"/>
           <div className="word-answer ru">{elem.wordTranslate}</div>
         </div>
     ));
@@ -75,7 +73,7 @@ function ResetGame({
           </div>
 
           <div className="word-answer en">{elem.word}</div>
-          <span className="separator"></span>
+          <span className="separator"/>
           <div className="word-answer ru">{elem.wordTranslate}</div>
         </div>
     ));
@@ -151,7 +149,7 @@ function ResetGame({
       <div className="right-answers">
         {trueWords}
       </div>
-      <div className="answers-separator"></div>
+      <div className="answers-separator"/>
       <div className="wrong-answers-counter">
         <div className="answers">{lang === "ru" ? "Ошибок:" : "Mistakes:"} </div>
         <div className="wrong-counter">{wrongAnswers.length}</div>
