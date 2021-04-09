@@ -18,12 +18,27 @@ const words = {
 
 let topic = "animals";
 
-function getWord(topic: string) {
-  return words[topic][Math.floor(Math.random() * words[topic].length)]
+function shuffle(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+let shuffledWords = shuffle(words[topic]);
+console.log("shuffledWords", shuffledWords);
+let selectedWord, wordsGuessedCounter = 0;
+
+function getWord(){
+
+  selectedWord = shuffledWords.pop();
+
+  return selectedWord;
 }
 
-let selectedWord = getWord(topic);
+wordsGuessedCounter += 1;
+
+
 console.log("selectedWord", selectedWord);
+
+let wordsAmount = words[topic].length;
+// let wordsGuessed =
 
 
 function setFullScreen(){
@@ -32,7 +47,7 @@ function setFullScreen(){
   } else if (document.exitFullscreen) {
     document.exitFullscreen();
   }
-}
+};
 
 export default function GameHangman() {
   const [playable, setPlayable] = useState(true);
