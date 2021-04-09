@@ -33,7 +33,7 @@ function GameMenu(props: any) {
 
   return (
     <div className="game-container">
-
+      <h5 className={hide ? "game-name" : "game-name hide"}>{props.gameName}</h5>
       <div className={hide ? "game-menu hide" : "game-menu"}>
         <div className="game-name">{props.gameName}</div>
         <div className="game-description">{props.description}</div>
