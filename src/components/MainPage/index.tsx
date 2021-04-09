@@ -1,3 +1,4 @@
 import MainPage from "./MainPage";
+import MainPageNew from "./MainPageNew";
 
-export default MainPage;
+export default MainPageNew;

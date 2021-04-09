@@ -2,13 +2,13 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const headerStyles = makeStyles(
   {
-    appBar: {
-      backgroundColor: "#3f51b5",
+    appBar: (theme) => ({
+      backgroundColor: theme.background,
       color: "#FFFFFF",
       fontWeight: 700,
       padding: "0",
 
-    },
+    }),
     toolbar: {
       display: "flex",
       flexDirection: "row",
@@ -69,7 +69,7 @@ const headerStyles = makeStyles(
     closeButton: {
 
       color: "#fff",
-    // margin: "10px 0",
+      // margin: "10px 0",
     },
   },
 );

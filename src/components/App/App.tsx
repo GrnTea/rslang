@@ -59,42 +59,49 @@ const App = () => {
   return (
     <React.Fragment>
       <HashRouter>
-        <Header />
-        <main className={useStyles.mainContent}>
+        <Switch>
           <Switch>
             <Route exact path="/">
+              <Header theme={"transparent"} />
               <MainPage />
               {/*<Link className="link-navigation" to='/games'>games</Link>*/}
             </Route>
-            <Route path="/games">
-              <Games />
-            </Route>
-            <Route path="/signin">
-              <SignIn />
-            </Route>
-            <Route path="/signup">
-              <SignUp />
-            </Route>
-            <Route path="/profile">
-              <UserProfile />
-            </Route>
-            <Route path="/section/:sectionId/:pageId" render={(props) => <TextbookPage {...props.match.params} />} />
-            <Route path="/section/:sectionId" render={(props) => <SectionComponent {...props.match.params} />} />
-            <Route path="/dictionary/:sectionId/" render={(props) => <DictionaryPage {...props.match.params} />} />
-            <Route path="/team">
-              <TeamPage />
-            </Route>
-            <Route path="/settings">
-              <SettingsPage />
-            </Route>
-            <Route path="/statistics">
-              <Stat />
+            <Route path="/">
+              <Header />
+              <main className={useStyles.mainContent}>
+                <Switch>
+                  <Route path="/games">
+                    <Games />
+                  </Route>
+                  <Route path="/signin">
+                    <SignIn />
+                  </Route>
+                  <Route path="/signup">
+                    <SignUp />
+                  </Route>
+                  <Route path="/profile">
+                    <UserProfile />
+                  </Route>
+                  <Route path="/section/:sectionId/:pageId" render={(props) => <TextbookPage {...props.match.params} />} />
+                  <Route path="/section/:sectionId" render={(props) => <SectionComponent {...props.match.params} />} />
+                  <Route path="/dictionary/:sectionId/" render={(props) => <DictionaryPage {...props.match.params} />} />
+                  <Route path="/team">
+                    <TeamPage />
+                  </Route>
+                  <Route path="/settings">
+                    <SettingsPage />
+                  </Route>
+                  <Route path="/statistics">
+                    <Stat />
+                  </Route>
+                </Switch>
+              </main>
+              <Footer />
             </Route>
           </Switch>
-        </main>
-        <Footer />
+        </Switch>        
       </HashRouter>
-    </React.Fragment>
+    </React.Fragment >
   );
 };
 
@@ -105,7 +112,7 @@ export default App;
 //   {/*<Switch>
 { /* <Route path={`${path}/:pageId`} component={TextbookPage} /> */ }
 // </Switch>*!/}
-// </SectionComponent>*/
+// </SectionComponent> * /
 // {/*<Route path="/:pageId"><TextbookPage/>}<Route/>*/}
 
 { /* <Route path="/section/:sectionId/:pageId" render={props => <TextbookPage {...props.match.params}/>} /> */ }
