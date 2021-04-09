@@ -14,7 +14,7 @@ import API_URL from "../../Constants/constants";
 function ResetGame({
   user, game, maxSerie, rightAnswers, wrongAnswers, resetgame, gameId
 }) {
-  // console.log(user);
+  // console.log(rightAnswers, wrongAnswers);
 
   const buttonStyles = {
     backgroundColor: "#3498db",
