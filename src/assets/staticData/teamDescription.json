@@ -1,32 +1,80 @@
 { 
-    "team": [
-        {
-            "id": 0,
-            "userName": "Julia1 Gvozdeva1",
-            "userImg": "https://picsum.photos/200/300",
-            "userDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-            "userGitHub": "https://github.com/JuliaGvozdeva"
-        },
-        {
-            "id": 1,
-            "userName": "Julia2 Gvozdeva2",
-            "userImg": "https://picsum.photos/200/300",
-            "userDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-            "userGitHub": "https://github.com/JuliaGvozdeva"
-        },
-        {
-            "id": 2,
-            "userName": "Julia1 Gvozdeva1",
-            "userImg": "https://picsum.photos/200/300",
-            "userDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-            "userGitHub": "https://github.com/JuliaGvozdeva"
-        },
-        {
-            "id": 3,
-            "userName": "Julia2 Gvozdeva2",
-            "userImg": "https://picsum.photos/200/300",
-            "userDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-            "userGitHub": "https://github.com/JuliaGvozdeva"
-        }
-    ]
+    "team": {
+        "ru": 
+        [
+            {
+                "id": 0,
+                "userName": "Арсений Бурячек",
+                "userImg": "arseniy",
+                "userDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                "userGitHub": "https://github.com/ArseniyXaoc"
+            },
+            {
+                "id": 1,
+                "userName": "Илья Котов",
+                "userImg": "ilya",
+                "userDescription": "Регистрация, авторизация и деавторизация пользователя (формы с валидацией, получение и хранение токена и данных). API для статистики на бэкенде, страница статистики.",
+                "userGitHub": "https://github.com/Beljar"
+            },
+            {
+                "id": 2,
+                "userName": "Екатерина Матвеева",
+                "userImg": "kate",
+                "userDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                "userGitHub": "https://github.com/GrnTea"
+            },
+            {
+                "id": 3,
+                "userName": "Максим",
+                "userImg": "maksim",
+                "userDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                "userGitHub": "https://github.com/JuliaGvozdeva"
+            },
+            {
+                "id": 4,
+                "userName": "Юлия Гвоздева",
+                "userImg": "julia",
+                "userDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                "userGitHub": "https://github.com/JuliaGvozdeva"
+            }
+        ],
+        "en": 
+        [
+            {
+                "id": 0,
+                "userName": "Arseniy Buryachek",
+                "userImg": "arseniy",
+                "userDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                "userGitHub": "https://github.com/JuliaGvozdeva"
+            },
+            {
+                "id": 1,
+                "userName": "Ilia Kotov",
+                "userImg": "ilya",
+                "userDescription": "Регистрация, авторизация и деавторизация пользователя (формы с валидацией, получение и хранение токена и данных). API для статистики на бэкенде, страница статистики.",
+                "userGitHub": "https://github.com/Beljar"
+            },
+            {
+                "id": 2,
+                "userName": "Ekaterina Matveeva",
+                "userImg": "kate",
+                "userDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                "userGitHub": "https://github.com/GrnTea"
+            },
+            {
+                "id": 3,
+                "userName": "Maksim Kisialiou",
+                "userImg": "maksim",
+                "userDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                "userGitHub": "https://github.com/conservativ007"
+            },
+            {
+                "id": 4,
+                "userName": "Julia Gvozdeva",
+                "userImg": "julia",
+                "userDescription": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                "userGitHub": "https://github.com/JuliaGvozdeva"
+            }
+        ]
+    }  
 }
