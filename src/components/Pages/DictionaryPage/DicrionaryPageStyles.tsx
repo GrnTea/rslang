@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 const dictionaryStyles = makeStyles({
   dictionaryContainer: {
     maxWidth: "1200px",
+    width: "1200px",
     margin: "0 auto",
     padding: "10px",
     display: "flex",
@@ -85,6 +86,12 @@ const dictionaryStyles = makeStyles({
     height: "32px",
     marginTop: "3px",
   },
+
+  paginationContainer: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+  }
 });
 
 export default dictionaryStyles;
