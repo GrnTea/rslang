@@ -8,8 +8,6 @@ import AspectRatioIcon from "@material-ui/icons/AspectRatio";
 import Button from "@material-ui/core/Button";
 import "./GameHangmanStyles.scss";
 
-
-
 const words = {
   fruits: ['apple', 'banana', 'grapes', 'pear', 'orange'],
   animals: ['cat', 'frog', 'dog', 'goat', 'elephant'],
@@ -17,28 +15,25 @@ const words = {
 };
 
 let topic = "animals";
+let wordsAmount = words[topic].length;
 
-function shuffle(array) {
+function shuffle(array: any) {
   return array.sort(() => Math.random() - 0.5);
 }
 let shuffledWords = shuffle(words[topic]);
+let selectedWord = "", wordsSelectedCounter = 0;
 console.log("shuffledWords", shuffledWords);
-let selectedWord, wordsGuessedCounter = 0;
+
 
 function getWord(){
-
   selectedWord = shuffledWords.pop();
-
-  return selectedWord;
+  wordsSelectedCounter += 1;
+  return {selectedWord, wordsSelectedCounter};
 }
 
-wordsGuessedCounter += 1;
-
+getWord();
 
 console.log("selectedWord", selectedWord);
-
-let wordsAmount = words[topic].length;
-// let wordsGuessed =
 
 
 function setFullScreen(){
@@ -54,10 +49,11 @@ export default function GameHangman() {
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
 
+
   console.log("selectedWord inside", selectedWord);
 
   useEffect(() => {
-    const handleKeydown = event => {
+    const handleKeydown = (event: any) => {
       const {key, keyCode} = event;
 
       if (playable && keyCode >= 65 && keyCode <= 90) {
@@ -90,17 +86,20 @@ export default function GameHangman() {
 
 
   return (
-    <div className="hangman-container">
-      <Figure wrongLetters={wrongLetters}/>
-      <WrongLetters wrongLetters={wrongLetters}/>
-      <Word selectedWord={selectedWord} correctLetters={correctLetters}/>
-      <div className="hangman-fullscreen-button">
-          <AspectRatioIcon
-            onClick={setFullScreen}
-            className="fullscreen-button-cursor"
-            fontSize="large"
-            color="primary"
-          />
+    <div>
+      <div className="hangman-counter">{wordsSelectedCounter} / {wordsAmount}</div>
+      <div className="hangman-container">
+        <Figure wrongLetters={wrongLetters}/>
+        <WrongLetters wrongLetters={wrongLetters}/>
+        <Word selectedWord={selectedWord} correctLetters={correctLetters}/>
+        <div className="hangman-fullscreen-button">
+            <AspectRatioIcon
+              onClick={setFullScreen}
+              className="fullscreen-button-cursor"
+              fontSize="large"
+              color="primary"
+            />
+        </div>
       </div>
     </div>
   )
