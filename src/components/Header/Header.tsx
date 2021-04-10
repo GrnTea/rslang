@@ -26,6 +26,7 @@ import settingIcon from "../../assets/icons/settings.svg";
 import statIcon from "../../assets/icons/trend.svg";
 import teamIcon from "../../assets/icons/group.svg";
 import exitIcon from "../../assets/icons/logout.svg";
+import bookImg from "../../assets/images/main/textbook.png";
 
 const buttonsData = [
   /* {

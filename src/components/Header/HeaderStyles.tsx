@@ -1,13 +1,16 @@
 import { makeStyles } from "@material-ui/core/styles";
 
+
 const headerStyles = makeStyles(
   {
     appBar: (theme) => ({
-      backgroundColor: theme.background,
+      backgroundImage: theme.backgroundImage,
+      backgroundColor: theme.backgroundColor,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
       color: "#FFFFFF",
       fontWeight: 700,
       padding: "0",
-
     }),
     toolbar: {
       display: "flex",

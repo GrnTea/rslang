@@ -21,6 +21,7 @@ import appStyles from "./AppStyles";
 import DictionaryPage from "../Pages/DictionaryPage/DictionaryPage";
 import SectionComponent from "../SectionComponent/SectionComponent";
 import MainPage from "../MainPage";
+import PromoPage from "../Promo";
 
 /* const App = () => {
   const useStyles = appStyles();
@@ -63,13 +64,16 @@ const App = () => {
           <Switch>
             <Route exact path="/">
               <Header theme={"transparent"} />
-              <MainPage />
+              <PromoPage />
               {/*<Link className="link-navigation" to='/games'>games</Link>*/}
             </Route>
             <Route path="/">
               <Header />
               <main className={useStyles.mainContent}>
                 <Switch>
+                <Route path="/main">
+                    <MainPage />
+                  </Route>
                   <Route path="/games">
                     <Games />
                   </Route>

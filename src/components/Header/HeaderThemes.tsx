@@ -1,9 +1,13 @@
+import bgImage from "../../assets/images/main/bg.svg";
+
 const themes = {
   normal: {
-    background: "#3f51b5",
+    backgroundImage: `url(${bgImage})`,
+    backgroundColor: "rgba(0,0,0,0)",
   },
   transparent: {
-    background: "rgba(0,0,0,0)",
+    backgroundImage: "",
+    backgroundColor: "rgba(0,0,0,0)",
   },
 }
 
