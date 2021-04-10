@@ -12,7 +12,7 @@ const getOverallPercent = (stat) => {
 
 const DailyStat = ({ user, stat }) => {
   if (stat.length) {
-    return <div>
+    return <div className="stat-section">
       <h1>{"Today"}</h1>
       <div className="iconed-block">
         <i className={"icon icon--study"}></i>

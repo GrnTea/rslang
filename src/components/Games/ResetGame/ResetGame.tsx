@@ -14,7 +14,7 @@ import API_URL from "../../Constants/constants";
 function ResetGame({
   user, game, maxSerie, rightAnswers, wrongAnswers, resetgame, gameId
 }) {
-  // console.log(user);
+  // console.log(rightAnswers, wrongAnswers);
 
   const buttonStyles = {
     backgroundColor: "#3498db",
@@ -112,10 +112,10 @@ function ResetGame({
   useEffect(() => {
     if (game && user.id) {
       rightAnswers.forEach((element) => {
-        WordUpdate(user, element.id);
+        WordUpdate(user, element.id, true);
       });
       wrongAnswers.forEach((element) => {
-        WordUpdate(user, element.id);
+        WordUpdate(user, element.id, false);
       });
     }
   }, []);
