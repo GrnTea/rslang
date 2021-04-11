@@ -72,8 +72,8 @@ function ResetGame({
     learnedWords: Number,
     date: Number, //  (current time in UTCmiliseconds)
     gameId: String,
-    rightAnswers: Number,
-    wrongAnswers: Number,
+    rightAnswers: Array<{}>,
+    wrongAnswers: Array<{}>,
     maxSerie: Number
   }
 
@@ -111,11 +111,11 @@ function ResetGame({
 
   useEffect(() => {
     if (game && user.id) {
-      rightAnswers.forEach((element) => {
-        WordUpdate(user, element.id);
+      rightAnswers.forEach((element: any) => {
+        WordUpdate(user, element.id, true, game);
       });
-      wrongAnswers.forEach((element) => {
-        WordUpdate(user, element.id);
+      wrongAnswers.forEach((element: any) => {
+        WordUpdate(user, element.id, false, game);
       });
     }
   }, []);

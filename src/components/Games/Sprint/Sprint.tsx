@@ -141,8 +141,19 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
       wordTranslate: "",
       id: "",
       isTrueTranslate: false,
-      audio: ""
+      audio: "",
     };
+
+    if (wordArr.length < 1) {
+      if (game.gameFrom === DICTIONARY) {
+        setFinish(true);
+        return;
+      }
+      pageCounter += 1;
+      if (pageCounter === 31) setFinish(true);
+      fetchingData(getUrl(pageCounter, "All"));
+      setIsLoaded(false);
+    }
 
     wordData.isTrueTranslate = Boolean(Math.round(Math.random()));
     const numOfWord = random(wordArr.length - 1);
@@ -153,20 +164,13 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
     try {
       wordData.wordTranslate = wordArr[numOfWord].wordTranslate;
       wordData.audio = wordArr[numOfWord].audio;
-      wordData.checkTranslate = wordData.isTrueTranslate ? wordArr[numOfWord].wordTranslate : wordArr[numFakeWord].wordTranslate;
+      wordData.checkTranslate = wordData.isTrueTranslate
+        ? wordArr[numOfWord].wordTranslate : wordArr[numFakeWord].wordTranslate;
     } catch (e) {
       console.log(ERROR + e);
     }
     setPlayWords(wordArr.filter((item, index) => numOfWord !== index));
-    if (wordArr.length === 1) {
-      if (game.gameFrom === DICTIONARY) {
-        setFinish(true);
-      }
-      pageCounter += 1;
-      if (pageCounter === 31) setFinish(true);
-      fetchingData(getUrl(pageCounter, "All"));
-      setIsLoaded(false);
-    }
+   
 
     setCurrentWord(wordData);
     return wordData;
