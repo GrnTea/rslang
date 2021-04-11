@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   useParams,
 } from "react-router-dom";
-import ResetGame from "./ResetGame";
+import ResetGame from "../ResetGame/ResetGame";
 import "./gameSavannah.css";
 import useSound from "use-sound";
 import succes from "../../../assets/sound/succes.mp3";
@@ -12,10 +12,15 @@ import FavoriteTwoToneIcon from "@material-ui/icons/FavoriteTwoTone";
 import FullScreenButton from "./FullScreenButton";
 import API_URL from "../../Constants/constants";
 
+import { connect } from "react-redux";
+import { RootState } from "../../../redux/reducer";
+
 const URL = API_URL;
 
-export default function GameSavannah() {
-  const { difficulty, page } = useParams();
+function GameSavannah({ game, user }: { game: { gameFrom: string }, user:  {id: any, token: any } }) {
+  const { difficulty, page }: {difficulty: string, page: string} = useParams();
+  let pageCounter: number = Number(page);
+
   const [counter, setCounter] = useState(0);
   const [data, setData] = useState([]);
   const [word, setWord] = useState({});
@@ -23,8 +28,6 @@ export default function GameSavannah() {
   let [gravityCounter, setGravityCounter] = useState(0);
   const [lifeCounter, setLifeCounter] = useState(2);
 
-  const [rightAnswersCounter, setRightAnswersCounter] = useState(0);
-  const [wrongAnswersCounter, setWrongAnswersCounter] = useState(0);
 
   const [rightAnswers, setRightAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
@@ -34,20 +37,102 @@ export default function GameSavannah() {
 
   const [playError] = useSound(error);
 
-  function initGame() {
-    fetch(`${URL}words?group=${difficulty - 1}&page=${page}`)
-      .then((response) => response.json())
-      .then((jsonData) => {
-        const dataShuffle = shuffle(jsonData);
+  const filters = {
+    studying: "{\"$and\":[{\"userWord.optional.studying\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
+    difficult: "{\"$and\":[{\"userWord.difficulty\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
+    deleted: "{\"userWord.optional.deleted\":\"true\"}",
+    not_deleted: "{\"userWord.optional.deleted\":\"false\"}",
+  };
 
-        setWord(dataShuffle.pop());
-        setData(dataShuffle);
-      });
+  interface IGetURL {
+    [key: string]: string;
+  }
+
+  function getUrl(numOfPage: number, urlKey: string) {
+    const url:IGetURL = {
+      All: `${API_URL}words?group=${Number(difficulty) - 1}&page=${numOfPage}`,
+      UserAll: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=${numOfPage}&filter=${filters.not_deleted}&wordsPerPage=20`,
+      UserDiff: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=0&filter=${filters.difficult}&wordsPerPage=20`,
+      UserStudying: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=0&filter=${filters.studying}&wordsPerPage=20`,
+    };
+    return url[urlKey];
+  }
+
+  function fetchingData(url: string) {
+    console.log(url);
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          if (game.gameFrom === "DICTIONARY") {
+            initGame(result[0].paginatedResults)
+          } else {
+            // console.log(result)
+            initGame(result)
+          }
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
+  }
+
+
+  function initGame(data: any) {
+    if(data.length < 20) {
+      addData(data);
+    }
+
+    const dataShuffle = shuffle(data);
+
+    setWord(dataShuffle.pop());
+    setData(dataShuffle);
+  }
+  
+
+  function getData() {
+    if (game.gameFrom === "DICTIONARY") {
+      fetchingData(getUrl(pageCounter, "UserDiff"));
+    } else {
+      fetchingData(getUrl(pageCounter, "All"));
+    }
   }
 
   useEffect(() => {
-    initGame();
-  }, []);
+    getData();
+  }, [difficulty]);
+
+
+  function addData(data: any) {
+    let data3;
+    let currentDifficulty = data[0].group;
+    fetch(`${API_URL}words?group=${Number(currentDifficulty)}&page=${Number(page)}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then(res => res.json())
+    .then(resData => {
+
+      data3 = [...data, ...resData];
+      data3 = data3.splice(0, 20);
+      data3 = shuffle(data3);
+
+      setWord(data3.pop());
+      setData(data3);
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+  
 
   useEffect(() => {
     if (counter === 0) return;
@@ -58,7 +143,7 @@ export default function GameSavannah() {
 
   // запушить новую пачку слов в стейт для отображения на экране
   useEffect(() => {
-    let res = data.filter((elem, index) => {
+    let res: any = data.filter((elem, index) => {
       if (index > 2) return;
       return elem;
     });
@@ -75,7 +160,6 @@ export default function GameSavannah() {
     setGravityCounter(0);
     setCounter((prev) => prev + 1);
     setLifeCounter((prev) => prev - 1);
-    setWrongAnswersCounter((prev) => prev + 1);
     addAnswers(word, setWrongAnswers, wrongAnswers);
     playError();
   }, [gravityCounter]);
@@ -97,7 +181,6 @@ export default function GameSavannah() {
       selectElem.classList.add("guess");
       audioPlay(succes);
       resetWorld(500);
-      setRightAnswersCounter((prev) => prev + 1);
       // передаём слово, стейт правильных или не правильных ответов, состояние
       addAnswers(word, setRightAnswers, rightAnswers);
     } else {
@@ -106,12 +189,12 @@ export default function GameSavannah() {
       audioPlay(error);
       resetWorld(1500);
       setLifeCounter((prev) => prev - 1);
-      setWrongAnswersCounter((prev) => prev + 1);
       addAnswers(word, setWrongAnswers, wrongAnswers);
     }
   }
 
-  function addAnswers(word, state, elems) {
+
+  function addAnswers(word: any, state: any, elems: any) {
     if (elems.length === 0) {
       state([word]);
     } else {
@@ -139,7 +222,7 @@ export default function GameSavannah() {
   useEffect(() => {
     if (endGame === true) return;
 
-    const elem = document.querySelector(".word-absolute");
+    const elem : any = document.querySelector(".word-absolute");
 
     const intervalId = setInterval(() => {
       gravityCounter++;
@@ -163,7 +246,7 @@ export default function GameSavannah() {
   }, [counter, lifeCounter]);
 
   useEffect(() => {
-    const res = displayWords.map((elem, index) => (
+    const res = displayWords.map((elem: any, index: number) => (
       <div
         data-value={elem.word}
         className="word-display"
@@ -178,44 +261,50 @@ export default function GameSavannah() {
   }, [displayWords]);
 
   function resetgame() {
-    initGame();
     setLifeCounter(2);
     setGravityCounter(0);
-    setRightAnswersCounter(0);
-    setWrongAnswersCounter(0);
     setCounter(0);
     setEndGame(false);
     setRightAnswers([]);
     setWrongAnswers([]);
+    getData();
+  }
+
+  if(endGame) {
+    return (
+      <ResetGame
+        maxSerie={rightAnswers.length}
+        rightAnswers={rightAnswers}
+        wrongAnswers={wrongAnswers}
+        resetgame={resetgame}
+        gameId={"1"}
+      />
+    )
   }
 
   return (
-    <>
-      {endGame === false
-        ? <div className="words-container">
-          <div className="words-display">
-            <div className="life-container">
-              <div className="life-counter">{lifeCounter}</div>
-              <FavoriteTwoToneIcon className="life-icon" />
-            </div>
-
-            <div className="word-absolute">{word.word}</div>
-            {wordsDisplayedOnTheScreen}
-          </div>
-          <div className="fullscreen-button">
-            <FullScreenButton />
-          </div>
-          <input className="input-hidden" type="hidden" onClick={() => audioPlay(error)} />
+    <div className="words-container">
+      <div className="words-display">
+        <div className="life-container">
+          <div className="life-counter">{lifeCounter}</div>
+          <FavoriteTwoToneIcon className="life-icon" />
         </div>
 
-        : <ResetGame
-          maxSerie={rightAnswersCounter}
-          rightAnswers={rightAnswers}
-          wrongAnswers={wrongAnswers}
-          resetgame={resetgame}
-          gameId={"1"}
-        />
-      }
-    </>
+        <div className="word-absolute">{word.word}</div>
+        {wordsDisplayedOnTheScreen}
+      </div>
+      <div className="fullscreen-button">
+        <FullScreenButton />
+      </div>
+      <input className="input-hidden" type="hidden" onClick={() => audioPlay(error)} />
+    </div>
   );
 }
+
+const mapStateToProps = (state: RootState) => ({
+  game: state.game,
+  user: state.user,
+  lang: state.settingsReducer.lang.lang,
+});
+
+export default connect(mapStateToProps)(GameSavannah);
