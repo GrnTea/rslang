@@ -39,7 +39,6 @@ const TextbookPage: React.FC = () => {
     fetch(wordsUrl)
       .then((response) => response.json())
       .then((jsonData) => {
-        // console.log(jsonData);
         setPageWords(jsonData);
       });
   }
@@ -63,7 +62,7 @@ const TextbookPage: React.FC = () => {
 
       </div>
       <BookToGame difficulty={sectionId} page={pageId} from={'TEXTBOOK'}/>
-      {pageWords.map((card: IWord) => <CardForWords key={card.id} cardInfo={card} />)}
+      {pageWords.map((card: IWord) => <CardForWords key={card.id} cardInfo={card} isMain={true}/>)}
       <BookToGame difficulty={sectionId} page={pageId} from={'TEXTBOOK'}/>
       <Pagination page={pageId} sectionId={sectionId} />
     </div>
