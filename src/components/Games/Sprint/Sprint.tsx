@@ -72,6 +72,7 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
     wordTranslate: "",
     isTrueTranslate: false,
     id: "",
+    audio: "",
   });
 
   const filters = {
@@ -170,7 +171,6 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
       console.log(ERROR + e);
     }
     setPlayWords(wordArr.filter((item, index) => numOfWord !== index));
-   
 
     setCurrentWord(wordData);
     return wordData;
