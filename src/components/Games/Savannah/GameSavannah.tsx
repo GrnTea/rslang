@@ -17,8 +17,8 @@ import { RootState } from "../../../redux/reducer";
 
 const URL = API_URL;
 
-function GameSavannah({ game, user }) {
-  const { difficulty, page } = useParams();
+function GameSavannah({ game, user }: { game: { gameFrom: string }, user:  {id: any, token: any } }) {
+  const { difficulty, page }: {difficulty: string, page: string} = useParams();
   let pageCounter: number = Number(page);
 
   const [counter, setCounter] = useState(0);
@@ -84,7 +84,7 @@ function GameSavannah({ game, user }) {
   }
 
 
-  function initGame(data) {
+  function initGame(data: any) {
     if(data.length < 20) {
       addData(data);
     }
@@ -119,15 +119,9 @@ function GameSavannah({ game, user }) {
       },
     })
     .then(res => res.json())
-    .then(test => {
-      let data2 = test.filter(elem => {
-        if(!data.includes(elem)){
-          return elem;
-        }
-        return;
-      })
+    .then(resData => {
 
-      data3 = [...data, ...data2];
+      data3 = [...data, ...resData];
       data3 = data3.splice(0, 20);
       data3 = shuffle(data3);
 
@@ -149,7 +143,7 @@ function GameSavannah({ game, user }) {
 
   // запушить новую пачку слов в стейт для отображения на экране
   useEffect(() => {
-    let res = data.filter((elem, index) => {
+    let res: any = data.filter((elem, index) => {
       if (index > 2) return;
       return elem;
     });
@@ -199,7 +193,8 @@ function GameSavannah({ game, user }) {
     }
   }
 
-  function addAnswers(word, state, elems) {
+
+  function addAnswers(word: any, state: any, elems: any) {
     if (elems.length === 0) {
       state([word]);
     } else {
@@ -227,7 +222,7 @@ function GameSavannah({ game, user }) {
   useEffect(() => {
     if (endGame === true) return;
 
-    const elem = document.querySelector(".word-absolute");
+    const elem : any = document.querySelector(".word-absolute");
 
     const intervalId = setInterval(() => {
       gravityCounter++;
@@ -251,7 +246,7 @@ function GameSavannah({ game, user }) {
   }, [counter, lifeCounter]);
 
   useEffect(() => {
-    const res = displayWords.map((elem, index) => (
+    const res = displayWords.map((elem: any, index: number) => (
       <div
         data-value={elem.word}
         className="word-display"
@@ -275,34 +270,34 @@ function GameSavannah({ game, user }) {
     getData();
   }
 
-  return (
-    <>
-      {endGame === false
-        ? <div className="words-container">
-          <div className="words-display">
-            <div className="life-container">
-              <div className="life-counter">{lifeCounter}</div>
-              <FavoriteTwoToneIcon className="life-icon" />
-            </div>
+  if(endGame) {
+    return (
+      <ResetGame
+        maxSerie={rightAnswers.length}
+        rightAnswers={rightAnswers}
+        wrongAnswers={wrongAnswers}
+        resetgame={resetgame}
+        gameId={"1"}
+      />
+    )
+  }
 
-            <div className="word-absolute">{word.word}</div>
-            {wordsDisplayedOnTheScreen}
-          </div>
-          <div className="fullscreen-button">
-            <FullScreenButton />
-          </div>
-          <input className="input-hidden" type="hidden" onClick={() => audioPlay(error)} />
+  return (
+    <div className="words-container">
+      <div className="words-display">
+        <div className="life-container">
+          <div className="life-counter">{lifeCounter}</div>
+          <FavoriteTwoToneIcon className="life-icon" />
         </div>
 
-        : <ResetGame
-          maxSerie={rightAnswers.length}
-          rightAnswers={rightAnswers}
-          wrongAnswers={wrongAnswers}
-          resetgame={resetgame}
-          gameId={"1"}
-        />
-      }
-    </>
+        <div className="word-absolute">{word.word}</div>
+        {wordsDisplayedOnTheScreen}
+      </div>
+      <div className="fullscreen-button">
+        <FullScreenButton />
+      </div>
+      <input className="input-hidden" type="hidden" onClick={() => audioPlay(error)} />
+    </div>
   );
 }
 
