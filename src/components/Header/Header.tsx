@@ -28,19 +28,19 @@ import teamIcon from "../../assets/icons/group.svg";
 import exitIcon from "../../assets/icons/logout.svg";
 
 const buttonsData = [
-  /* {
+/*   {
     label: "Главная",
     href: "/main",
-  }, */
-  /*  {
+  },
+    {
     label: "Изучение",
     href: "/learning",
-  }, */
-  // {
-  //   label: "Словарь",
-  //   href: "/dictionary",
-  //   icon: dictionaryIcon,
-  // },
+  },
+  {
+    label: "Словарь",
+    href: "/dictionary",
+    icon: dictionaryIcon,
+  },*/
   {
     label: "Мини-игры",
     href: "/games",
@@ -65,12 +65,12 @@ const buttonsData = [
     icon: teamIcon,
 
   },
-  {
+ /* {
     label: "Exit",
     href: "/",
     icon: exitIcon,
 
-  },
+  },*/
 ];
 
 function Header() {
@@ -102,7 +102,7 @@ function Header() {
       }
 
       return [1, 2, 3, 4, 5, 6].map((listItem) => (
-          <ListItemLink key={`k${listItem}`} to={`/${path}/${listItem}`} activeClassName="Mui-selected">
+          <ListItemLink key={`k${listItem}`} to={`/${path}/${listItem}`} activeClassName="Mui-selected" onClick={handleDrawerClose}>
             <ListItemText className={listLinkItemSection} primary={`Раздел ${listItem}`}/>
           </ListItemLink>
       ));
@@ -118,6 +118,7 @@ function Header() {
               if (label === "Мини-игры") {
                 dispatch({ type: "GAME_SET_DEFAULT" });
               }
+              handleDrawerClose();
             }}
           >
             <div className={listItemContainer}>
@@ -164,7 +165,7 @@ function Header() {
             <Link to="/" className={listLinkItem}>
               <div className={listItemContainer}>
                 <img className={menuIcon} src={homeIcon} alt="home"/>
-                <MenuItem>{"Главная"}</MenuItem>
+                <MenuItem onClick={handleDrawerClose}>{"Главная"}</MenuItem>
               </div>
             </Link>
 

@@ -5,6 +5,9 @@ import { RootState } from "../../../redux/reducer";
 import BookToGame from "../TextbookPage/BookToGame";
 import DictionaryStyles from "./DicrionaryPageStyles";
 import WordsCategory from "./WordsCategory";
+import setColor from "../../../utils";
+import settingsIcon from "../../../assets/icons/settingsBlack.svg";
+import { Link } from "react-router-dom";
 
 type Props = {
     lang: string,
@@ -43,6 +46,7 @@ const DictionaryPage: React.FC<Props> = ({ lang, user }: IDictionaryProps) => {
   const { sectionId } = useParams();
   const useStyles = DictionaryStyles();
   const [category, setCategory] = useState("studying");
+  const activeCategory = `${useStyles.dictionaryMenuItem} ${ useStyles.dictionaryMenuItemActive}`;
   const filters = {
     studying: "{\"$and\":[{\"userWord.optional.studying\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
     difficult: "{\"$and\":[{\"userWord.difficulty\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
@@ -50,25 +54,33 @@ const DictionaryPage: React.FC<Props> = ({ lang, user }: IDictionaryProps) => {
   };
 
   return (
+    user.id ?
     <div className={useStyles.dictionaryContainer}>
-          <h1>{`${TEXTS[lang].mainTitle} ->  ${TEXTS[lang].section} ${sectionId}`}</h1>
-          <BookToGame difficulty={sectionId} page={'1'} from={'DICTIONARY'}/>
-          <div className={useStyles.dictionaryMenu}>
-              <button className={useStyles.dictionaryMenuItem} onClick={() => { setCategory("studiedWords"); }}>
-                  {TEXTS[lang].studiedWords}
-              </button>
-              <button className={useStyles.dictionaryMenuItem} onClick={() => { setCategory("difficultWords"); }}>
-                  {TEXTS[lang].difficultWords}
-              </button>
-              <button className={useStyles.dictionaryMenuItem} onClick={() => { setCategory("removedWords"); }}>
-                  {TEXTS[lang].removedWords}
-              </button>
-          </div>
-          { category === "studiedWords"
-            ? <WordsCategory user={user} section={sectionId} filter={filters.studying}/>
-            : category === "difficultWords" ? <WordsCategory user={user} section={sectionId} filter={filters.difficult}/>
-              : <WordsCategory user={user} section={sectionId} filter={filters.deleted} />}
-    </div>
+      <div className={useStyles.textbookSectionTitle} style={{backgroundColor: setColor(sectionId)}}>
+        
+      <h3>{`${TEXTS[lang].section} ${sectionId}`}</h3>
+        <h1 >{`${TEXTS[lang].mainTitle}`}</h1>
+        <div className={useStyles.textbookSectionBlock}>
+          <Link to="/settings">
+            <img className={useStyles.settingsIcon} src={settingsIcon} alt="settings"/>
+          </Link>
+        </div>
+      </div>
+
+      <BookToGame difficulty={sectionId} page={'1'} from={'DICTIONARY'} />
+      <div className={useStyles.dictionaryMenu}>
+          <button className={category === "studying" ? activeCategory :  useStyles.dictionaryMenuItem} onClick={() => { setCategory("studying") }}>
+              {TEXTS[lang].studiedWords}
+          </button>
+          <button className={category === "difficult" ? activeCategory : useStyles.dictionaryMenuItem} onClick={() => { setCategory("difficult") }}>
+              {TEXTS[lang].difficultWords}
+          </button>
+          <button className={category === "deleted" ? activeCategory :useStyles.dictionaryMenuItem} onClick={() => { setCategory("deleted") }}>
+              {TEXTS[lang].removedWords}
+          </button>
+      </div>
+      <WordsCategory user={user} section={sectionId} filter={filters[category]}/>
+    </div> : <div className={useStyles.emptyTab}>User is not logged!</div>
   );
 };
 
