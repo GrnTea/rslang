@@ -1,12 +1,12 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {
-  Route, Link,
+  Route, Link, useLocation
   // BrowserRouter, Switch,HashRouter,
 } from "react-router-dom";
 import Sprint from "./Sprint/Sprint";
 import GameAudioCall from "./AudioCall/GameAudioCall";
 import GameSavannah from "./Savannah/GameSavannah";
-import "./games.css";
+import "./games.scss";
 
 import GameDescription from "./GameDescription";
 import {
@@ -18,14 +18,33 @@ export default function Games() {
   const audioCall = () => (<GameAudioCall />);
   const sprint = () => (<Sprint />);
   const savannah = () => (<GameSavannah />);
+
+  let [hideMenu, setHideMenu] = useState(false);
+  const location = useLocation();
+ 
+  useEffect(() => {
+    const locationPath = location.pathname;
+    const test: any = locationPath.split('/').reverse()[0];
+    
+    if(!isNaN(test)){ 
+      setHideMenu(true)
+    } else {
+      setHideMenu(false)
+    }
+  }, [location])
+
+  
   return (
     <div className="games-container">
-      <h1>Мини-игры</h1>
+      
 
-      <div className="routes">
-        <Link className="links" to="/games/audiocall">audiocall</Link>
-        <Link className="links" to="/games/sprint">sprint</Link>
-        <Link className="links" to="/games/savannah">savannah</Link>
+      <div className={hideMenu ? "games-routes hide" : "games-routes"}>
+        <div className="games-description">Мини-игры</div>
+        <div className="games-links">
+          <Link className="links" to="/games/audiocall">audiocall</Link>
+          <Link className="links" to="/games/sprint">sprint</Link>
+          <Link className="links" to="/games/savannah">savannah</Link>
+        </div>
       </div>
 
       <Route path="/games/audiocall">
