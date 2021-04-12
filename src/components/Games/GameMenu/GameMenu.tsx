@@ -6,8 +6,10 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
+import { connect } from "react-redux";
+import { RootState } from "../../../redux/reducer";
 
-export default function GameMenu(props: any) {
+function GameMenu(props: any) {
   const arrLinks = [];
   for (let i = 1; i < 7; i++) {
     arrLinks.push(<Link key={i} className="link-navigation" to={`/games/${props.gameSelected}/level/${i}/1`}>{i}</Link>);
@@ -35,7 +37,7 @@ export default function GameMenu(props: any) {
       <div className={hide ? "game-menu hide" : "game-menu"}>
         <div className="game-name">{props.gameName}</div>
         <div className="game-description">{props.description}</div>
-        <div className="game-level">выберите уровень</div>
+        <div className="game-level">{props.lang === "ru" ? "выберите уровень" : "change level"}</div>
         <div className="button-group">
           {arrLinks}
         </div>
@@ -50,3 +52,9 @@ export default function GameMenu(props: any) {
 
   );
 }
+
+const mapStateToProps = (state: RootState) => ({
+  lang: state.settingsReducer.lang.lang,
+});
+
+export default connect(mapStateToProps, null)(GameMenu);

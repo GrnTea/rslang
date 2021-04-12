@@ -247,7 +247,7 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
 
   if (begin) {
     return (
-      <Begin setBegin={setBegin} />
+      <Begin start={Buttons[lang].start} setBegin={setBegin} />
     );
   }
 
