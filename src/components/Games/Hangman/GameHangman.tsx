@@ -7,6 +7,7 @@ import Word from "./Word";
 import AspectRatioIcon from "@material-ui/icons/AspectRatio";
 import "./GameHangmanStyles.scss";
 import API_URL from "../../Constants/constants";
+import { showNotification as show, checkWin } from "./helpers";
 import {useDispatch} from "react-redux";
 
 const URL = API_URL;
@@ -25,16 +26,20 @@ function shuffle(array: any) {
 
 export default function GameHangman() {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [wordsData, setWordsData] = useState([]);
-  const [selectedWordObj, setSelectedWordObj] = useState({});
+  //const [wordsData, setWordsData] = useState([]);
+  //const [selectedWordObj, setSelectedWordObj] = useState({});
   const [selectedWord, setSelectedWord] = useState('');
   const [isStartGame, setIsStartGame] = useState(false);
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
+  const [showNotification, setShowNotification] = useState(false);
 
   const { difficulty, page } = useParams();
   const dispatch = useDispatch();
-  let resultLength;
+  let resultLength = 0,
+      wordObj,
+      wordsAmount = 0;
+
   function getWords() {
     fetch(`${URL}words?group=${difficulty - 1}&page=${page}`)
       .then((response) => response.json())
@@ -42,49 +47,26 @@ export default function GameHangman() {
         resultLength = result.length;
         console.log("resultLength", resultLength);
         setIsLoaded(true);
-        setWordsData(shuffle(result));
-       })
+        wordObj = shuffle(result).pop();
+        setSelectedWord(wordObj.word);
+        console.log(wordObj.word);
+      })
   }
 
   useEffect(() => {
     getWords();
-    /*console.log("isLoaded", isLoaded);
-    console.log("shuffled", wordsData);*/
   }, []);
 
-  const wordsAmount = wordsData.length;
-  console.log("wordsData", wordsData);
-  console.log("wordsAmount", wordsAmount);
-
-
   function gameInit(){
-    //= useCallback(() => {
     dispatch({type: "START_GAME"});
-
-    if(wordsData.length) {
-      const selectedWordObj = wordsData.pop();
-      const selectedWord = selectedWordObj["word"];
-      setIsStartGame(true);
-
-      setSelectedWordObj(selectedWordObj);
-      setSelectedWord(selectedWord);
-      console.log("selectedWordObj", selectedWordObj);
-      console.log("selectedWord", selectedWord);
-      /*console.log("wordsData from game start after state", wordsData);
-      console.log("wordsAmount from game start after state", wordsAmount);*/
-    }
-  }//, []);
-
-  // gameInit();
-
-  let wordsSelectedCounter = 0;
-
+    setIsStartGame(true);
+  }
 
   useEffect(() => {
     const handleKeydown = (event: any) => {
       const {key, keyCode} = event;
 
-      if (isStartGame && keyCode >= 65 && keyCode <= 90) {
+      if (isStartGame && selectedWord && keyCode >= 65 && keyCode <= 90) {
         const letter = key.toLowerCase();
         // isAudioPlaying && playSounds(click);
 
@@ -92,15 +74,16 @@ export default function GameHangman() {
           if (!correctLetters.includes(letter)) {
             setCorrectLetters(currentLetters => [...currentLetters, letter])
           } else {
-            // show(setShowNotification);
+            show(setShowNotification);
             // isAudioPlaying && playSounds(note);
           }
         } else {
+          console.log("selectedWord from letters", selectedWord);
           if (!wrongLetters.includes(letter)) {
             setWrongLetters(currentLetters => [...currentLetters, letter]);
 
           } else {
-            // show(setShowNotification);
+            show(setShowNotification);
             // isAudioPlaying && playSounds(note);
           }
         }
@@ -111,6 +94,16 @@ export default function GameHangman() {
 
     return() => window.removeEventListener('keydown', handleKeydown);
   }, [correctLetters, wrongLetters, isStartGame]);
+
+
+  const notification = (showNotification) => {
+    return(
+      <div className={`notification-container ${showNotification ? 'show' : ''}`}>
+        <p>You have already entered this letter</p>
+      </div>
+    )
+  };
+
 
   if (!isLoaded) {
     return <div>Загрузка...</div>;
@@ -133,6 +126,7 @@ export default function GameHangman() {
               color="primary"
             />
           </div>
+          {notification(showNotification)}
         </div>
       </div>
     )
