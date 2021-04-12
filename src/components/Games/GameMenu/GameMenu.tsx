@@ -43,11 +43,9 @@ function GameMenu(props: any) {
         </div>
       </div>
 
-    <div className="game-body">
       <Route exact path={gamePath}>
         {props.game()}
       </Route>
-    </div>
     </div>
 
   );

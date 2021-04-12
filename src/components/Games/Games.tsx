@@ -1,36 +1,53 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {
-  Route, Link,
+  Route, Link, useLocation
   // BrowserRouter, Switch,HashRouter,
 } from "react-router-dom";
+import { connect } from "react-redux";
 import Sprint from "./Sprint/Sprint";
 import GameAudioCall from "./AudioCall/GameAudioCall";
 import GameSavannah from "./Savannah/GameSavannah";
-import "./games.css";
+import "./games.scss";
 
 import GameDescription from "./GameDescription";
 import {
-  GAME_NAME_AUDIOCALL_RU, DESCRIPTION_AUDIOCALL_RU, DESCRIPTION_SPRINT_RU,
-  GAME_NAME_SPRINT_RU, SELECT_AUDIOCALL, SELECT_SPRINT, DESCRIPTION_SAVANNAH_RU, 
-  GAME_NAME_SAVANNA_RU, SELECT_SAVANNAH, GAME_NAME_SPRINT_ENG, DESCRIPTION_SPRINT_ENG, 
-  DESCRIPTION_SAVANNAH_ENG, GAME_NAME_SAVANNA_ENG, DESCRIPTION_AUDIOCALL_ENG, GAME_NAME_AUDIOCALL_ENG, GAME,
+  GAME, SELECT_AUDIOCALL, SELECT_SPRINT, SELECT_SAVANNAH,
 } from "./gameSettings";
-import { connect } from "react-redux";
+
 import { RootState } from "../../redux/reducer";
 
-function Games({ lang }: {lang:string}}) {
+function Games({ lang }: {lang:string}) {
   console.log(lang);
   const audioCall = () => (<GameAudioCall />);
   const sprint = () => (<Sprint />);
   const savannah = () => (<GameSavannah />);
+
+  let [hideMenu, setHideMenu] = useState(false);
+  const location = useLocation();
+ 
+  useEffect(() => {
+    const locationPath = location.pathname;
+    const test: any = locationPath.split('/').reverse()[0];
+    
+    if(!isNaN(test)){ 
+      setHideMenu(true)
+    } else {
+      setHideMenu(false)
+    }
+  }, [location])
+
+  
   return (
     <div className="games-container">
-      <h1 className="games-header">Мини-игры</h1>
+      
 
-      <div className="routes">
+      <div className={hideMenu ? "games-routes hide" : "games-routes"}>
+        <div className="games-description">Мини-игры</div>
+        <div className="games-links">
         <Link className="links" to="/games/audiocall">{GAME[lang].AUDIOCALL.NAME}</Link>
         <Link className="links" to="/games/sprint">{GAME[lang].SPRINT.NAME}</Link>
         <Link className="links" to="/games/savannah">{GAME[lang].SAVANNA.NAME}</Link>
+        </div>
       </div>
 
       <Route path="/games/audiocall">
