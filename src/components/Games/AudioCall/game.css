@@ -11,7 +11,7 @@
   height: 220px;
 }
 
-.content-conteiner{
+.content-container{
   /*margin-top: 20px;*/
   margin: 0 auto;
   width: 600px;
@@ -21,6 +21,7 @@
 }
 
 .content{
+  width: 600px;
   display: flex;
   justify-content: space-between;
 }
@@ -43,6 +44,7 @@ h2{
   width: 150px;
   height: 150px;
   border-radius: 4px;
+  object-fit: cover;
 }
 
 .content-container{
