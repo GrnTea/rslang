@@ -1,8 +1,9 @@
 import React, {
   useEffect, useState, useCallback, Fragment,
 } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link as RouterLink } from "react-router-dom";
 import { connect } from "react-redux";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { RootState } from "../../redux/reducer";
 import "./style.scss";
 import bookImg from "../../assets/images/main/textbook.png";
@@ -10,10 +11,10 @@ import dictionaryImg from "../../assets/images/main/dictionary.png";
 import gamesImg from "../../assets/images/main/game.png";
 import statisticsImg from "../../assets/images/main/statistics.png";
 import joinImg from "../../assets/images/main/join.svg";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { UserType } from "../../redux/user_reducer";
 
-const Teaser = ({ scroll }) => {
-  const [englishLvl, setEnglishLvl] = useState(null);
+function Teaser({ scroll }: { scroll: (page: number) => void }): React.ReactElement {
+  const [englishLvl, setEnglishLvl] = useState<number | null>(null);
   switch (englishLvl) {
     case 0:
       return <Fragment>
@@ -42,28 +43,23 @@ const Teaser = ({ scroll }) => {
   }
 }
 
-const PromoPage = ({ user }) => {
+function PromoPage ({ user }: { user: UserType }): React.ReactElement  {
+  const history = useHistory();
   if (user.id) {
-    const history = useHistory();
     history.push("/main");
   }
   const numPages = 6;
   const [page, setPage] = useState(0);
-  const scroll = (dir) => {
+  const scroll = (dir: number) => {
     setPage((p) => {
       if (((p + dir) >= 0) && ((p + dir) < numPages)) {
         return p + dir;
       }
       return p;
     });
-  }
+  };
   const scrollHandler = useCallback((e) => {
-    console.log(e);
     scroll(e.deltaY / Math.abs(e.deltaY));
-  }, []);
-  useEffect(() => {
-    console.log("main mount");
-    return () => console.log("main unmount");
   }, []);
   useEffect(() => {
     window.addEventListener("wheel", scrollHandler);
@@ -72,7 +68,6 @@ const PromoPage = ({ user }) => {
     };
   }, [scrollHandler]);
   useEffect(() => {
-    console.log(page);
   }, [page]);
   return <div className="main">
     <div className="main__bg">
@@ -83,7 +78,11 @@ const PromoPage = ({ user }) => {
     </div>
     <div className="main__tower">
     </div>
-<ExpandMoreIcon className="main__down"></ExpandMoreIcon>
+    {(page < numPages - 1)
+      ? <ExpandMoreIcon
+        className="main__down"
+        onClick={() => scroll(1)}></ExpandMoreIcon>
+      : null}
     <div className="main__container" style={{ top: `${-100 * page}vh` }}>
       <div className="main__page" >
         <div className="main__hero">
@@ -132,7 +131,8 @@ const PromoPage = ({ user }) => {
         <div className="main__hero main__hero--reversed">
           <div className="main__text">
             <h1>4 игры</h1>
-            <div className="main__paragraph">Играйте в игры, чтобы сделать процесс запоминания слов легким и увлекательным</div>
+            <div className="main__paragraph">{"Играйте в игры, чтобы сделать процесс\
+             запоминания слов легким и увлекательным"}</div>
           </div>
           <div className="main__video">
             <img src={gamesImg} alt="" ></img>
@@ -157,8 +157,12 @@ const PromoPage = ({ user }) => {
           <div className="main__text">
             <h1 className={"h1--small"}>Присоединятесь</h1>
             <div className="hero__buttons">
-              <div className="main__button">Регистрация</div>
-              <div className="main__button">Попробовать</div>
+              <RouterLink to={"/signup"}>
+                <div className="main__button">Регистрация</div>
+              </RouterLink>
+              <RouterLink to={"/main"}>
+                <div className="main__button">Попробовать</div>
+              </RouterLink>
             </div>
           </div>
           <div className="main__video">
@@ -167,10 +171,8 @@ const PromoPage = ({ user }) => {
         </div>
       </div>
     </div>
-  </div>
-
-
-}
+  </div>;
+};
 
 const mapStateToProps = (state: RootState) => ({
   user: state.user,
