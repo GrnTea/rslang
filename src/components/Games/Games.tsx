@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
-  Route, Link, useLocation
+  Route, Link, useLocation,
   // BrowserRouter, Switch,HashRouter,
 } from "react-router-dom";
 import { connect } from "react-redux";
@@ -22,24 +22,22 @@ function Games({ lang }: {lang:string}) {
   const sprint = () => (<Sprint />);
   const savannah = () => (<GameSavannah />);
 
-  let [hideMenu, setHideMenu] = useState(false);
+  const [hideMenu, setHideMenu] = useState(false);
   const location = useLocation();
- 
+
   useEffect(() => {
     const locationPath = location.pathname;
-    const test: any = locationPath.split('/').reverse()[0];
-    
-    if(!isNaN(test)){ 
-      setHideMenu(true)
-    } else {
-      setHideMenu(false)
-    }
-  }, [location])
+    const test: any = locationPath.split("/").reverse()[0];
 
-  
+    if (!isNaN(test)) {
+      setHideMenu(true);
+    } else {
+      setHideMenu(false);
+    }
+  }, [location]);
+
   return (
     <div className="games-container">
-      
 
       <div className={hideMenu ? "games-routes hide" : "games-routes"}>
         <div className="games-description">Мини-игры</div>

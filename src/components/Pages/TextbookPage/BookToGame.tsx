@@ -5,8 +5,7 @@ import {
 } from "react-router-dom";
 import { RootState } from "../../../redux/reducer";
 import {
-  GAME_NAME_AUDIOCALL_ENG, GAME_NAME_AUDIOCALL_RU, GAME_NAME_SAVANNA_ENG,
-  GAME_NAME_SAVANNA_RU, GAME_NAME_SPRINT_ENG, GAME_NAME_SPRINT_RU,
+  GAME
 } from "../../Games/gameSettings";
 
 function BookToGame({
@@ -23,12 +22,12 @@ function BookToGame({
   handleGame();
   return (
     <div className="game-links">
-      <Link className="link-navigation" to={`/games/audiocall/level/${difficulty}/${page}`}>{lang === "ru"
-        ? GAME_NAME_AUDIOCALL_RU : GAME_NAME_AUDIOCALL_ENG}</Link>
-      <Link className="link-navigation" to={`/games/sprint/level/${difficulty}/${page}`}>{lang === "ru"
-        ? GAME_NAME_SPRINT_RU : GAME_NAME_SPRINT_ENG}</Link>
-      <Link className="link-navigation" to={`/games/savannah/level/${difficulty}/${page}`}>{lang === "ru"
-        ? GAME_NAME_SAVANNA_RU : GAME_NAME_SAVANNA_ENG}</Link>
+      <Link className="link-navigation" to={`/games/audiocall/level/${difficulty}/${page}`}>
+        {GAME[lang].AUDIOCALL.NAME}</Link>
+      <Link className="link-navigation" to={`/games/sprint/level/${difficulty}/${page}`}>{
+      GAME[lang].SPRINT.NAME}</Link>
+      <Link className="link-navigation" to={`/games/savannah/level/${difficulty}/${page}`}>{
+      GAME[lang].SAVANNA.NAME}</Link>
     </div>
   );
 }
