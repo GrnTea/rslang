@@ -3,11 +3,13 @@ import {
   useParams,
 } from "react-router-dom";
 import ResetGame from "../ResetGame/ResetGame";
-import "./gameSavannah.css";
+import LifeCounterGame from "./LifeCounterGame";
+import "./gameSavannah.scss";
 import useSound from "use-sound";
 import succes from "../../../assets/sound/succes.mp3";
 import error from "../../../assets/sound/error.mp3";
-import FavoriteTwoToneIcon from "@material-ui/icons/FavoriteTwoTone";
+import bacground from "../../../assets/images/games/Savannah/b-savannah1.jpg";
+
 
 import FullScreenButton from "./FullScreenButton";
 import API_URL from "../../Constants/constants";
@@ -16,6 +18,7 @@ import { connect } from "react-redux";
 import { RootState } from "../../../redux/reducer";
 
 const URL = API_URL;
+// console.log(bacground)
 
 function GameSavannah({ game, user }: { game: { gameFrom: string }, user:  {id: any, token: any } }) {
   const { difficulty, page }: {difficulty: string, page: string} = useParams();
@@ -26,7 +29,7 @@ function GameSavannah({ game, user }: { game: { gameFrom: string }, user:  {id: 
   const [word, setWord] = useState({});
   const [displayWords, setDisplayWords] = useState([]);
   let [gravityCounter, setGravityCounter] = useState(0);
-  const [lifeCounter, setLifeCounter] = useState(2);
+  const [lifeCounter, setLifeCounter] = useState(3);
 
 
   const [rightAnswers, setRightAnswers] = useState([]);
@@ -59,7 +62,7 @@ function GameSavannah({ game, user }: { game: { gameFrom: string }, user:  {id: 
   }
 
   function fetchingData(url: string) {
-    console.log(url);
+    // console.log(url);
     fetch(url, {
       method: "GET",
       headers: {
@@ -148,6 +151,7 @@ function GameSavannah({ game, user }: { game: { gameFrom: string }, user:  {id: 
       return elem;
     });
 
+    res = shuffle(res);
     res.push(word);
     res = shuffle(res);
     setDisplayWords(res);
@@ -161,7 +165,7 @@ function GameSavannah({ game, user }: { game: { gameFrom: string }, user:  {id: 
     setCounter((prev) => prev + 1);
     setLifeCounter((prev) => prev - 1);
     addAnswers(word, setWrongAnswers, wrongAnswers);
-    playError();
+    // playError();
   }, [gravityCounter]);
 
   //  проверка ответа
@@ -204,7 +208,7 @@ function GameSavannah({ game, user }: { game: { gameFrom: string }, user:  {id: 
     }
   }
 
-  function audioPlay(src) {
+  function audioPlay(src: string) {
     const audio = new Audio(src);
     audio.play();
   }
@@ -240,10 +244,10 @@ function GameSavannah({ game, user }: { game: { gameFrom: string }, user:  {id: 
 
   // конец игры
   useEffect(() => {
-    if (counter === 10 || lifeCounter <= 0) {
+    if (lifeCounter <= 0 || counter >= 10) {
       setEndGame(true);
     }
-  }, [counter, lifeCounter]);
+  }, [lifeCounter, counter]);
 
   useEffect(() => {
     const res = displayWords.map((elem: any, index: number) => (
@@ -261,7 +265,7 @@ function GameSavannah({ game, user }: { game: { gameFrom: string }, user:  {id: 
   }, [displayWords]);
 
   function resetgame() {
-    setLifeCounter(2);
+    setLifeCounter(3);
     setGravityCounter(0);
     setCounter(0);
     setEndGame(false);
@@ -282,21 +286,19 @@ function GameSavannah({ game, user }: { game: { gameFrom: string }, user:  {id: 
     )
   }
 
+
   return (
     <div className="words-container">
+    <img className="image-background" src={bacground} alt="саванна"/> 
       <div className="words-display">
-        <div className="life-container">
-          <div className="life-counter">{lifeCounter}</div>
-          <FavoriteTwoToneIcon className="life-icon" />
-        </div>
+        <LifeCounterGame lifeCounter={lifeCounter} />
 
         <div className="word-absolute">{word.word}</div>
         {wordsDisplayedOnTheScreen}
       </div>
-      <div className="fullscreen-button">
+      {/* <div className="fullscreen-button" > */}
         <FullScreenButton />
-      </div>
-      <input className="input-hidden" type="hidden" onClick={() => audioPlay(error)} />
+      {/* </div> */}
     </div>
   );
 }
