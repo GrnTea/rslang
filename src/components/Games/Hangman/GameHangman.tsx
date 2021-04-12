@@ -28,17 +28,19 @@ export default function GameHangman() {
   const [wordsData, setWordsData] = useState([]);
   const [selectedWordObj, setSelectedWordObj] = useState({});
   const [selectedWord, setSelectedWord] = useState('');
-  const [playable, setPlayable] = useState(true);
+  const [isStartGame, setIsStartGame] = useState(false);
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
 
   const { difficulty, page } = useParams();
   const dispatch = useDispatch();
-
+  let resultLength;
   function getWords() {
     fetch(`${URL}words?group=${difficulty - 1}&page=${page}`)
       .then((response) => response.json())
       .then((result) => {
+        resultLength = result.length;
+        console.log("resultLength", resultLength);
         setIsLoaded(true);
         setWordsData(shuffle(result));
        })
@@ -46,34 +48,32 @@ export default function GameHangman() {
 
   useEffect(() => {
     getWords();
-    console.log("isLoaded", isLoaded);
-    console.log("shuffled", wordsData);
+    /*console.log("isLoaded", isLoaded);
+    console.log("shuffled", wordsData);*/
   }, []);
 
-  let wordsAmount = wordsData.length;
+  const wordsAmount = wordsData.length;
   console.log("wordsData", wordsData);
   console.log("wordsAmount", wordsAmount);
 
 
-  const gameInit = useCallback(() => {
+  function gameInit(){
+    //= useCallback(() => {
     dispatch({type: "START_GAME"});
 
-
     if(wordsData.length) {
-      const selectedWordObj1 = wordsData.pop();
-      const selectedWord1 = selectedWordObj1["word"];
+      const selectedWordObj = wordsData.pop();
+      const selectedWord = selectedWordObj["word"];
+      setIsStartGame(true);
 
-
-      console.log("selectedWordObj1", selectedWordObj1);
-      console.log("selectedWord1", selectedWord1);
-
-
-      /*setSelectedWordObj(selectedWordObj1);
-      setSelectedWord(selectedWord1);
+      setSelectedWordObj(selectedWordObj);
+      setSelectedWord(selectedWord);
       console.log("selectedWordObj", selectedWordObj);
-      console.log("selectedWord", selectedWord);*/
+      console.log("selectedWord", selectedWord);
+      /*console.log("wordsData from game start after state", wordsData);
+      console.log("wordsAmount from game start after state", wordsAmount);*/
     }
-  }, []);
+  }//, []);
 
   // gameInit();
 
@@ -84,7 +84,7 @@ export default function GameHangman() {
     const handleKeydown = (event: any) => {
       const {key, keyCode} = event;
 
-      if (playable && keyCode >= 65 && keyCode <= 90) {
+      if (isStartGame && keyCode >= 65 && keyCode <= 90) {
         const letter = key.toLowerCase();
         // isAudioPlaying && playSounds(click);
 
@@ -110,22 +110,21 @@ export default function GameHangman() {
     window.addEventListener('keydown', handleKeydown);
 
     return() => window.removeEventListener('keydown', handleKeydown);
-  }, [correctLetters, wrongLetters, playable]);
+  }, [correctLetters, wrongLetters, isStartGame]);
 
   if (!isLoaded) {
     return <div>Загрузка...</div>;
   } else {
-
     return (
       <div>
         <div className="hangman-buttons">
-          <div className="hangman-counter">{wordsSelectedCounter} / {wordsAmount}</div>
+          <div className="hangman-counter">{wordsAmount}  / {resultLength}</div>
           <div className="hangman-start"  onClick={gameInit}>Start</div>
         </div>
         <div className="hangman-container">
           <Figure wrongLetters={wrongLetters}/>
           <WrongLetters wrongLetters={wrongLetters}/>
-          {isStartGame && <Word selectedWord={selectedWord1} correctLetters={correctLetters}/>}
+          {isStartGame && <Word selectedWord={selectedWord} correctLetters={correctLetters}/>}
           <div className="hangman-fullscreen-button">
             <AspectRatioIcon
               onClick={setFullScreen}
