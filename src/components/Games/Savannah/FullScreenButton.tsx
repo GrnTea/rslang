@@ -14,7 +14,7 @@ const FullScreenButton = (props) => {
     }
   };
 
-  let fullscreenButtonStyles11 = {
+  const fullscreenButtonStyles11 = {
     position: "absolute",
     top: "100px",
     left: "50%",
@@ -23,12 +23,12 @@ const FullScreenButton = (props) => {
     zIndex: "1",
     fontSize: "30px",
     cursor: "pointer",
-  }
+  };
 
   return (
     <AspectRatioIcon
       onClick={toggleFulscreen}
-      style={{...fullscreenButtonStyles11}}
+      style={{ ...fullscreenButtonStyles11 }}
     />
   );
 };
