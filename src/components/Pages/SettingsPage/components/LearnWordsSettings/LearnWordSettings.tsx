@@ -137,7 +137,7 @@ const LearnWordSettings: React.FC<Props> = ({
   }, [buttonsSettings, cardSettings]);
 
   return (
-    <div>
+    <div className={useStyles.settingsContainer}>
         <h2>{TEXTS[lang].mainTitle}</h2>
         <div className={useStyles.formsContainer}>
         <FormControl component="fieldset" className={useStyles.formControl}>
