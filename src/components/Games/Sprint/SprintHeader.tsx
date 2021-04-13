@@ -17,11 +17,10 @@ interface ISprintHeader {
 }
 
 const SprintHeader = ({
-  isVolume, score, setFinish, setIsVolume,time, setTime
+  isVolume, score, setFinish, setIsVolume, time, setTime,
 }:ISprintHeader) => {
   const [playTada] = useSound(tada, { volume: 0.2 });
 
-  // const [time, setTime] = useState(40);
   const [timeIn, setTimeIn] = useState();
 
   useEffect(() => {

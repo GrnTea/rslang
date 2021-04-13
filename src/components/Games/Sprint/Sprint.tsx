@@ -67,6 +67,7 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
   const [playWords, setPlayWords] = useState<ICurrentWord[]>([]);
   const [isVolume, setIsVolume] = useState(true);
   const [time, setTime] = useState(40);
+  const [noWords, setNoWords] = useState(false);
   const [currentWord, setCurrentWord] = useState<ICurrentWord>({
     word: "",
     checkTranslate: "",
@@ -110,8 +111,16 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
       .then(
         (result) => {
           if (game.gameFrom === DICTIONARY) {
+            if (result[0].paginatedResults.length === 0) {
+              setNoWords(true);
+              setFinish(false);
+            }
             setWords(result[0].paginatedResults);
           } else {
+            if (result.length === 0) {
+              setNoWords(true);
+              setFinish(false);
+            }
             setWords(result);
           }
           setIsLoaded(true);
@@ -245,6 +254,16 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
     setBonus(10);
     setFinish(false);
     setBegin(true);
+    setTime(40);
+    setRightAnswers([]);
+    setWrongAnswers([]);
+    setNoWords(false);
+  }
+
+  if (noWords) {
+    return (
+      <div>Слов больше нет, добавьте новые!</div>
+    );
   }
 
   if (begin) {
