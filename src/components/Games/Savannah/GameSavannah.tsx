@@ -289,16 +289,16 @@ function GameSavannah({ game, user }: { game: { gameFrom: string }, user:  {id: 
 
   return (
     <div className="words-container">
-    <img className="image-background" src={bacground} alt="саванна"/> 
+      {/* <img className="image-background" src={bacground} alt="саванна"/>  */}
+      <div className="savannah-background-gradient"></div>
       <div className="words-display">
         <LifeCounterGame lifeCounter={lifeCounter} />
 
         <div className="word-absolute">{word.word}</div>
         {wordsDisplayedOnTheScreen}
       </div>
-      {/* <div className="fullscreen-button" > */}
-        <FullScreenButton />
-      {/* </div> */}
+
+      <FullScreenButton />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import AspectRatioIcon from "@material-ui/icons/AspectRatio";
 const FullScreenButton = (props) => {
 
   const toggleFulscreen = () => {
-    let elem = document.querySelector(".game-body-container");
+    let elem = document.querySelector(".games-container");
     
     if(document.fullscreenElement === null) {
       // document.documentElement.requestFullscreen();
@@ -16,13 +16,18 @@ const FullScreenButton = (props) => {
     }
   }
 
-  let fullscreenButtonStyles = {
-    marginTop: "20px",
+  let styleButton = {
+    position: "absolute",
+    left: "50%",
+    top: "70px",
+    cursor: "pointer",
+    zIndex: "1"
   }
+
 
   return (
     <AspectRatioIcon 
-      style={{...fullscreenButtonStyles}}
+      style={{...styleButton}}
       onClick={toggleFulscreen} 
       className="fullscreen-button-cursor" 
       fontSize="large" 
