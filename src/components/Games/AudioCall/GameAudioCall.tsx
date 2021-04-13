@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import SpeakerIcon from "@material-ui/icons/Speaker";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import VolumeUpIcon from '@material-ui/icons/VolumeUp';
+import AudioVisualize from "./AudioVisualize";
 
 import {LinearProgressStyles, SpeakerIconStyles} from './stylesUI';
 
@@ -14,7 +15,7 @@ import DisplayWordsComponent from "./DisplayWordsComponent";
 import ResetGame from "../ResetGame/ResetGame";
 import FullScreenButton from "./FullScreenButton";
 
-import "./game.css";
+import "./game.scss";
 import API_URL from "../../Constants/constants";
 
 const URL = API_URL;
@@ -148,7 +149,12 @@ function GameAudioCall({ game, user, lang }) {
     if (counter === 0) return;
     if (counter >= 10) return;
 
-    playWord();
+    let timeoutId = setTimeout(() => {
+      playWord();
+
+    }, 500)
+
+    return () => clearTimeout(timeoutId)
   }, [word]);
 
 
@@ -166,9 +172,13 @@ function GameAudioCall({ game, user, lang }) {
     setDisplayWords(res);
   }, [data, word]);
 
+  let canvas = document.querySelector('.canvas1');
+  const audio = new Audio();
+  
   function playWord() {
-    const audio = new Audio(URL + word.audio);
-    audio.play();
+    let audioSrc = URL + word.audio;
+
+    AudioVisualize(canvas, audioSrc);
   }
 
   function addAnswers(word: any, state: any, elems: []) {
@@ -194,7 +204,7 @@ function GameAudioCall({ game, user, lang }) {
         setShowImage(false);
         setCounter((prev) => prev + 1);
         targetElem.classList.remove("guessed");
-      }, 2000);
+      }, 1500);
     } else {
       currentElem = document.querySelector(`[data-value="${word.word}"]`);
       targetElem.classList.add("no-guessed");
@@ -208,7 +218,7 @@ function GameAudioCall({ game, user, lang }) {
         currentElem.classList.remove("guessed");
         setShowImage(false);
         setCounter((prev) => prev + 1);
-      }, 2000);
+      }, 1500);
     }
   }
 
@@ -226,6 +236,7 @@ function GameAudioCall({ game, user, lang }) {
     getData();
   }
 
+
   if(counter === 10) {
     return (
       <ResetGame
@@ -239,27 +250,23 @@ function GameAudioCall({ game, user, lang }) {
   }
 
   return (
-    <div className="game-body-container">
+    <div className="audiocall-container">
+      <div className="background-gradien"></div>
 
-      <div className="content-container">
-        <LinearProgress style={{ ...LinearProgressStyles }} variant="determinate" value={counter * 10} />
-
-        <div className="content">
-          <DisplayWordsComponent displayWords={displayWords} checkWord={checkWord} />
-
-          <div className="word-image">
-            {showImage ? <img className="game-image" src={URL + word.image} alt="" /> : ""}
-          </div>
-
-          <div className="speaker-icon">
-            <SpeakerIcon style={{ ...SpeakerIconStyles }} onClick={() => playWord()} />
-          </div>
-        </div>
-
-        <div className="fullscreen-button">
-          <FullScreenButton />
-        </div>
+      <div className="media-content">
+        <VolumeUpIcon style={{ ...SpeakerIconStyles }} onClick={() => playWord()}/>
+        <canvas width="300" height="300" className="canvas1"></canvas>
       </div>
+      
+      <LinearProgress style={{ ...LinearProgressStyles }} variant="determinate" value={counter * 10} />
+
+      <DisplayWordsComponent displayWords={displayWords} checkWord={checkWord} counter={counter} />
+      
+      <div className="word-image">
+        {showImage ? <img className="game-image" src={URL + word.image} alt="" /> : ""}
+      </div>
+
+      <FullScreenButton />
     </div>
   )
 }
