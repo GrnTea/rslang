@@ -18,7 +18,7 @@ import Container from "@material-ui/core/Container";
 import { RootState } from "../../../redux/reducer";
 import { signIn, UserType } from "../../../redux/user_reducer";
 import {
-  toggleLang, toggleIsAutoVoice, setCountNewWords, setCountMaxDailyCards
+  toggleLang, toggleIsAutoVoice, setCountNewWords, setCountMaxDailyCards,
 } from "../../../redux/main-settings_reducer";
 import { toggleButtonsSettings, toggleCardSetting } from "../../../redux/learning-settings_reducer";
 import API_URL from "../../Constants/constants";
@@ -126,34 +126,34 @@ function SignIn({ signIn }) {
   };
 
   useEffect(() => {
-      const settingsUrl = `${API_URL}users/${userPersonal.id}/settings`;
+    const settingsUrl = `${API_URL}users/${userPersonal.id}/settings`;
 
-      const getSettings = async () => {
-        const userSettingsData = await fetch(settingsUrl, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userPersonal.token}`,
-          },
-        });
+    const getSettings = async () => {
+      const userSettingsData = await fetch(settingsUrl, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userPersonal.token}`,
+        },
+      });
 
-        if (userSettingsData.ok) {
-          const data = await userSettingsData.json();
-          if (data) {
-            setCountNewWords(data.wordsPerDay);
-            toggleLang(data.optional.lang);
-            toggleIsAutoVoice(data.optional.isAutoVoice);
-            setCountMaxDailyCards(data.optional.countMaxDayCards);
-            toggleCardSetting(data.optional.cardSettings.cardSettings);
-            toggleButtonsSettings(data.optional.buttonsSettings.buttonsSettings);
-          }
+      if (userSettingsData.ok) {
+        const data = await userSettingsData.json();
+        if (data) {
+          setCountNewWords(data.wordsPerDay);
+          toggleLang(data.optional.lang);
+          toggleIsAutoVoice(data.optional.isAutoVoice);
+          setCountMaxDailyCards(data.optional.countMaxDayCards);
+          toggleCardSetting(data.optional.cardSettings.cardSettings);
+          toggleButtonsSettings(data.optional.buttonsSettings.buttonsSettings);
         }
       }
+    };
 
-      if (userPersonal.id) {
-        getSettings();
-      }
-  }, [userPersonal])
+    if (userPersonal.id) {
+      getSettings();
+    }
+  }, [userPersonal]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -246,8 +246,8 @@ const mapDispatchToProps = {
   toggleIsAutoVoice,
   setCountNewWords,
   setCountMaxDailyCards,
-  toggleButtonsSettings, 
-  toggleCardSetting
+  toggleButtonsSettings,
+  toggleCardSetting,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

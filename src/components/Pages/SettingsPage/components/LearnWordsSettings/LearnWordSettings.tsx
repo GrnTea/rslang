@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import FormControl from "@material-ui/core/FormControl";
 import Checkbox, { CheckboxProps } from "@material-ui/core/Checkbox";
 import { connect } from "react-redux";
@@ -46,7 +46,7 @@ const BUTTON_NAME = {
     goodBtn: "«Good» button",
     easyBtn: "«Easy» button",
     deleteBtn: "«Delete» button",
-    recoveryBtn: "Recovery button"
+    recoveryBtn: "Recovery button",
   },
   ru: {
     repeateBtn: "Кнопка «Повторить»",
@@ -54,7 +54,7 @@ const BUTTON_NAME = {
     goodBtn: "Кнопка «Хорошо»",
     easyBtn: "Кнопка «Легко»",
     deleteBtn: "Кнопка «Удалить»",
-    recoveryBtn: "Кнопка «Восстановить»"
+    recoveryBtn: "Кнопка «Восстановить»",
   },
 };
 
@@ -94,14 +94,14 @@ function setUserSettings(url:string, token:string, data:any) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   })
-  .then((response)=>{
-    if (!response.ok) {
-      throw Error(response.statusText);
-    }
-  })
-  .catch((error)=>{console.log(error)});
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+    })
+    .catch((error) => { console.log(error); });
 }
 
 function createCheckboxSettings(checkbox:any, name:string, toggleFunction: (value: React.ChangeEvent<HTMLInputElement>) => void) {
@@ -115,26 +115,26 @@ function createCheckboxSettings(checkbox:any, name:string, toggleFunction: (valu
 }
 
 const LearnWordSettings: React.FC<Props> = ({
-  lang, buttonsSettings, toggleButtonsSettings, cardSettings, toggleCardSetting, mainSettings, user
+  lang, buttonsSettings, toggleButtonsSettings, cardSettings, toggleCardSetting, mainSettings, user,
 }) => {
   const useStyles = LearnSettingsStyles();
 
-  useEffect(()=> {
+  useEffect(() => {
     const data = {
-      "wordsPerDay": mainSettings.countNewWords.countNewWords,
-      "optional": {
-        "buttonsSettings": mainSettings.buttonsSettings,
-        "cardSettings": mainSettings.cardSettings,
-        "lang": mainSettings.lang.lang,
-        "countMaxDayCards": mainSettings.countMaxDayCards.countMaxDayCards,
-        "isAutoVoice": mainSettings.isAutoVoice.isAutoVoice
-      }
-    }
+      wordsPerDay: mainSettings.countNewWords.countNewWords,
+      optional: {
+        buttonsSettings: mainSettings.buttonsSettings,
+        cardSettings: mainSettings.cardSettings,
+        lang: mainSettings.lang.lang,
+        countMaxDayCards: mainSettings.countMaxDayCards.countMaxDayCards,
+        isAutoVoice: mainSettings.isAutoVoice.isAutoVoice,
+      },
+    };
 
     localStorage.setItem("rsLangSettings", JSON.stringify(data));
     const settingsUrl = `${API_URL}users/${user.id}/settings`;
     setUserSettings(settingsUrl, user.token, data);
-  }, [buttonsSettings, cardSettings])
+  }, [buttonsSettings, cardSettings]);
 
   return (
     <div>
@@ -168,7 +168,7 @@ const mapStateToProps = (state:RootState) => ({
   buttonsSettings: state.settingsReducer.buttonsSettings.buttonsSettings,
   cardSettings: state.settingsReducer.cardSettings.cardSettings,
   mainSettings: state.settingsReducer,
-  user: state.user
+  user: state.user,
 });
 
 const mapDispatchToProps = {

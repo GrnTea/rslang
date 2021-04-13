@@ -76,36 +76,36 @@ function setUserSettings(url:string, token:string, data:any) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   })
-  .then((response)=>{
-    if (!response.ok) {
-      throw Error(response.statusText);
-    }
-  })
-  .catch((error)=>{console.log(error)});
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+    })
+    .catch((error) => { console.log(error); });
 }
 
 const MainSettings: React.FC<Props> = ({
-  lang, toggleLang, isAutoVoice, toggleIsAutoVoice, countNewWords, setCountNewWords, countMaxDayCards, setCountMaxDailyCards, user, mainSettings
+  lang, toggleLang, isAutoVoice, toggleIsAutoVoice, countNewWords, setCountNewWords, countMaxDayCards, setCountMaxDailyCards, user, mainSettings,
 }) => {
   const useStyles = MainSettingsStyles();
 
-  useEffect(()=> {
+  useEffect(() => {
     const data = {
-      "wordsPerDay": countNewWords,
-      "optional": {
-        "buttonsSettings": mainSettings.buttonsSettings,
-        "cardSettings": mainSettings.cardSettings,
-        "lang": mainSettings.lang.lang,
-        "countMaxDayCards": mainSettings.countMaxDayCards.countMaxDayCards,
-        "isAutoVoice": mainSettings.isAutoVoice.isAutoVoice
-      }
-    }
+      wordsPerDay: countNewWords,
+      optional: {
+        buttonsSettings: mainSettings.buttonsSettings,
+        cardSettings: mainSettings.cardSettings,
+        lang: mainSettings.lang.lang,
+        countMaxDayCards: mainSettings.countMaxDayCards.countMaxDayCards,
+        isAutoVoice: mainSettings.isAutoVoice.isAutoVoice,
+      },
+    };
     localStorage.setItem("rsLangSettings", JSON.stringify(data));
     const settingsUrl = `${API_URL}users/${user.id}/settings`;
     setUserSettings(settingsUrl, user.token, data);
-  }, [lang, isAutoVoice, countNewWords, countMaxDayCards])
+  }, [lang, isAutoVoice, countNewWords, countMaxDayCards]);
 
   return (
     <div className={useStyles.settingsContainer}>
@@ -153,17 +153,17 @@ const MainSettings: React.FC<Props> = ({
                         <div className={useStyles.dailySettings}>
                             <span>{TEXTS[lang].numbersNewWords}</span>
                             <div className={useStyles.dailySettingsBtnGroup}>
-                                <Button className={useStyles.daylySettingsBtn} onClick={()=> {setCountNewWords(countNewWords - 1)}}>-</Button>
+                                <Button className={useStyles.daylySettingsBtn} onClick={() => { setCountNewWords(countNewWords - 1); }}>-</Button>
                                 <div>{countNewWords}</div>
-                                <Button className={useStyles.daylySettingsBtn} onClick={()=> {setCountNewWords(countNewWords + 1)}}>+</Button>
+                                <Button className={useStyles.daylySettingsBtn} onClick={() => { setCountNewWords(countNewWords + 1); }}>+</Button>
                             </div>
                         </div>
                         <div className={useStyles.dailySettings}>
                             <span>{TEXTS[lang].maxNumberOfCards}</span>
                             <div className={useStyles.dailySettingsBtnGroup}>
-                                <Button className={useStyles.daylySettingsBtn} onClick={() => {setCountMaxDailyCards(countMaxDayCards - 1)}}>-</Button>
+                                <Button className={useStyles.daylySettingsBtn} onClick={() => { setCountMaxDailyCards(countMaxDayCards - 1); }}>-</Button>
                                 <div>{countMaxDayCards}</div>
-                                <Button className={useStyles.daylySettingsBtn} onClick={() => {setCountMaxDailyCards(countMaxDayCards + 1)}}>+</Button>
+                                <Button className={useStyles.daylySettingsBtn} onClick={() => { setCountMaxDailyCards(countMaxDayCards + 1); }}>+</Button>
                             </div>
                         </div>
                     </FormGroup>
@@ -180,14 +180,14 @@ const mapStateToProps = (state:RootState) => ({
   isAutoVoice: state.settingsReducer.isAutoVoice.isAutoVoice,
   countNewWords: state.settingsReducer.countNewWords.countNewWords,
   countMaxDayCards: state.settingsReducer.countMaxDayCards.countMaxDayCards,
-  user: state.user
+  user: state.user,
 });
 
 const mapDispatchToProps = {
   toggleLang,
   toggleIsAutoVoice,
   setCountNewWords,
-  setCountMaxDailyCards
+  setCountMaxDailyCards,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainSettings);

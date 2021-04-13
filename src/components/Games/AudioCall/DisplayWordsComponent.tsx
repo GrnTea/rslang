@@ -1,43 +1,41 @@
-import React, {useRef} from 'react';
+import React, { useRef } from "react";
 
 const DisplayWordsComponent = (props) => {
   const wordsElement = useRef(null);
 
-  let res = props.displayWords.map((elem: any, index: number) => {
-    return (
-      <div key={index} 
+  const res = props.displayWords.map((elem: any, index: number) => (
+      <div key={index}
         data-value={elem.word}
         className="random-word"
-        onClick={elem => props.checkWord(elem)}
+        onClick={(elem) => props.checkWord(elem)}
         onMouseDown={func} >
           {elem.wordTranslate}
       </div>
-    )
-  })
+  ));
 
   function func() {
-    if(props.counter >= 9) return;
-    
+    if (props.counter >= 9) return;
+
     setTimeout(() => {
-      wordsElement.current.classList.add('go-transform');
+      wordsElement.current.classList.add("go-transform");
       // console.log(wordsElement.current)
-    }, 1000)
-    
+    }, 1000);
+
     setTimeout(() => {
-      wordsElement.current.classList.remove('go-transform');
-    }, 3000)
+      wordsElement.current.classList.remove("go-transform");
+    }, 3000);
 
     // console.log(wordsElement.current)
   }
 
-  return(
+  return (
     <div className="audiocall-words-container">
       <div className="random-words" ref={wordsElement}>
         {res}
       </div>
     </div>
-    
-    );
-}
+
+  );
+};
 
 export default DisplayWordsComponent;

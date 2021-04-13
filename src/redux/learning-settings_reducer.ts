@@ -47,7 +47,7 @@ const initialStateButtons: InitialStateTypeButtons = {
     },
     {
       id: "goodBtn",
-      state: localButtonSettings ? localButtonSettings[2].state :  true,
+      state: localButtonSettings ? localButtonSettings[2].state : true,
     },
     {
       id: "easyBtn",
@@ -164,7 +164,7 @@ export const settingsReducerCard = (state = initialStateCard, action:any): Initi
       if (action.target) {
         newCardSettings[index].state = action.value;
       }
-      return { ...state, cardSettings: action.target? [...newCardSettings] : action.value };
+      return { ...state, cardSettings: action.target ? [...newCardSettings] : action.value };
     default: return state;
   }
 };
