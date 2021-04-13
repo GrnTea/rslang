@@ -60,13 +60,14 @@
   border-radius: 10px;
   padding: 0 10px 0 10px;
   color: white;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+  font-family:'Roboto', Tahoma, Geneva, Verdana, sans-serif
 }
 
 .answers{
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family:'Roboto', Tahoma, Geneva, Verdana, sans-serif;
   color: silver;
   font-size: 18px;
+  margin-left: 27px;
 }
 
 .right-counter{

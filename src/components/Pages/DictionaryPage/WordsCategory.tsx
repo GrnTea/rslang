@@ -64,11 +64,9 @@ const WordsFromCategory: React.FC<Props> = ({ user, section, filter }: ICategory
     return listOfWords.map((card:any) => <CardOfWord key={card._id} cardInfo={card} isMain={false} />);
   }
 
-  {console.log(listOfWords)}
   return (
     listOfWords ? 
     <div className={useStyles.cards}>
-      {console.log(countPages)}
       {
         countPages === 1 ? renderOnePage() 
         : countPages > 1 ?

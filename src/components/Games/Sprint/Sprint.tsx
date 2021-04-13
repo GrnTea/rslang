@@ -154,6 +154,7 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
       if (pageCounter === 31) setFinish(true);
       fetchingData(getUrl(pageCounter, "All"));
       setIsLoaded(false);
+      return;
     }
 
     wordData.isTrueTranslate = Boolean(Math.round(Math.random()));
@@ -247,7 +248,7 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
 
   if (begin) {
     return (
-      <Begin setBegin={setBegin} />
+      <Begin start={Buttons[lang].start} setBegin={setBegin} />
     );
   }
 

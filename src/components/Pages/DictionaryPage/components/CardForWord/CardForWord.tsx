@@ -28,7 +28,7 @@ type Props = {
     isMain: boolean
 }
 
-function updateListOfUserWords(data:any, metod:string, url:string, authorizationToken:string,  setCheckedWord, setIsDeleted, setIsDifficult):void {
+function updateListOfUserWords(data:any, metod:string, url:string, authorizationToken:string,  setCheckedWord, setIsDeleted, setIsDifficult, setIsStudied):void {
     fetch(url, {
         method: metod,
         mode: 'cors',
@@ -46,13 +46,13 @@ function updateListOfUserWords(data:any, metod:string, url:string, authorization
         if (!response.ok) {
             throw Error(response.statusText);
         }
-        checkWords(url, authorizationToken, setCheckedWord, setIsDeleted, setIsDifficult);
+        checkWords(url, authorizationToken, setCheckedWord, setIsDeleted, setIsDifficult, setIsStudied);
         return response;
         })
       .catch((error)=> {console.log(error)});
 }
 
-function checkWords(url:string, authorizationToken:string, setCheckedWord, setIsDeleted, setIsDifficult):any {
+function checkWords(url:string, authorizationToken:string, setCheckedWord, setIsDeleted, setIsDifficult, setIsStudied):any {
     fetch(url , {
         method: 'GET',
         headers: {
@@ -69,8 +69,9 @@ function checkWords(url:string, authorizationToken:string, setCheckedWord, setIs
       .then((jsonData) => {
         if (jsonData) {
             setCheckedWord(jsonData);
-            setIsDeleted(jsonData.optional.deleted)
-            setIsDifficult(jsonData.difficulty)
+            setIsDeleted(jsonData.optional.deleted);
+            setIsDifficult(jsonData.difficulty);
+            setIsStudied(jsonData.optional.studying);
         }
       })
       .catch((error)=> {console.log(error)});
@@ -85,12 +86,13 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
     const urlRequest = `${url}users/${userId}/words/${cardId}`;
     const [checkedWord, setCheckedWord] = useState("");
     const [isDeleted, setIsDeleted] = useState("false");
+    const [isStudied, setIsStudied] = useState("false");
     const [isDifficult, setIsDifficult] = useState("false");
 
     useEffect(() => {
         const check = async () => {
             const checkURL = `${url}users/${userId}/words/${cardId}`;
-            await checkWords(checkURL, authorizationToken, setCheckedWord, setIsDeleted, setIsDifficult);
+            await checkWords(checkURL, authorizationToken, setCheckedWord, setIsDeleted, setIsDifficult, setIsStudied);
         }
         check();
     }, []);
@@ -131,9 +133,9 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
         }
 
         if (checkedWord) {
-           updateListOfUserWords(data, "PUT", urlRequest, authorizationToken, setCheckedWord, setIsDeleted, setIsDifficult);
+           updateListOfUserWords(data, "PUT", urlRequest, authorizationToken, setCheckedWord, setIsDeleted, setIsDifficult, setIsStudied);
         } else {
-           updateListOfUserWords(data, "POST", urlRequest, authorizationToken, setCheckedWord, setIsDeleted, setIsDifficult); 
+           updateListOfUserWords(data, "POST", urlRequest, authorizationToken, setCheckedWord, setIsDeleted, setIsDifficult, setIsStudied); 
         }
     }
 
@@ -147,13 +149,13 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
         }
 
         if (checkedWord) {
-           updateListOfUserWords(data, "PUT", urlRequest, authorizationToken, setCheckedWord, setIsDeleted, setIsDifficult);
+           updateListOfUserWords(data, "PUT", urlRequest, authorizationToken, setCheckedWord, setIsDeleted, setIsDifficult, setIsStudied);
         } else {
-           updateListOfUserWords(data, "POST", urlRequest, authorizationToken, setCheckedWord, setIsDeleted, setIsDifficult);
+           updateListOfUserWords(data, "POST", urlRequest, authorizationToken, setCheckedWord, setIsDeleted, setIsDifficult, setIsStudied);
         }
     }
     
-    if (isMain && isDeleted === "false" || !isMain && isDeleted === "true" || !isMain && isDifficult === "true") {
+    if (isMain && isDeleted === "false" || !isMain && isDeleted === "true" || !isMain && isDifficult === "true" || !isMain && isStudied === "true") {
         return (
             <div className={useStyles.cardContainer}>
                 { cardSettings[4].state ? 
@@ -204,6 +206,14 @@ const CardForWords: React.FC<Props> = ({cardInfo, lang, buttonsSettings, cardSet
                             <div className={useStyles.exampleTranslate} >
                                 {cardInfo.textMeaningTranslate}
                             </div>
+                        </div> : null
+                    }
+                    {
+                        isStudied === "true" ? 
+                        <div className={useStyles.cardScore}>
+                            <div>{lang === "en" ? "Study result : " : "Результат изучения: "}</div>
+                            <div className={useStyles.rightAnswers}>{checkedWord.optional.rightAnswers ? checkedWord.optional.rightAnswers : 0}</div>
+                            <div className={useStyles.wrongAnswers}>{checkedWord.optional.wrongAnswers ? checkedWord.optional.wrongAnswers : 0}</div>
                         </div> : null
                     }
                     {
