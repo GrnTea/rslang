@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, { useRef } from "react";
 
 const DisplayWordsComponent = (props) => {
   const wordsElement = useRef(null);
@@ -37,14 +37,14 @@ const DisplayWordsComponent = (props) => {
     console.log(error)
   }
 
-  return(
+  return (
     <div className="audiocall-words-container">
       <div className="random-words" ref={wordsElement}>
         {res}
       </div>
     </div>
-    
-    );
-}
+
+  );
+};
 
 export default DisplayWordsComponent;

@@ -24,12 +24,16 @@ const SpeakerIconStyles = {
   fontSize: 100,
   color: "rgba(223, 230, 233, .5)",
   cursor: "pointer",
-  zIndex: "1"
+  zIndex: "1",
 };
 
+<<<<<<< HEAD
 const StartGameButtonStyle = {
   backgroundColor: "#ff0b53",
   color: "white",
 }
 
 export {LinearProgressStyles, SpeakerIconStyles, StartGameButtonStyle}
+=======
+export { LinearProgressStyles, SpeakerIconStyles };
+>>>>>>> develop
