@@ -6,13 +6,13 @@ import tik from "../../../assets/sound/percussive-hit.wav";
 type BeginTipe = {
   setBegin: Dispatch<boolean>,
 }
-const Begin = ({ setBegin }: BeginTipe) => {
+const Begin = ({ setBegin, start, isVolume }: BeginTipe) => {
   const [playTik] = useSound(tik);
   const [beginTimer, setBeginTimer] = useState(3);
   useEffect(() => {
     const interval = setInterval(() => {
       setBeginTimer(beginTimer - 1);
-      playTik();
+      if (isVolume) playTik();
     }, 1000);
     if (beginTimer === 0) {
       setBegin(false);
@@ -25,7 +25,7 @@ const Begin = ({ setBegin }: BeginTipe) => {
 
   return (
     <div className="sprint">
-      <h2 className="sprint__header">Приготовьтесь!</h2>
+      <h2 className="sprint__header">{start}</h2>
       <div className="sprint__words-container">
         <AccessAlarm />
         <div>{beginTimer}</div>

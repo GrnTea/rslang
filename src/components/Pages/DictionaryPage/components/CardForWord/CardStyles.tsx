@@ -97,6 +97,24 @@ const cardStyles = makeStyles({
       backgroundColor: "#3680cb",
     },
   },
+
+  cardScore: {
+    display: "flex",
+    flexDirection: "row",
+    columnGap: "1em",
+    fontSize: "20px",
+  },
+
+  rightAnswers: {
+    fontWeight: "bold",
+    color: "green",
+  },
+
+  wrongAnswers: {
+    fontWeight: "bold",
+    color: "red",
+  },
+
 });
 
 export default cardStyles;

@@ -43,7 +43,7 @@ const buttonsData = [
       label: "Словарь",
       href: "/dictionary",
       icon: dictionaryIcon,
-    },*/
+    }, */
   {
     label: "Мини-игры",
     href: "/games",
@@ -78,12 +78,11 @@ const buttonsData = [
      label: "Exit",
      href: "/",
      icon: exitIcon,
- 
-   },*/
+
+   }, */
 ];
 
 function Header({ theme }) {
-
   const [{
     appBar, toolbar, logo, list, listLinkItemSection, listLinkItemLearn,
     listItemContainer, collapsedList, listLinkItem, closeButton,
