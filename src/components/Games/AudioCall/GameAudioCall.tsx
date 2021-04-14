@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
+import Button from '@material-ui/core/Button';
 import AudioVisualize from "./AudioVisualize";
 
-import {LinearProgressStyles, SpeakerIconStyles} from './stylesUI';
+import {LinearProgressStyles, SpeakerIconStyles, StartGameButtonStyle} from './stylesUI';
 
 import { connect } from "react-redux";
 import {
@@ -23,6 +24,8 @@ const URL = API_URL;
 function GameAudioCall({ game, user, lang }) {
   const { difficulty, page }: { difficulty: string, page: string } = useParams();
   let pageCounter: number = Number(page);
+
+  let [startGame, setStartGame] = useState(false);
 
   const [counter, setCounter] = useState(0);
   const [data, setData] = useState([]);
@@ -82,9 +85,6 @@ function GameAudioCall({ game, user, lang }) {
       );
   }
 
-  useEffect(() => {
-    getData();
-  }, [difficulty]);
 
   function getData() {
     if (game.gameFrom === "DICTIONARY") {
@@ -145,8 +145,9 @@ function GameAudioCall({ game, user, lang }) {
   }, [counter]);
 
   useEffect(() => {
-    if (counter === 0) return;
+    // if (counter === 0) return;
     if (counter >= 10) return;
+    console.log(word)
 
     let timeoutId = setTimeout(() => {
       playWord();
@@ -180,6 +181,9 @@ function GameAudioCall({ game, user, lang }) {
   let canvas: any;
   
   function playWord() {
+    if(startGame === false) return;
+
+    console.log(startGame)
     let audioSrc = URL + word.audio;
     ctx = ctx || canvasElem.current.getContext('2d');
     canvas = canvas || canvasElem.current;
@@ -239,7 +243,22 @@ function GameAudioCall({ game, user, lang }) {
     setDisplayWords([]);
     setRightAnswers([]);
     setWrongAnswers([]);
+    setStartGame(false);
+  }
+
+  function startGameF() {
+    setStartGame(true);
     getData();
+  }
+
+  if(startGame === false) {
+    return (
+      <div className="audiocall-start-game-button">
+        <Button variant="contained" style={{...StartGameButtonStyle}} onClick={startGameF}>
+          start game
+        </Button>
+      </div>
+    )
   }
 
 
