@@ -145,9 +145,7 @@ function GameAudioCall({ game, user, lang }) {
   }, [counter]);
 
   useEffect(() => {
-    // if (counter === 0) return;
     if (counter >= 10) return;
-    console.log(word)
 
     let timeoutId = setTimeout(() => {
       playWord();
@@ -183,7 +181,6 @@ function GameAudioCall({ game, user, lang }) {
   function playWord() {
     if(startGame === false) return;
 
-    console.log(startGame)
     let audioSrc = URL + word.audio;
     ctx = ctx || canvasElem.current.getContext('2d');
     canvas = canvas || canvasElem.current;
