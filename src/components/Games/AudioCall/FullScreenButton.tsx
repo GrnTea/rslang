@@ -19,7 +19,7 @@ const FullScreenButton = (props) => {
   let styleButton = {
     position: "absolute",
     left: "50%",
-    top: "70px",
+    top: "100px",
     cursor: "pointer",
     zIndex: "1"
   }
