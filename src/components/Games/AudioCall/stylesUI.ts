@@ -27,4 +27,9 @@ const SpeakerIconStyles = {
   zIndex: "1"
 };
 
-export {LinearProgressStyles, SpeakerIconStyles}
+const StartGameButtonStyle = {
+  backgroundColor: "#ff0b53",
+  color: "white",
+}
+
+export {LinearProgressStyles, SpeakerIconStyles, StartGameButtonStyle}
