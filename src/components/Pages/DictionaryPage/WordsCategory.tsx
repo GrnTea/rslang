@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Pagination from "@material-ui/lab/Pagination";
 import DictionaryStyles from "./DicrionaryPageStyles";
 import CardOfWord from "./components/CardForWord/CardForWord";
 import API_URL from "../../Constants/constants";
@@ -15,40 +16,68 @@ interface ICategory {
   filter: string
 }
 
-const DifficultWords: React.FC<Props> = ({ user, section, filter }: ICategory) => {
+function getCards(token:string, page:number, sectionId:number, filter:string, userId:number, setCountPages, setListOfWords) {
+  const url = `${API_URL}users/${userId}/aggregatedWords?group=${sectionId - 1}&page=${page - 1}&filter=${filter}&wordsPerPage=20`;
+
+  fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+      return response.json();
+    })
+    .then((jsonData) => {
+      setListOfWords(jsonData !== 0 ? jsonData[0].paginatedResults : []);
+      setCountPages(jsonData[0].totalCount.length !== 0 ? Math.ceil((jsonData[0].totalCount[0].count) / 20) : 0);
+    })
+    .catch((error) => { console.log(error); });
+}
+
+const WordsFromCategory: React.FC<Props> = ({ user, section, filter }: ICategory) => {
   const useStyles = DictionaryStyles();
   const [listOfWords, setListOfWords] = useState([]);
-  const url = `${API_URL}users/${user.id}/aggregatedWords?group=${section - 1}&page=0&filter=${filter}&wordsPerPage=20`;
+  const [countPages, setCountPages] = useState(0);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`,
-      },
-    })
-      .then(
-        (response) => response.json(),
-      )
-      .then((jsonData) => {
-        setListOfWords(jsonData);
-      });
-  }, [section, filter]);
+    getCards(user.token, page, section, filter, user.id, setCountPages, setListOfWords);
+  }, [page]);
 
-  const listOfCard = listOfWords.length !== 0 ? listOfWords[0].paginatedResults : null;
+  useEffect(() => {
+    setPage(1);
+    getCards(user.token, page, section, filter, user.id, setCountPages, setListOfWords);
+  }, [filter, section]);
+
+  const handleChangePagination = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+    return listOfWords.map((card:any) => <CardOfWord key={card._id} cardInfo={card} isMain={false} />);
+  };
+
+  const renderOnePage = () => listOfWords.map((card:any) => <CardOfWord key={card._id} cardInfo={card} isMain={false} />);
 
   return (
-      <div>
-          <div className={useStyles.cards}>
-              {
-                  listOfCard && listOfCard.length !== 0
-                    ? listOfCard.map((card:any) => <CardOfWord key={card.id} cardInfo={card} />)
-                    : <div>No items yet.</div>
-              }
+    listOfWords
+      ? <div className={useStyles.cards}>
+      {
+        countPages === 1 ? renderOnePage()
+          : countPages > 1
+            ? <>
+          {renderOnePage()}
+          <div className={useStyles.paginationContainer}>
+            <Pagination color="primary" defaultPage={0} showFirstButton showLastButton count={countPages} page={page} onChange={handleChangePagination} />
           </div>
-      </div>
+        </>
+            : <div>No items yet.</div>
+      }
+    </div>
+      : <div>No items yet.</div>
   );
 };
 
-export default DifficultWords;
+export default WordsFromCategory;

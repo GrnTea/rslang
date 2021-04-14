@@ -1,5 +1,5 @@
 import React from "react";
-import "./gameSavannah.css";
+import "./gameSavannah.scss";
 import AspectRatioIcon from "@material-ui/icons/AspectRatio";
 
 const FullScreenButton = (props) => {
@@ -14,12 +14,21 @@ const FullScreenButton = (props) => {
     }
   };
 
+  const fullscreenButtonStyles11 = {
+    position: "absolute",
+    top: "100px",
+    left: "50%",
+    transform: "translate(-50%)",
+    color: "#fdcb6e",
+    zIndex: "1",
+    fontSize: "30px",
+    cursor: "pointer",
+  };
+
   return (
     <AspectRatioIcon
       onClick={toggleFulscreen}
-      className="fullscreen-button-cursor"
-      fontSize="large"
-      color="primary"
+      style={{ ...fullscreenButtonStyles11 }}
     />
   );
 };

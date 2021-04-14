@@ -1,27 +1,35 @@
-import React, { useState, useEffect } from "react";
-import SpeakerIcon from "@material-ui/icons/Speaker";
+import React, { useState, useEffect, useRef } from "react";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import VolumeUpIcon from '@material-ui/icons/VolumeUp';
+import Button from '@material-ui/core/Button';
+import AudioVisualize from "./AudioVisualize";
 
-import {LinearProgressStyles, SpeakerIconStyles} from './stylesUI';
+import {LinearProgressStyles, SpeakerIconStyles, StartGameButtonStyle} from './stylesUI';
 
 import { connect } from "react-redux";
 import {
   useParams,
 } from "react-router-dom";
+import AudioVisualize from "./AudioVisualize";
+
+import { LinearProgressStyles, SpeakerIconStyles } from "./stylesUI";
+
 import { RootState } from "../../../redux/reducer";
 
 import DisplayWordsComponent from "./DisplayWordsComponent";
 import ResetGame from "../ResetGame/ResetGame";
 import FullScreenButton from "./FullScreenButton";
 
-import "./game.css";
+import "./game.scss";
 import API_URL from "../../Constants/constants";
 
 const URL = API_URL;
 
 function GameAudioCall({ game, user, lang }) {
   const { difficulty, page }: { difficulty: string, page: string } = useParams();
-  let pageCounter: number = Number(page);
+  const pageCounter: number = Number(page);
+
+  let [startGame, setStartGame] = useState(false);
 
   const [counter, setCounter] = useState(0);
   const [data, setData] = useState([]);
@@ -34,6 +42,7 @@ function GameAudioCall({ game, user, lang }) {
   const [wrongAnswers, setWrongAnswers] = useState([]);
 
   const [maxSerie, setMaxSerie] = useState(0);
+  const canvasElem = useRef(null);
 
   const filters = {
     studying: "{\"$and\":[{\"userWord.optional.studying\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
@@ -69,10 +78,8 @@ function GameAudioCall({ game, user, lang }) {
       .then(
         (result) => {
           if (game.gameFrom === "DICTIONARY") {
-            console.log("gameFrom = DICTIONARY")
             initGame(result[0].paginatedResults);
           } else {
-            console.log("gameFrom != DICTIONARY")
             initGame(result);
           }
         },
@@ -82,9 +89,6 @@ function GameAudioCall({ game, user, lang }) {
       );
   }
 
-  useEffect(() => {
-    getData();
-  }, [difficulty]);
 
   function getData() {
     if (game.gameFrom === "DICTIONARY") {
@@ -94,9 +98,8 @@ function GameAudioCall({ game, user, lang }) {
     }
   }
 
-
   function initGame(data) {
-    if(data.length < 20) {
+    if (data.length < 20) {
       addData(data);
     }
 
@@ -107,34 +110,32 @@ function GameAudioCall({ game, user, lang }) {
   }
 
   function addData(data: any) {
+
     let data3;
-    let currentDifficulty = data[0].group;
-    fetch(`${API_URL}words?group=${Number(currentDifficulty)}&page=${Number(page)}`, {
+    fetch(`${API_URL}words?group=${Number(difficulty - 1)}&page=${Number(page - 1)}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     })
-    .then(res => res.json())
-    .then(test => {
-      let data2 = test.filter(elem => {
-        if(!data.includes(elem)){
-          return elem;
-        }
-        return;
-      })
+      .then((res) => res.json())
+      .then((test) => {
+        const data2 = test.filter((elem) => {
+          if (!data.includes(elem)) {
+            return elem;
+          }
+        });
 
-      data3 = [...data, ...data2];
-      data3 = data3.splice(0, 20);
-      data3 = shuffle(data3);
+        data3 = [...data, ...data2];
+        data3 = data3.splice(0, 20);
+        data3 = shuffle(data3);
 
-      setWord(data3.pop());
-      setData(data3);
-    }).catch(error => {
-      console.log(error)
-    })
+        setWord(data3.pop());
+        setData(data3);
+      }).catch((error) => {
+        console.log(error);
+      });
   }
-
 
   // -------
   useEffect(() => {
@@ -145,20 +146,26 @@ function GameAudioCall({ game, user, lang }) {
   }, [counter]);
 
   useEffect(() => {
-    if (counter === 0) return;
     if (counter >= 10) return;
 
-    playWord();
-  }, [word]);
+    const timeoutId = setTimeout(() => {
+      playWord();
+    }, 500);
 
+    return () => clearTimeout(timeoutId);
+  }, [word]);
 
   useEffect(() => {
     let res = data.filter((elem, index) => {
+      if(word === undefined) return;
+
       if (elem.word === word.word) return;
-      if (index > 3) return;
+      if (index >= 3) return;
 
       return elem.word;
     });
+
+    
 
     res.push(word);
     res = shuffle(res);
@@ -166,14 +173,23 @@ function GameAudioCall({ game, user, lang }) {
     setDisplayWords(res);
   }, [data, word]);
 
+
+  let ctx: any;
+  let canvas: any;
+  
   function playWord() {
-    const audio = new Audio(URL + word.audio);
-    audio.play();
+    if(startGame === false) return;
+
+    let audioSrc = URL + word.audio;
+    ctx = ctx || canvasElem.current.getContext('2d');
+    canvas = canvas || canvasElem.current;
+
+    AudioVisualize(canvas, audioSrc, ctx);
   }
 
   function addAnswers(word: any, state: any, elems: []) {
     if (elems.length === 0) {
-       state([word]);
+      state([word]);
     } else {
       const copy = elems;
       copy.push(word);
@@ -194,7 +210,7 @@ function GameAudioCall({ game, user, lang }) {
         setShowImage(false);
         setCounter((prev) => prev + 1);
         targetElem.classList.remove("guessed");
-      }, 2000);
+      }, 1500);
     } else {
       currentElem = document.querySelector(`[data-value="${word.word}"]`);
       targetElem.classList.add("no-guessed");
@@ -208,7 +224,7 @@ function GameAudioCall({ game, user, lang }) {
         currentElem.classList.remove("guessed");
         setShowImage(false);
         setCounter((prev) => prev + 1);
-      }, 2000);
+      }, 1500);
     }
   }
 
@@ -223,8 +239,24 @@ function GameAudioCall({ game, user, lang }) {
     setDisplayWords([]);
     setRightAnswers([]);
     setWrongAnswers([]);
+    setStartGame(false);
+  }
+
+  function startGameF() {
+    setStartGame(true);
     getData();
   }
+
+  if(startGame === false) {
+    return (
+      <div className="audiocall-start-game-button">
+        <Button variant="contained" style={{...StartGameButtonStyle}} onClick={startGameF}>
+          start game
+        </Button>
+      </div>
+    )
+  }
+
 
   if(counter === 10) {
     return (
@@ -235,35 +267,30 @@ function GameAudioCall({ game, user, lang }) {
         maxSerie={maxSerie}
         gameId={"2"}
       />
-    )
+    );
   }
 
   return (
-    <div className="game-body-container">
+    <div className="audiocall-container">
+      <div className="background-gradien"></div>
 
-      <div className="content-container">
-        <LinearProgress style={{ ...LinearProgressStyles }} variant="determinate" value={counter * 10} />
-
-        <div className="content">
-          <DisplayWordsComponent displayWords={displayWords} checkWord={checkWord} />
-
-          <div className="word-image">
-            {showImage ? <img className="game-image" src={URL + word.image} alt="" /> : ""}
-          </div>
-
-          <div className="speaker-icon">
-            <SpeakerIcon style={{ ...SpeakerIconStyles }} onClick={() => playWord()} />
-          </div>
-        </div>
-
-        <div className="fullscreen-button">
-          <FullScreenButton />
-        </div>
+      <div className="media-content">
+        <VolumeUpIcon style={{ ...SpeakerIconStyles }} onClick={() => playWord()}/>
+        <canvas ref={canvasElem} width="300" height="300" className="canvas1"></canvas>
       </div>
-    </div>
-  )
-}
+      
+      <LinearProgress className="line-progress" style={{ ...LinearProgressStyles }} variant="determinate" value={counter * 10} />
 
+      <DisplayWordsComponent displayWords={displayWords} checkWord={checkWord} counter={counter} />
+
+      <div className="word-image">
+        {showImage ? <img className="game-image" src={URL + word.image} alt="" /> : ""}
+      </div>
+
+      <FullScreenButton />
+    </div>
+  );
+}
 
 const mapStateToProps = (state: RootState) => ({
   game: state.game,

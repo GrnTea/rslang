@@ -10,14 +10,14 @@ import { Key } from "readline";
 import ResetGame from "../ResetGame/ResetGame";
 import "./sprint.scss";
 import Points from "./Points";
-import SprintHeader from "./SprinInterface";
+import SprintHeader from "./SprintHeader";
 import Begin from "./Begin";
 import correct from "../../../assets/sound/correct-choice.wav";
 import wrong from "../../../assets/sound/error.wav";
 import {
   ERROR, ERROR_WORD, RIGHT_ARROW, RIGHT, DICTIONARY, Buttons,
-  IButtons, GAME_ID
-} from "./sprintconstants";
+  IButtons, GAME_ID, LEFT_ARROW,
+} from "./CONSTANTS";
 import { RootState } from "../../../redux/reducer";
 import API_URL from "../../Constants/constants";
 
@@ -29,17 +29,21 @@ const random = (max: number): number => {
 
 interface ICurrentWord {
   word: string,
+  checkTranslate: string,
   wordTranslate: string,
   isTrueTranslate: boolean,
   id?: string,
   _id?: string,
+  audio: string,
 }
 
 interface IWordData {
   word: string,
+  checkTranslate: string,
   wordTranslate: string,
   id: string | undefined,
   isTrueTranslate: boolean,
+  audio: string,
 }
 
 function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: any, token: any }, lang: any }) {
@@ -61,12 +65,16 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
   const [rightAnswers, setRightAnswers] = useState<ICurrentWord[]>([]);
   const [wrongAnswers, setWrongAnswers] = useState<ICurrentWord[]>([]);
   const [playWords, setPlayWords] = useState<ICurrentWord[]>([]);
-  const isVolume = true;
+  const [isVolume, setIsVolume] = useState(true);
+  const [time, setTime] = useState(40);
+  const [noWords, setNoWords] = useState(false);
   const [currentWord, setCurrentWord] = useState<ICurrentWord>({
     word: "",
+    checkTranslate: "",
     wordTranslate: "",
     isTrueTranslate: false,
     id: "",
+    audio: "",
   });
 
   const filters = {
@@ -81,7 +89,7 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
   }
 
   function getUrl(numOfPage: number, urlKey: string) {
-    const url:IGetURL = {
+    const url: IGetURL = {
       All: `${API_URL}words?group=${Number(difficulty) - 1}&page=${numOfPage}`,
       UserAll: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=${numOfPage}&filter=${filters.not_deleted}&wordsPerPage=20`,
       UserDiff: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=0&filter=${filters.difficult}&wordsPerPage=20`,
@@ -103,8 +111,16 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
       .then(
         (result) => {
           if (game.gameFrom === DICTIONARY) {
+            if (result[0].paginatedResults.length === 0) {
+              setNoWords(true);
+              setFinish(false);
+            }
             setWords(result[0].paginatedResults);
           } else {
+            if (result.length === 0) {
+              setNoWords(true);
+              setFinish(false);
+            }
             setWords(result);
           }
           setIsLoaded(true);
@@ -132,33 +148,40 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
   const playGame = useCallback((wordArr: ICurrentWord[]) => {
     const wordData: IWordData = {
       word: "",
-      wordTranslate: ERROR_WORD,
+      checkTranslate: ERROR_WORD,
+      wordTranslate: "",
       id: "",
       isTrueTranslate: false,
+      audio: "",
     };
 
-    wordData.isTrueTranslate = Boolean(Math.round(Math.random()));
-    const numOfWord = random(wordArr.length - 1);
-    const numFakeWord = numOfWord < wordArr.length ? numOfWord + 1 : numOfWord - 1;
-    wordData.word = wordArr ? wordArr[numOfWord].word : wordArr;
-    const idCheck = game.gameFrom === DICTIONARY ? "_id" : "id";
-    wordData.id = wordArr ? wordArr[numOfWord][idCheck] : wordArr;
-    try {
-      wordData.wordTranslate = wordData.isTrueTranslate
-        ? wordArr[numOfWord].wordTranslate : wordArr[numFakeWord].wordTranslate;
-    } catch (e) {
-      console.log(ERROR + e);
-    }
-    setPlayWords(wordArr.filter((item, index) => numOfWord !== index));
-    if (wordArr.length === 1) {
+    if (wordArr.length < 1) {
       if (game.gameFrom === DICTIONARY) {
         setFinish(true);
+        return;
       }
       pageCounter += 1;
       if (pageCounter === 31) setFinish(true);
       fetchingData(getUrl(pageCounter, "All"));
       setIsLoaded(false);
+      return;
     }
+
+    wordData.isTrueTranslate = Boolean(Math.round(Math.random()));
+    const numOfWord = random(wordArr.length - 1);
+    const numFakeWord = numOfWord < wordArr.length ? numOfWord - 1 : numOfWord + 1;
+    wordData.word = wordArr ? wordArr[numOfWord].word : wordArr;
+    const idCheck = game.gameFrom === DICTIONARY ? "_id" : "id";
+    wordData.id = wordArr ? wordArr[numOfWord][idCheck] : wordArr;
+    try {
+      wordData.wordTranslate = wordArr[numOfWord].wordTranslate;
+      wordData.audio = wordArr[numOfWord].audio;
+      wordData.checkTranslate = wordData.isTrueTranslate
+        ? wordArr[numOfWord].wordTranslate : wordArr[numFakeWord].wordTranslate;
+    } catch (e) {
+      console.log(ERROR + e);
+    }
+    setPlayWords(wordArr.filter((item, index) => numOfWord !== index));
 
     setCurrentWord(wordData);
     return wordData;
@@ -204,19 +227,25 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
         setCheckbox([state]);
       }
     };
+
+    // const btn = event.target.innerHTML === RIGHT;
     const btn = event.target.innerHTML === RIGHT || event.key === RIGHT_ARROW;
     if (btn === currentWord.isTrueTranslate) {
       setScore(score + bonus);
-      playCorrect();
+      if (isVolume) playCorrect();
       addCheckbox(true);
       setRightAnswers([...rightAnswers, currentWord]);
       setTrueanswer(trueAnswer + 1);
-    } else {
-      playWrong();
+    } else if (btn !== currentWord.isTrueTranslate) {
+      if (isVolume) playWrong();
       addCheckbox(false);
       setWrongAnswers([...wrongAnswers, currentWord]);
       setFalseAnswer(falseAnswer + 1);
     }
+  }
+
+  function keyboardEventHandler(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (event.key === RIGHT_ARROW || event.key === LEFT_ARROW) handleClick(event);
   }
 
   function restart() {
@@ -225,11 +254,21 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
     setBonus(10);
     setFinish(false);
     setBegin(true);
+    setTime(40);
+    setRightAnswers([]);
+    setWrongAnswers([]);
+    setNoWords(false);
+  }
+
+  if (noWords) {
+    return (
+      <div>Слов больше нет, добавьте новые!</div>
+    );
   }
 
   if (begin) {
     return (
-      <Begin setBegin={setBegin} />
+      <Begin start={Buttons[lang].start} setBegin={setBegin} isVolume={isVolume} />
     );
   }
 
@@ -254,24 +293,30 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
   }
 
   return (
-    <div ref={sprintEl} className="sprint">
+    <div ref={sprintEl} className="sprint" onKeyDown={keyboardEventHandler}>
       <h2 className="sprint__header">sprint</h2>
-      <SprintHeader setFinish={setFinish} isVolume={isVolume} score={score} />
+      <SprintHeader setFinish={setFinish}
+      isVolume={isVolume}
+      score={score}
+      setIsVolume={setIsVolume}
+      time={time}
+      setTime={setTime} />
       <Points bonus={bonus} checkbox={checkbox} key={Date.now()} />
       <div className="sprint__words-container">
         <h3 className="sprint__words">
           {currentWord.word}
         </h3>
         <h4 className="sprint__translate">
-          {currentWord.wordTranslate}
+          {currentWord.checkTranslate}
         </h4>
       </div>
       <div className="sprint__button">
+
         <Button variant="contained" color="secondary" onClick={handleClick} >
-          {Buttons[lang].rightButton}
-        </Button>
-        <Button variant="contained" color="primary" onClick={handleClick} onKeyDown={handleClick}>
           {Buttons[lang].wrongButton}
+        </Button>
+        <Button variant="contained" color="primary" onClick={handleClick} >
+          {Buttons[lang].rightButton}
         </Button>
       </div>
       <Button variant="contained" onClick={fullscreen}>

@@ -1,14 +1,20 @@
 .reset-game{
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
 }
 
 .right-answers{
   margin-top: 20px;
+  padding-left: 5%;
 }
 
 .wrong-answers{
   margin-top: 20px;
   margin-bottom: 20px;
+  padding-left: 5%;
 }
 
 .true-words,
@@ -23,6 +29,7 @@
 
 .end-game-emotion{
   margin: 0 auto;
+  margin-bottom: 10px;
   width: 100px;
   text-align: center;
   display: flex;
@@ -60,13 +67,14 @@
   border-radius: 10px;
   padding: 0 10px 0 10px;
   color: white;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+  font-family:'Roboto', Tahoma, Geneva, Verdana, sans-serif
 }
 
 .answers{
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family:'Roboto', Tahoma, Geneva, Verdana, sans-serif;
   color: silver;
   font-size: 18px;
+  padding-left: 5%;
 }
 
 .right-counter{
