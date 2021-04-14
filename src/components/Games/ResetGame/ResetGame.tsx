@@ -14,7 +14,15 @@ import API_URL from "../../Constants/constants";
 function ResetGame({
   user, game, maxSerie, rightAnswers, wrongAnswers, resetgame, gameId, lang
 }) {
-  // console.log(rightAnswers, wrongAnswers);
+
+  let emojiStyles = {
+    cursor: "pointer",
+    color: "red"
+  };
+
+  let [emojiEmotionsTwoToneIconStyles, setEmojiEmotionsTwoToneIconStyles] = useState(emojiStyles);
+  
+  let arrStylesEmotion = ["red", "blue", "green", "silver", "orange", "black", "white", "gray", "pink", "mint"];
 
   const buttonStyles = {
     backgroundColor: "#3498db",
@@ -22,6 +30,19 @@ function ResetGame({
     cursor: "pointer",
     margin: "0 auto",
   };
+
+  
+
+  function func() {
+    setEmojiEmotionsTwoToneIconStyles(
+      prev => {
+        return {
+          ...prev,
+          color: arrStylesEmotion[Math.trunc(Math.random() * 10)]
+        }
+      }
+    )
+  }
 
   const herokuUrl = API_URL;
 
@@ -122,8 +143,7 @@ function ResetGame({
 
   return (
     <div className="reset-game">
-      <div className="end-game-emotion">{lang === "ru" ? "Это конец" : "Game Over"}
-      <EmojiEmotionsTwoToneIcon color="primary"/></div>
+      <div className="end-game-emotion">это конец <EmojiEmotionsTwoToneIcon style={{...emojiEmotionsTwoToneIconStyles}} onClick={func}/></div>
       <div className="right-answers-counter">
         <div className="answers">{lang === "ru" ? "Знаю:" : "Know:"} </div>
         <div className="right-counter">{rightAnswers.length}</div>
