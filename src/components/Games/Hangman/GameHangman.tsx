@@ -7,10 +7,23 @@ import Word from "./Word";
 import AspectRatioIcon from "@material-ui/icons/AspectRatio";
 import "./GameHangmanStyles.scss";
 import API_URL from "../../Constants/constants";
-import { showNotification as show, checkWin } from "./helpers";
+import { showNotification as show, checkWin, playSounds } from "./helpers";
 import {useDispatch} from "react-redux";
+import Popup from "./Popup";
+import SelectLevel from "./SelectLevel";
 
 const URL = API_URL;
+
+
+interface ICurrentWord {
+  word: string,
+  checkTranslate: string,
+  wordTranslate: string,
+  isTrueTranslate: boolean,
+  id?: string,
+  _id?: string,
+  audio: string,
+}
 
 function setFullScreen(){
   if (!document.fullscreenElement) {
@@ -26,30 +39,37 @@ function shuffle(array: any) {
 
 export default function GameHangman() {
   const [isLoaded, setIsLoaded] = useState(false);
-  //const [wordsData, setWordsData] = useState([]);
+  const [wordsData, setWordsData] = useState([]);
+  const [resultLength, setResultLength] = useState(0);
+  const [wordsCounter, setWordsCounter] = useState(0);
   //const [selectedWordObj, setSelectedWordObj] = useState({});
+  const [errors, setErrors] = useState('');
   const [selectedWord, setSelectedWord] = useState('');
   const [isStartGame, setIsStartGame] = useState(false);
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
 
+
   const { difficulty, page } = useParams();
   const dispatch = useDispatch();
-  let resultLength = 0,
-      wordObj,
+  let wordObj,
       wordsAmount = 0;
 
   function getWords() {
     fetch(`${URL}words?group=${difficulty - 1}&page=${page}`)
       .then((response) => response.json())
       .then((result) => {
-        resultLength = result.length;
+        setResultLength(result.length);
         console.log("resultLength", resultLength);
         setIsLoaded(true);
+        setWordsData(result);
         wordObj = shuffle(result).pop();
         setSelectedWord(wordObj.word);
+        setWordsCounter(wordsCounter + 1);
         console.log(wordObj.word);
+        console.log(wordsData);
+
       })
   }
 
@@ -57,9 +77,13 @@ export default function GameHangman() {
     getWords();
   }, []);
 
-  function gameInit(){
-    dispatch({type: "START_GAME"});
-    setIsStartGame(true);
+  function gameInit(errors){
+    if (errors === ""){
+      alert('Select number of possible mistakes!');
+    } else {
+      dispatch({type: "START_GAME"});
+      setIsStartGame(true);
+    }
   }
 
   useEffect(() => {
@@ -104,6 +128,24 @@ export default function GameHangman() {
     )
   };
 
+  function playAgain(){
+    //setPlayable(true);
+    if (wordsData.length) {
+    setSelectedWord(wordsData.pop().word);
+    setWordsCounter(wordsCounter + 1);
+
+    console.log("wordsData game", wordsData);
+    console.log("selected word game", selectedWord);
+    setIsStartGame(true);
+    setCorrectLetters([]);
+    setWrongLetters([]);
+    } else {
+      console.log("finish");
+    }
+    //setIsAudioPlaying(false);
+    // window.location.reload();
+    //setStatistics();
+  }
 
   if (!isLoaded) {
     return <div>Загрузка...</div>;
@@ -111,8 +153,9 @@ export default function GameHangman() {
     return (
       <div>
         <div className="hangman-buttons">
-          <div className="hangman-counter">{wordsAmount}  / {resultLength}</div>
-          <div className="hangman-start"  onClick={gameInit}>Start</div>
+          <div className="hangman-counter">{wordsCounter}  / {resultLength}</div>
+          <div className="hangman-start" onClick={() => gameInit(errors)}>Start</div>
+          <SelectLevel setErrors={setErrors} />
         </div>
         <div className="hangman-container">
           <Figure wrongLetters={wrongLetters}/>
@@ -126,6 +169,17 @@ export default function GameHangman() {
               color="primary"
             />
           </div>
+          {!!checkWin(correctLetters, wrongLetters, selectedWord, errors).length && <Popup
+            correctLetters={correctLetters}
+            wrongLetters={wrongLetters}
+            selectedWord={selectedWord}
+            errors={errors}
+            playAgain={playAgain}
+            // setPlayable={setPlayable}
+
+            // isAudioPlaying={isAudioPlaying}
+            // setIsAudioPlaying={setIsAudioPlaying}
+          />}
           {notification(showNotification)}
         </div>
       </div>

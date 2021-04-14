@@ -63,9 +63,9 @@ function Games({ lang }: {lang:string}) {
         <GameDescription gameName={GAME[lang].SAVANNA.NAME} description={GAME[lang].SAVANNA.DESCRIPTION()}
         game={savannah} gameSelected ={SELECT_SAVANNAH} />
       </Route>
-      <Route path="/games/savannah">
-        <GameDescription gameName={GAME[lang].SAVANNA.NAME} description={GAME[lang].SAVANNA.DESCRIPTION()}
-        game={savannah} gameSelected ={SELECT_SAVANNAH} />
+      <Route path="/games/hangman">
+        <GameDescription gameName={GAME[lang].HANGMAN.NAME} description={GAME[lang].HANGMAN.DESCRIPTION()}
+        game={hangman} gameSelected ={SELECT_HANGMAN} />
       </Route>
 
     </div>
