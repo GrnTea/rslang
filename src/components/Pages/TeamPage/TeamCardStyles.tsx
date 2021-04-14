@@ -28,7 +28,7 @@ const cardStyles = makeStyles({
     height: "400px",
     display: "flex",
     justifyContent: "flex-start",
-    backgroundColor: "rgba(255, 255, 255, 0.4)",
+    backgroundColor: "rgb(242 242 242 / 40%)",
     borderRadius: "10px",
     overflow: "hidden",
   },

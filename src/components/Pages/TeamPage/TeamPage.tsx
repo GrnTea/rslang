@@ -7,8 +7,8 @@ import { RootState } from "../../../redux/reducer";
 import juliaImg from "../../../assets/images/team/julia.jpg";
 import ilyaImg from "../../../assets/images/team/ilya.jpg";
 import kateImg from "../../../assets/images/team/kate.jpg";
-// import arseniyImg from "../../../assets/images/team/arseniy.jpg";
-// import maksimImg from "../../../assets/images/team/maksim.jpg";
+import arseniyImg from "../../../assets/images/team/arseniy.jpg";
+import maksimImg from "../../../assets/images/team/maksim.jpg";
 
 type Props = {
   lang: string
@@ -20,8 +20,8 @@ const TeamPage: React.FC<Props> = ({lang}) => {
     ilya: ilyaImg,
     julia: juliaImg,
     kate: kateImg,
-    // arseniy: arseniyImg,
-    // maksim: maksimImg
+    arseniy: arseniyImg,
+    maksim: maksimImg
   }
 
   return (
