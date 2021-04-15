@@ -11,6 +11,7 @@ import { showNotification as show, checkWin, playSounds } from "./helpers";
 import {useDispatch} from "react-redux";
 import Popup from "./Popup";
 import SelectLevel from "./SelectLevel";
+import ResetGame from "./ResetGame";
 
 const URL = API_URL;
 
@@ -42,9 +43,9 @@ export default function GameHangman() {
   const [wordsData, setWordsData] = useState([]);
   const [resultLength, setResultLength] = useState(0);
   const [wordsCounter, setWordsCounter] = useState(0);
-  //const [selectedWordObj, setSelectedWordObj] = useState({});
-  const [errors, setErrors] = useState('');
-  const [selectedWord, setSelectedWord] = useState('');
+  const [selectedWordObj, setSelectedWordObj] = useState({});
+  const [errors, setErrors] = useState("");
+  const [selectedWord, setSelectedWord] = useState("");
   const [isStartGame, setIsStartGame] = useState(false);
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
@@ -53,20 +54,22 @@ export default function GameHangman() {
 
   const { difficulty, page } = useParams();
   const dispatch = useDispatch();
-  let wordObj,
-      wordsAmount = 0;
+  let wordObj;
 
   function getWords() {
-    fetch(`${URL}words?group=${difficulty - 1}&page=${page}`)
+    //fetch(`${URL}words?group=${difficulty - 1}&page=${page}`)
+    fetch(`${URL}words/5e9f5ee35eb9e72bc21af4a0`)
       .then((response) => response.json())
       .then((result) => {
         setResultLength(result.length);
         console.log("resultLength", resultLength);
         setIsLoaded(true);
         setWordsData(result);
-        wordObj = shuffle(result).pop();
+        // wordObj = shuffle(result).pop();
+        wordObj = [result].pop();
+        setSelectedWordObj(wordObj);
         setSelectedWord(wordObj.word);
-        setWordsCounter(wordsCounter + 1);
+
         console.log(wordObj.word);
         console.log(wordsData);
 
@@ -79,11 +82,13 @@ export default function GameHangman() {
 
   function gameInit(errors){
     if (errors === ""){
-      alert('Select number of possible mistakes!');
+      alert('Select maximum number of possible mistakes!');
     } else {
       dispatch({type: "START_GAME"});
       setIsStartGame(true);
+      setWordsCounter(wordsCounter + 1);
     }
+    console.log("selectedWordObj", selectedWordObj);
   }
 
   useEffect(() => {
@@ -128,10 +133,38 @@ export default function GameHangman() {
     )
   };
 
+  function resetGame() {
+    setResultLength(0);
+    setWordsCounter(0);
+    setIsLoaded(false);
+    setWordsData([]);
+    setSelectedWordObj({});
+    setSelectedWord("");
+    setCorrectLetters([]);
+    setWrongLetters([]);
+    getWords()
+  }
+
+  function getStat() {
+    const rightAnswers = JSON.parse(localStorage.getItem('rightObj'));
+    const wrongAnswers = JSON.parse(localStorage.getItem('wrongObj'));
+
+    return (
+      <ResetGame
+        maxSerie={rightAnswers.length}
+        rightAnswers={rightAnswers}
+        wrongAnswers={wrongAnswers}
+        resetgame={resetGame}
+        gameId={"4"}
+      />
+    )
+  }
+
   function playAgain(){
-    //setPlayable(true);
     if (wordsData.length) {
-    setSelectedWord(wordsData.pop().word);
+    wordObj = wordsData.pop();
+    setSelectedWordObj(wordObj);
+    setSelectedWord(wordObj.word);
     setWordsCounter(wordsCounter + 1);
 
     console.log("wordsData game", wordsData);
@@ -141,10 +174,13 @@ export default function GameHangman() {
     setWrongLetters([]);
     } else {
       console.log("finish");
+      //statistics
+      getStat();
     }
     //setIsAudioPlaying(false);
     // window.location.reload();
     //setStatistics();
+    console.log("selectedWordObj", selectedWordObj);
   }
 
   if (!isLoaded) {
@@ -169,14 +205,15 @@ export default function GameHangman() {
               color="primary"
             />
           </div>
-          {!!checkWin(correctLetters, wrongLetters, selectedWord, errors).length && <Popup
+          {!!checkWin(correctLetters, wrongLetters, selectedWord, errors).length
+          && <Popup
+            selectedWordObj={selectedWordObj}
             correctLetters={correctLetters}
             wrongLetters={wrongLetters}
             selectedWord={selectedWord}
             errors={errors}
             playAgain={playAgain}
-            // setPlayable={setPlayable}
-
+            setIsStartGame={setIsStartGame}
             // isAudioPlaying={isAudioPlaying}
             // setIsAudioPlaying={setIsAudioPlaying}
           />}

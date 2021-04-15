@@ -18,7 +18,7 @@ import {
 import { RootState } from "../../redux/reducer";
 
 function Games({ lang }: {lang:string}) {
-  console.log(lang);
+  console.log('--- games', lang);
   const audioCall = () => (<GameAudioCall />);
   const sprint = () => (<Sprint />);
   const savannah = () => (<GameSavannah />);

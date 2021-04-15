@@ -31,6 +31,8 @@ function GameMenu(props: any) {
     }
   }, [location]);
 
+  console.log('!!! gamemenu');
+
   return (
     <div className="game-container">
       <h6 className={hide ? "game-name" : "game-name hide"}>{props.gameName}</h6>

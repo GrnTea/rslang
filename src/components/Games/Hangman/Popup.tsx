@@ -3,35 +3,59 @@ import {checkWin, playSounds} from './helpers';
 /*import win from "../audio/win.mp3";
 import lose from "../audio/lose.mp3";*/
 
-function Popup({correctLetters, wrongLetters, selectedWord, errors, playAgain,
-                 /*setPlayable, isAudioPlaying, setIsAudioPlaying: setIsAudioPlaying*/}) {
+function Popup ({selectedWordObj, correctLetters, wrongLetters, selectedWord, errors, playAgain, setIsStartGame}) {
 
-  const [trueAnswer, setTrueAnswer] = useState(0);
-  const [falseAnswer, setFalseAnswer] = useState(0);
-  const [rightAnswers, setRightAnswers] = useState([]);
-  const [wrongAnswers, setWrongAnswers] = useState([]);
   let finalMessage = '';
   let finalMessageRevealWord = '';
-  // let playable = true;
+  let isStartGame = true;
+  const gameResult = checkWin(correctLetters, wrongLetters, selectedWord, errors);
+  console.log("selectedWordObj", selectedWordObj, gameResult);
 
+  if (gameResult === 'win') {
+    isStartGame = false;
+    finalMessage = "Congratulations! You guessed the word correctly!"
+    finalMessageRevealWord =`...the word was: ${selectedWord} - ${selectedWordObj.wordTranslate}`;
 
-    // setRightAnswers([...rightAnswers, selectedWord]);
-    // setTrueAnswer(trueAnswer + 1);
+    if(selectedWord) {
+      const rightAnswersFromStorage = JSON.parse(localStorage.getItem("rightAnswers")) || [];
+      rightAnswersFromStorage.push(selectedWord);
+      localStorage.setItem("rightAnswers", JSON.stringify(rightAnswersFromStorage));
 
+      const rightObjFromStorage = JSON.parse(localStorage.getItem("rightObj")) || [];
+      rightObjFromStorage.push(selectedWordObj);
+      localStorage.setItem("rightObj", JSON.stringify(rightObjFromStorage));
 
-  if (checkWin(correctLetters, wrongLetters, selectedWord, errors) === 'win') {
-    finalMessage = 'Congratulations! You guessed the word correctly!';
-
-
-   /* setRightAnswers([...rightAnswers, selectedWord]);
+      let trueAnswersFromStorage = parseInt(localStorage.getItem("trueAnswers")) || 0;
+      trueAnswersFromStorage = parseInt(trueAnswersFromStorage) + 1;
+      localStorage.setItem("trueAnswers", trueAnswersFromStorage);
+    }
+  /*  setRightAnswers([...rightAnswers, selectedWord]);
     setTrueAnswer(trueAnswer + 1);*/
     // playable = false;
     // isAudioPlaying && playSounds(win);
     // setIsAudioPlaying(false);
 
-  } else if (checkWin(correctLetters, wrongLetters, selectedWord, errors) === 'lose') {
-    finalMessage = 'Unfortunately you lost :(';
-    finalMessageRevealWord = `...the word was: ${selectedWord}`;
+  }
+
+  if (gameResult === 'lose') {
+    isStartGame = false;
+    finalMessage = "Unfortunately you lost :(";
+    finalMessageRevealWord = `...the word was: ${selectedWord} - ${selectedWordObj.wordTranslate}`;
+
+    const wrongAnswersFromStorage = JSON.parse(localStorage.getItem("wrongAnswers")) || [];
+    wrongAnswersFromStorage.push(selectedWord);
+    localStorage.setItem("wrongAnswers", JSON.stringify(wrongAnswersFromStorage));
+
+    const wrongObjFromStorage = JSON.parse(localStorage.getItem("wrongObj")) || [];
+    wrongObjFromStorage.push(selectedWordObj);
+    localStorage.setItem("wrongObj", JSON.stringify(wrongObjFromStorage));
+
+    let falseAnswersFromStorage = parseInt(localStorage.getItem("falseAnswers")) || 0;
+    console.log("falseAnswersFromStorage", typeof falseAnswersFromStorage);
+    falseAnswersFromStorage = parseInt(falseAnswersFromStorage) + 1;
+    console.log("falseAnswersFromStorage", typeof falseAnswersFromStorage);
+    localStorage.setItem("falseAnswers", falseAnswersFromStorage);
+
     /*setWrongAnswers([...wrongAnswers, selectedWord]);
     setFalseAnswer(falseAnswer + 1);*/
     // playable = false;
@@ -39,7 +63,7 @@ function Popup({correctLetters, wrongLetters, selectedWord, errors, playAgain,
     // setIsAudioPlaying(false);
   }
 
-  // useEffect(() => setPlayable(playable));
+  useEffect(() => {console.log("isStartGame", isStartGame); setIsStartGame(isStartGame)});
 
   return(
     <div className="popup-container" style={finalMessage !== '' ? {display: 'flex'} : {}}>
