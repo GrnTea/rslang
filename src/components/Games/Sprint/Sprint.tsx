@@ -238,7 +238,8 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
       setTrueAnswer(trueAnswer + 1);
     } else {
       setTrueAnswer(trueAnswer + 1);
-    } else if (btn !== currentWord.isTrueTranslate) {
+    }
+    if (btn !== currentWord.isTrueTranslate) {
       if (isVolume) playWrong();
       addCheckbox(false);
       setWrongAnswers([...wrongAnswers, currentWord]);
