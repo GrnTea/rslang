@@ -50,28 +50,27 @@ export default function GameHangman() {
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
+  const [canSeeStatistics, setCanSeeStatistics] = useState(false);
 
-
-  const { difficulty, page } = useParams();
+  const {difficulty, page} = useParams();
   const dispatch = useDispatch();
-  let wordObj;
+  let wordObj, shuffledData;
 
   function getWords() {
-    //fetch(`${URL}words?group=${difficulty - 1}&page=${page}`)
-    fetch(`${URL}words/5e9f5ee35eb9e72bc21af4a0`)
+    fetch(`${URL}words?group=${difficulty - 1}&page=${page}`)
       .then((response) => response.json())
       .then((result) => {
         setResultLength(result.length);
         console.log("resultLength", resultLength);
         setIsLoaded(true);
-        setWordsData(result);
-        // wordObj = shuffle(result).pop();
-        wordObj = [result].pop();
+        shuffledData = shuffle(result);
+        setWordsData(shuffledData);
+        wordObj = shuffledData.pop();
         setSelectedWordObj(wordObj);
         setSelectedWord(wordObj.word);
 
         console.log(wordObj.word);
-        console.log(wordsData);
+        console.log(shuffledData);
 
       })
   }
@@ -80,12 +79,14 @@ export default function GameHangman() {
     getWords();
   }, []);
 
-  function gameInit(errors){
-    if (errors === ""){
-      alert('Select maximum number of possible mistakes!');
+  function gameInit(errors) {
+    if (errors === "") {
+      alert('Select LEVEL - the maximum number of possible mistakes!');
     } else {
       dispatch({type: "START_GAME"});
       setIsStartGame(true);
+      localStorage.removeItem('rightObj');
+      localStorage.removeItem('wrongObj');
       setWordsCounter(wordsCounter + 1);
     }
     console.log("selectedWordObj", selectedWordObj);
@@ -107,7 +108,6 @@ export default function GameHangman() {
             // isAudioPlaying && playSounds(note);
           }
         } else {
-          console.log("selectedWord from letters", selectedWord);
           if (!wrongLetters.includes(letter)) {
             setWrongLetters(currentLetters => [...currentLetters, letter]);
 
@@ -121,12 +121,12 @@ export default function GameHangman() {
 
     window.addEventListener('keydown', handleKeydown);
 
-    return() => window.removeEventListener('keydown', handleKeydown);
+    return () => window.removeEventListener('keydown', handleKeydown);
   }, [correctLetters, wrongLetters, isStartGame]);
 
 
   const notification = (showNotification) => {
-    return(
+    return (
       <div className={`notification-container ${showNotification ? 'show' : ''}`}>
         <p>You have already entered this letter</p>
       </div>
@@ -142,61 +142,71 @@ export default function GameHangman() {
     setSelectedWord("");
     setCorrectLetters([]);
     setWrongLetters([]);
+    setCanSeeStatistics(false);
+    setErrors("");
     getWords()
   }
 
-  function getStat() {
-    const rightAnswers = JSON.parse(localStorage.getItem('rightObj'));
-    const wrongAnswers = JSON.parse(localStorage.getItem('wrongObj'));
-
-    return (
-      <ResetGame
-        maxSerie={rightAnswers.length}
-        rightAnswers={rightAnswers}
-        wrongAnswers={wrongAnswers}
-        resetgame={resetGame}
-        gameId={"4"}
-      />
-    )
-  }
-
-  function playAgain(){
+  function playAgain() {
     if (wordsData.length) {
-    wordObj = wordsData.pop();
-    setSelectedWordObj(wordObj);
-    setSelectedWord(wordObj.word);
-    setWordsCounter(wordsCounter + 1);
-
-    console.log("wordsData game", wordsData);
-    console.log("selected word game", selectedWord);
-    setIsStartGame(true);
-    setCorrectLetters([]);
-    setWrongLetters([]);
+      wordObj = wordsData.pop();
+      setSelectedWordObj(wordObj);
+      setSelectedWord(wordObj.word);
+      setWordsCounter(wordsCounter + 1);
+      setIsStartGame(true);
+      setCorrectLetters([]);
+      setWrongLetters([]);
     } else {
-      console.log("finish");
-      //statistics
-      getStat();
+      setIsStartGame(false);
+      setCorrectLetters([]);
+      setWrongLetters([]);
+      setCanSeeStatistics(true);
     }
     //setIsAudioPlaying(false);
-    // window.location.reload();
-    //setStatistics();
     console.log("selectedWordObj", selectedWordObj);
   }
 
+
+  let rightAnswers, wrongAnswers;
+
+  if (canSeeStatistics) {
+    const rightAnswersStore = JSON.parse(localStorage.getItem('rightObj')) || [];
+    const wrongAnswersStore = JSON.parse(localStorage.getItem('wrongObj')) || [];
+
+    if (rightAnswersStore.length || wrongAnswersStore.length) {
+
+      const rightSet = new Set();
+      rightAnswers = rightAnswersStore.filter(el => {
+        const duplicate = rightSet.has(el.id);
+        rightSet.add(el.id);
+        return !duplicate;
+      });
+
+      const wrongSet = new Set();
+      wrongAnswers = wrongAnswersStore.filter(el => {
+        const duplicate = wrongSet.has(el.id);
+        wrongSet.add(el.id);
+        return !duplicate;
+      });
+  }
+}
+
   if (!isLoaded) {
     return <div>Загрузка...</div>;
-  } else {
+  } else if (!canSeeStatistics) {
     return (
+
       <div>
         <div className="hangman-buttons">
-          <div className="hangman-counter">{wordsCounter}  / {resultLength}</div>
+          <div className="hangman-counter">{wordsCounter} / {resultLength}</div>
           <div className="hangman-start" onClick={() => gameInit(errors)}>Start</div>
-          <SelectLevel setErrors={setErrors} />
+          <SelectLevel setErrors={setErrors}/>
         </div>
         <div className="hangman-container">
           <Figure wrongLetters={wrongLetters}/>
           <WrongLetters wrongLetters={wrongLetters}/>
           {isStartGame && <Word selectedWord={selectedWord} correctLetters={correctLetters}/>}
+
           <div className="hangman-fullscreen-button">
             <AspectRatioIcon
               onClick={setFullScreen}
@@ -221,6 +231,15 @@ export default function GameHangman() {
         </div>
       </div>
     )
+  } else {
+    return (
+       <ResetGame
+        maxSerie={rightAnswers.length}
+        rightAnswers={rightAnswers}
+        wrongAnswers={wrongAnswers}
+        resetgame={resetGame}
+        gameId={"4"}
+      />
+    )
   }
-
 };

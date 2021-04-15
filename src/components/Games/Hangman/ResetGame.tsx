@@ -4,6 +4,7 @@ import Button from "@material-ui/core/Button";
 import VolumeUpIcon from "@material-ui/icons/VolumeUp";
 import EmojiEmotionsTwoToneIcon from "@material-ui/icons/EmojiEmotionsTwoTone";
 import API_URL from "../../Constants/constants";
+import "./resetGame.css";
 
 const ResetGame = (props: any) => {
   const herokuUrl = API_URL;
