@@ -1,7 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {checkWin, playSounds} from './helpers';
-/*import win from "../audio/win.mp3";
-import lose from "../audio/lose.mp3";*/
+import { modal, buttons } from "./Constants";
+import {RootState} from "../../../redux/reducer";
+import {connect} from "react-redux";
+import win from "../../../assets/sound/succes.mp3";
+import lose from "../../../assets/sound/lose.mp3";;
 
 function Popup ({selectedWordObj,
                   correctLetters,
@@ -9,17 +12,18 @@ function Popup ({selectedWordObj,
                   selectedWord,
                   errors,
                   playAgain,
-                  setIsStartGame}) {
+                  setIsStartGame,
+                  lang}) {
 
-  let finalMessage = '';
-  let finalMessageRevealWord = '';
+  let finalMessage = "";
+  let finalMessageRevealWord = "";
   let isStartGame = true;
   const gameResult = checkWin(correctLetters, wrongLetters, selectedWord, errors);
 
   if (gameResult === 'win') {
     isStartGame = false;
-    finalMessage = "Congratulations! You guessed the word correctly!"
-    finalMessageRevealWord =`...the word was: ${selectedWord} - ${selectedWordObj.wordTranslate}`;
+    finalMessage = modal[lang].win;
+    finalMessageRevealWord = modal[lang].word + `${selectedWord} - ${selectedWordObj.wordTranslate}`;
 
     if(selectedWord) {
       const rightObjFromStorage = JSON.parse(localStorage.getItem("rightObj")) || [];
@@ -27,23 +31,20 @@ function Popup ({selectedWordObj,
       localStorage.setItem("rightObj", JSON.stringify(rightObjFromStorage));
     }
 
-    // playable = false;
-    // isAudioPlaying && playSounds(win);
-    // setIsAudioPlaying(false);
+     // playSounds(win);
   }
 
   if (gameResult === 'lose') {
     isStartGame = false;
-    finalMessage = "Unfortunately you lost :(";
-    finalMessageRevealWord = `...the word was: ${selectedWord} - ${selectedWordObj.wordTranslate}`;
+    finalMessage = modal[lang].lose;
+    finalMessageRevealWord = modal[lang].word + ` ${selectedWord} - ${selectedWordObj.wordTranslate}`;
 
     const wrongObjFromStorage = JSON.parse(localStorage.getItem("wrongObj")) || [];
     wrongObjFromStorage.push(selectedWordObj);
     localStorage.setItem("wrongObj", JSON.stringify(wrongObjFromStorage));
 
-    // playable = false;
-    // isAudioPlaying && playSounds(lose);
-    // setIsAudioPlaying(false);
+   // playSounds(lose);
+
   }
 
   useEffect(() => {setIsStartGame(isStartGame)});
@@ -53,13 +54,18 @@ function Popup ({selectedWordObj,
       <div className="popup">
         <h2>{finalMessage}</h2>
         <h3>{finalMessageRevealWord}</h3>
-        <button onClick={playAgain}>Next</button>
+        <button onClick={playAgain}>{buttons[lang].next}</button>
       </div>
     </div>
   )
 };
 
-export default Popup
+
+const mapStateToProps = (state: RootState) => ({
+  lang: state.settingsReducer.lang.lang,
+});
+
+export default connect(mapStateToProps, null)(Popup);
 
 
 

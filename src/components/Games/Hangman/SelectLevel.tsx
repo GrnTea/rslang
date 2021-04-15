@@ -1,6 +1,9 @@
 import React from 'react'
+import {RootState} from "../../../redux/reducer";
+import {connect} from "react-redux";
+import { level } from "./Constants";
 
-const SelectLevel = ({ setErrors }) => {
+const SelectLevel = ({ setErrors, lang }) => {
 
   function handleChange(e) {
     setErrors(parseFloat(e.target.value));
@@ -13,13 +16,17 @@ const SelectLevel = ({ setErrors }) => {
         onChange={handleChange}
         name="errors"
         className="select_input">
-        <option value="">--Select level--</option>
-        <option value="6">6 mistakes</option>
-        <option value="10">10 mistakes</option>
-        <option value="13">13 mistakes</option>
+        <option value="">{level[lang].select}</option>
+        <option value="6">{level[lang].level6}</option>
+        <option value="10">{level[lang].level10}</option>
+        <option value="13">{level[lang].level13}</option>
       </select>
     </div>
   )
 };
 
-export default SelectLevel
+const mapStateToProps = (state: RootState) => ({
+  lang: state.settingsReducer.lang.lang,
+});
+
+export default connect(mapStateToProps, null)(SelectLevel);

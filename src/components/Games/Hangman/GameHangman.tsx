@@ -5,13 +5,15 @@ import Figure from "./Figure";
 import WrongLetters from "./WrongLetters";
 import Word from "./Word";
 import AspectRatioIcon from "@material-ui/icons/AspectRatio";
-import "./GameHangmanStyles.scss";
+
 import API_URL from "../../Constants/constants";
 import { showNotification as show, checkWin, playSounds } from "./helpers";
 import {connect, useDispatch} from "react-redux";
 import Popup from "./Popup";
 import SelectLevel from "./SelectLevel";
 import ResetGame from "../ResetGame/ResetGame";
+import { alert as message, buttons } from "./Constants";
+import "./GameHangmanStyles.scss";
 
 const URL = API_URL;
 
@@ -53,7 +55,7 @@ function shuffle(array: any) {
   return array.sort(() => Math.random() - 0.5);
 }
 
-function GameHangman({ game, user }: IGameHangman) {
+function GameHangman({ game, user, lang }: IGameHangman) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [wordsData, setWordsData] = useState([]);
   const [resultLength, setResultLength] = useState(0);
@@ -94,8 +96,9 @@ function GameHangman({ game, user }: IGameHangman) {
       .then(
         (result) => {
           if (game.gameFrom === "DICTIONARY") {
-            if (result[0].paginatedResults.length === 0) {
-              setNoWords(true);
+            if (!result[0].paginatedResults.length) {
+              alert("No words received")
+              //setNoWords(true);
             }
             setResultLength(result[0].paginatedResults.length);
             console.log("resultLength", resultLength);
@@ -106,8 +109,9 @@ function GameHangman({ game, user }: IGameHangman) {
             setSelectedWordObj(wordObj);
             setSelectedWord(wordObj.word);
           } else {
-            if (result.length === 0) {
-              setNoWords(true);
+            if (!result.length) {
+              alert("No words received")
+              // setNoWords(true);
             }
             setResultLength(result.length);
             console.log("resultLength", resultLength);
@@ -125,7 +129,7 @@ function GameHangman({ game, user }: IGameHangman) {
         },
       );
     return function cleanup() {
-      setWords([]);
+      setWordsData([]);
     };
   }
 
@@ -158,13 +162,15 @@ function GameHangman({ game, user }: IGameHangman) {
 
   function gameInit(errors) {
     if (errors === "") {
-      alert('Select LEVEL - the maximum number of possible mistakes!');
+      alert(`${message[lang].alert}`);
     } else {
       dispatch({type: "START_GAME"});
       setIsStartGame(true);
       localStorage.removeItem('rightObj');
       localStorage.removeItem('wrongObj');
-      setWordsCounter(wordsCounter + 1);
+      if(wordsCounter < resultLength) {
+        setWordsCounter(wordsCounter + 1);
+      }
     }
     console.log("selectedWordObj", selectedWordObj);
   }
@@ -280,7 +286,7 @@ function GameHangman({ game, user }: IGameHangman) {
       <div>
         <div className="hangman-buttons">
           <div className="hangman-counter">{wordsCounter} / {resultLength}</div>
-          <div className="hangman-start" onClick={() => gameInit(errors)}>Start</div>
+          <div className="hangman-start" onClick={() => gameInit(errors)}>{buttons[lang].start}</div>
           <SelectLevel setErrors={setErrors}/>
         </div>
         <div className="hangman-container">
@@ -329,6 +335,7 @@ function GameHangman({ game, user }: IGameHangman) {
 const mapStateToProps = (state: RootState) => ({
   game: state.game,
   user: state.user,
+  lang: state.settingsReducer.lang.lang,
 });
 
 export default connect(mapStateToProps, null)(GameHangman);
