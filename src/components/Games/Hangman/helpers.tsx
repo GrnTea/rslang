@@ -15,8 +15,6 @@ export function checkWin(correct, wrong, word, errors) {
   });
 
   if (wrong.length === errors) status = 'lose';
-  // localStorage.setItem('status', status);
-  console.log('checkWin returns', status);
   return status;
 }
 
