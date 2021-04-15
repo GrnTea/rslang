@@ -260,6 +260,12 @@ function Sprint({ game, user, lang }: { game: { gameFrom: string }, user: { id: 
     setRightAnswers([]);
     setWrongAnswers([]);
     setNoWords(false);
+    if (game.gameFrom === DICTIONARY) {
+      fetchingData(getUrl(pageCounter, "UserDiff"));
+    } else {
+      fetchingData(getUrl(pageCounter, "All"));
+    }
+    setIsLoaded(false);
   }
 
   if (noWords) {

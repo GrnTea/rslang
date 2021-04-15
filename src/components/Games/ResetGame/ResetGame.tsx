@@ -8,6 +8,7 @@ import WordUpdate from "../WordUpdate/WordUpdate";
 
 import { RootState } from "../../../redux/reducer";
 import API_URL from "../../Constants/constants";
+import { Link, NavLink } from "react-router-dom";
 
 function ResetGame({
   user, game, maxSerie, rightAnswers, wrongAnswers, resetgame, gameId, lang
@@ -128,16 +129,31 @@ function ResetGame({
       });
   }, [gameStatistics]);
 
-  useEffect(() => {
+  function endGame() {
     if (game && user.id) {
       rightAnswers.forEach((element: any) => {
+        element.id = element.id ? element.id : element._id;
         WordUpdate(user, element.id, true, game);
       });
       wrongAnswers.forEach((element: any) => {
+        element.id = element.id ? element.id : element._id;
         WordUpdate(user, element.id, false, game);
       });
     }
-  }, []);
+  }
+
+  // useEffect(() => {
+  //   if (game && user.id) {
+  //     rightAnswers.forEach((element: any) => {
+  //       element.id = element.id ? element.id : element._id;
+  //       WordUpdate(user, element.id, true, game);
+  //     });
+  //     wrongAnswers.forEach((element: any) => {
+  //       element.id = element.id ? element.id : element._id;
+  //       WordUpdate(user, element.id, false, game);
+  //     });
+  //   }
+  // }, []);
 
   return (
     <div className="reset-game">
@@ -160,6 +176,9 @@ function ResetGame({
       <Button style={{ ...buttonStyles }} variant="contained" onClick={resetgame}>
       {lang === "ru" ? "Попробовать ещё раз" : "Try Again"}
       </Button>
+      <NavLink activeClassName="word-link" to="/"><Button style={{ ...buttonStyles }} variant="contained" onClick={endGame}>
+      {lang === "ru" ? "Завершить" : "End Game"}
+      </Button></NavLink>
     </div>
   );
 }

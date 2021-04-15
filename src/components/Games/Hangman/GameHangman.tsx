@@ -8,13 +8,24 @@ import AspectRatioIcon from "@material-ui/icons/AspectRatio";
 import "./GameHangmanStyles.scss";
 import API_URL from "../../Constants/constants";
 import { showNotification as show, checkWin, playSounds } from "./helpers";
-import {useDispatch} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import Popup from "./Popup";
 import SelectLevel from "./SelectLevel";
-import ResetGame from "./ResetGame";
+import ResetGame from "../ResetGame/ResetGame";
 
 const URL = API_URL;
 
+const filters = {
+  studying: "{\"$and\":[{\"userWord.optional.studying\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
+  difficult: "{\"$and\":[{\"userWord.difficulty\":\"true\", \"userWord.optional.deleted\":\"false\"}]}",
+  deleted: "{\"userWord.optional.deleted\":\"true\"}",
+  not_deleted: "{\"userWord.optional.deleted\":\"false\"}",
+};
+
+interface IGameHangman {
+  game: { gameFrom: string },
+  user: { id: any, token: any },
+}
 
 interface ICurrentWord {
   word: string,
@@ -24,6 +35,10 @@ interface ICurrentWord {
   id?: string,
   _id?: string,
   audio: string,
+}
+
+interface IGetURL {
+  [key: string]: string;
 }
 
 function setFullScreen(){
@@ -38,7 +53,7 @@ function shuffle(array: any) {
   return array.sort(() => Math.random() - 0.5);
 }
 
-export default function GameHangman() {
+function GameHangman({ game, user }: IGameHangman) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [wordsData, setWordsData] = useState([]);
   const [resultLength, setResultLength] = useState(0);
@@ -56,27 +71,89 @@ export default function GameHangman() {
   const dispatch = useDispatch();
   let wordObj, shuffledData;
 
-  function getWords() {
-    fetch(`${URL}words?group=${difficulty - 1}&page=${page}`)
-      .then((response) => response.json())
-      .then((result) => {
-        setResultLength(result.length);
-        console.log("resultLength", resultLength);
-        setIsLoaded(true);
-        shuffledData = shuffle(result);
-        setWordsData(shuffledData);
-        wordObj = shuffledData.pop();
-        setSelectedWordObj(wordObj);
-        setSelectedWord(wordObj.word);
-
-        console.log(wordObj.word);
-        console.log(shuffledData);
-
-      })
+  function getUrl(numOfPage: number, urlKey: string) {
+    const url: IGetURL = {
+      All: `${API_URL}words?group=${Number(difficulty) - 1}&page=${numOfPage}`,
+      UserAll: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=${numOfPage}&filter=${filters.not_deleted}&wordsPerPage=20`,
+      UserDiff: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=0&filter=${filters.difficult}&wordsPerPage=20`,
+      UserStudying: `${API_URL}users/${user.id}/aggregatedWords?group=${Number(difficulty) - 1}&page=0&filter=${filters.studying}&wordsPerPage=20`,
+    };
+    return url[urlKey];
   }
 
+  function getWords(url: string) {
+    console.log(url);
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          if (game.gameFrom === "DICTIONARY") {
+            if (result[0].paginatedResults.length === 0) {
+              setNoWords(true);
+            }
+            setResultLength(result[0].paginatedResults.length);
+            console.log("resultLength", resultLength);
+            setIsLoaded(true);
+            shuffledData = shuffle(result[0].paginatedResults);
+            setWordsData(shuffledData);
+            wordObj = shuffledData.pop();
+            setSelectedWordObj(wordObj);
+            setSelectedWord(wordObj.word);
+          } else {
+            if (result.length === 0) {
+              setNoWords(true);
+            }
+            setResultLength(result.length);
+            console.log("resultLength", resultLength);
+            setIsLoaded(true);
+            shuffledData = shuffle(result);
+            setWordsData(shuffledData);
+            wordObj = shuffledData.pop();
+            setSelectedWordObj(wordObj);
+            setSelectedWord(wordObj.word);
+          }
+          setIsLoaded(true);
+        },
+        (error) => {
+          setIsLoaded(true);
+        },
+      );
+    return function cleanup() {
+      setWords([]);
+    };
+  }
+
+  // function getWords() {
+  //   fetch(`${URL}words?group=${difficulty - 1}&page=${page}`)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+        // setResultLength(result.length);
+        // console.log("resultLength", resultLength);
+        // setIsLoaded(true);
+        // shuffledData = shuffle(result);
+        // setWordsData(shuffledData);
+        // wordObj = shuffledData.pop();
+        // setSelectedWordObj(wordObj);
+        // setSelectedWord(wordObj.word);
+
+  //       console.log(wordObj.word);
+  //       console.log(shuffledData);
+
+  //     })
+  // }
+
   useEffect(() => {
-    getWords();
+    if (game.gameFrom === "DICTIONARY") {
+      getWords(getUrl(page, "UserDiff"));
+    } else {
+      getWords(getUrl(page, "All"));
+    }
   }, []);
 
   function gameInit(errors) {
@@ -144,7 +221,11 @@ export default function GameHangman() {
     setWrongLetters([]);
     setCanSeeStatistics(false);
     setErrors("");
-    getWords()
+    if (game.gameFrom === "DICTIONARY") {
+      getWords(getUrl(page, "UserDiff"));
+    } else {
+      getWords(getUrl(page, "All"));
+    }
   }
 
   function playAgain() {
@@ -233,7 +314,8 @@ export default function GameHangman() {
     )
   } else {
     return (
-       <ResetGame
+
+      <ResetGame
         maxSerie={rightAnswers.length}
         rightAnswers={rightAnswers}
         wrongAnswers={wrongAnswers}
@@ -243,3 +325,10 @@ export default function GameHangman() {
     )
   }
 };
+
+const mapStateToProps = (state: RootState) => ({
+  game: state.game,
+  user: state.user,
+});
+
+export default connect(mapStateToProps, null)(GameHangman);
