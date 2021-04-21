@@ -1,0 +1,47 @@
+.footer {
+  //position: absolute;
+  //bottom: 0;
+  //right: 0;
+  //left: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px 10px 2px;
+  //background-color: rgba(76, 80, 82, 0.51);
+  font-size: 16px;
+  font-weight: bold;
+  &_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  &_icon {
+    width: 32px;
+    padding: 0;
+    margin: 0;
+  }
+  &_rss {
+    width: 40px;
+    padding: 0;
+    margin-left: 10px;
+
+  }
+  &_link {
+    text-decoration: none;
+    margin: 5px;
+    color: #3f51b5;
+    &:hover {
+      color: #078eb9;
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .footer {
+    &_container {
+      justify-content: flex-start;
+    }
+  }
+}
